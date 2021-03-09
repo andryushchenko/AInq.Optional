@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{32FB9D82-8E27-4E7D-A376-A6F491071BA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{4FCA6A24-5F37-4EE2-B25C-AF89FB88BB77}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		AInq.Optional.sln.DotSettings = AInq.Optional.sln.DotSettings
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Optional", "src\AInq.Optional\AInq.Optional.csproj", "{687C04FA-51B9-4DF3-86CC-82B605A51459}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{687C04FA-51B9-4DF3-86CC-82B605A51459} = {32FB9D82-8E27-4E7D-A376-A6F491071BA8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41B2CF89-3E90-467F-A5AF-F5AF0D3324AF}
+	EndGlobalSection
+EndGlobal
