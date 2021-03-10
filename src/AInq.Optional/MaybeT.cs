@@ -18,11 +18,11 @@ using System.Collections.Generic;
 namespace AInq.Optional
 {
 
-public readonly struct Optional<T> : IEquatable<Optional<T>>, IEquatable<T>, IComparable<Optional<T>>, IComparable<T>
+public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparable<Maybe<T>>, IComparable<T>
 {
     private readonly T _value;
 
-    internal Optional(T value, bool hasValue)
+    internal Maybe(T value, bool hasValue)
     {
         _value = value;
         HasValue = hasValue;
@@ -39,7 +39,7 @@ public readonly struct Optional<T> : IEquatable<Optional<T>>, IEquatable<T>, ICo
         => HasValue ? _value?.GetHashCode() ?? 0 : 1;
 
     public override bool Equals(object obj)
-        => obj is Optional<T> other
+        => obj is Maybe<T> other
            && (HasValue, other.HasValue) switch
            {
                (false, false) => true,
@@ -47,7 +47,7 @@ public readonly struct Optional<T> : IEquatable<Optional<T>>, IEquatable<T>, ICo
                _ => false
            };
 
-    public bool Equals(Optional<T> other)
+    public bool Equals(Maybe<T> other)
         => (HasValue, other.HasValue) switch
         {
             (false, false) => true,
@@ -58,7 +58,7 @@ public readonly struct Optional<T> : IEquatable<Optional<T>>, IEquatable<T>, ICo
     public bool Equals(T other)
         => HasValue && EqualityComparer<T>.Default.Equals(_value, other);
 
-    public int CompareTo(Optional<T> other)
+    public int CompareTo(Maybe<T> other)
         => (HasValue, other.HasValue) switch
         {
             (false, false) => 0,
@@ -70,64 +70,64 @@ public readonly struct Optional<T> : IEquatable<Optional<T>>, IEquatable<T>, ICo
     public int CompareTo(T other)
         => HasValue ? Comparer<T>.Default.Compare(_value, other) : -1;
 
-    public static explicit operator Optional<T>(T item)
+    public static explicit operator Maybe<T>(T item)
         => new(item, true);
 
-    public static explicit operator T(Optional<T> item)
+    public static explicit operator T(Maybe<T> item)
         => item.Value;
 
-    public static bool operator ==(Optional<T> left, Optional<T> right)
+    public static bool operator ==(Maybe<T> left, Maybe<T> right)
         => left.Equals(right);
 
-    public static bool operator !=(Optional<T> left, Optional<T> right)
+    public static bool operator !=(Maybe<T> left, Maybe<T> right)
         => !left.Equals(right);
 
-    public static bool operator <(Optional<T> left, Optional<T> right)
+    public static bool operator <(Maybe<T> left, Maybe<T> right)
         => left.CompareTo(right) < 0;
 
-    public static bool operator >(Optional<T> left, Optional<T> right)
+    public static bool operator >(Maybe<T> left, Maybe<T> right)
         => left.CompareTo(right) > 0;
 
-    public static bool operator <=(Optional<T> left, Optional<T> right)
+    public static bool operator <=(Maybe<T> left, Maybe<T> right)
         => left.CompareTo(right) <= 0;
 
-    public static bool operator >=(Optional<T> left, Optional<T> right)
+    public static bool operator >=(Maybe<T> left, Maybe<T> right)
         => left.CompareTo(right) >= 0;
 
-    public static bool operator ==(Optional<T> left, T right)
+    public static bool operator ==(Maybe<T> left, T right)
         => left.Equals(right);
 
-    public static bool operator !=(Optional<T> left, T right)
+    public static bool operator !=(Maybe<T> left, T right)
         => !left.Equals(right);
 
-    public static bool operator <(Optional<T> left, T right)
+    public static bool operator <(Maybe<T> left, T right)
         => left.CompareTo(right) < 0;
 
-    public static bool operator >(Optional<T> left, T right)
+    public static bool operator >(Maybe<T> left, T right)
         => left.CompareTo(right) > 0;
 
-    public static bool operator <=(Optional<T> left, T right)
+    public static bool operator <=(Maybe<T> left, T right)
         => left.CompareTo(right) <= 0;
 
-    public static bool operator >=(Optional<T> left, T right)
+    public static bool operator >=(Maybe<T> left, T right)
         => left.CompareTo(right) >= 0;
 
-    public static bool operator ==(T left, Optional<T> right)
+    public static bool operator ==(T left, Maybe<T> right)
         => right.Equals(left);
 
-    public static bool operator !=(T left, Optional<T> right)
+    public static bool operator !=(T left, Maybe<T> right)
         => right.Equals(left);
 
-    public static bool operator <(T left, Optional<T> right)
+    public static bool operator <(T left, Maybe<T> right)
         => right.CompareTo(left) >= 0;
 
-    public static bool operator >(T left, Optional<T> right)
+    public static bool operator >(T left, Maybe<T> right)
         => right.CompareTo(left) <= 0;
 
-    public static bool operator <=(T left, Optional<T> right)
+    public static bool operator <=(T left, Maybe<T> right)
         => right.CompareTo(left) > 0;
 
-    public static bool operator >=(T left, Optional<T> right)
+    public static bool operator >=(T left, Maybe<T> right)
         => right.CompareTo(left) < 0;
 }
 

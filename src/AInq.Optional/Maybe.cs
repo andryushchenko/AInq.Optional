@@ -17,30 +17,30 @@ using System;
 namespace AInq.Optional
 {
 
-public static class Optional
+public static class Maybe
 {
-    public static Optional<T> None<T>()
+    public static Maybe<T> None<T>()
         => new(default!, false);
 
-    public static Optional<T> Value<T>(T value)
+    public static Maybe<T> Value<T>(T value)
         => new(value, true);
 
-    public static Optional<TResult> Select<T, TResult>(this Optional<T> item, Func<T, TResult> selector)
+    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, TResult> selector)
         => item.HasValue ? Value(selector.Invoke(item.Value)) : None<TResult>();
 
-    public static Optional<TResult> Select<T, TResult>(this Optional<T> item, Func<T, Optional<TResult>> selector)
+    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector)
         => item.HasValue ? selector.Invoke(item.Value) : None<TResult>();
 
-    public static T ValueOrDefault<T>(this Optional<T> item, T defaultValue)
+    public static T ValueOrDefault<T>(this Maybe<T> item, T defaultValue)
         => item.HasValue ? item.Value : defaultValue;
 
-    public static T ValueOrDefault<T>(this Optional<T> item, Func<T> defaultGenerator)
+    public static T ValueOrDefault<T>(this Maybe<T> item, Func<T> defaultGenerator)
         => item.HasValue ? item.Value : defaultGenerator.Invoke();
 
-    public static Optional<T> Or<T>(this Optional<T> item, Optional<T> other)
+    public static Maybe<T> Or<T>(this Maybe<T> item, Maybe<T> other)
         => item.HasValue ? item : other;
 
-    public static Optional<T> Unwrap<T>(this Optional<Optional<T>> item)
+    public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> item)
         => item.HasValue ? item.Value : None<T>();
 }
 

@@ -17,11 +17,11 @@ namespace AInq.Optional
 
 public static class Extension
 {
-    public static Optional<TLeft> LeftOrNone<TLeft, TRight>(this Either<TLeft, TRight> item)
-        => item.HasLeft ? Optional.Value(item.Left) : Optional.None<TLeft>();
+    public static Maybe<TLeft> LeftOrNone<TLeft, TRight>(this Either<TLeft, TRight> item)
+        => item.HasLeft ? Maybe.Value(item.Left) : Maybe.None<TLeft>();
 
-    public static Optional<TRight> RightOrNone<TLeft, TRight>(this Either<TLeft, TRight> item)
-        => item.HasLeft ? Optional.None<TRight>() : Optional.Value(item.Right);
+    public static Maybe<TRight> RightOrNone<TLeft, TRight>(this Either<TLeft, TRight> item)
+        => item.HasLeft ? Maybe.None<TRight>() : Maybe.Value(item.Right);
 
     public static Try<TLeft> TryLeft<TLeft, TRight>(this Either<TLeft, TRight> item)
         => Try.Result(() => item.Left);
@@ -29,11 +29,17 @@ public static class Extension
     public static Try<TRight> TryRight<TLeft, TRight>(this Either<TLeft, TRight> item)
         => Try.Result(() => item.Right);
 
-    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Optional<TLeft> left, TRight right)
-        => left.HasValue ? Either.Left<TLeft, TRight>(left.Value) : Either.Right<TLeft, TRight>(right);
+    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Maybe<TLeft> item, TRight other)
+        => item.HasValue ? Either.Left<TLeft, TRight>(item.Value) : Either.Right<TLeft, TRight>(other);
 
-    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Try<TLeft> left, TRight right)
-        => left.Success ? Either.Left<TLeft, TRight>(left.Value) : Either.Right<TLeft, TRight>(right);
+    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Try<TLeft> item, TRight other)
+        => item.Success ? Either.Left<TLeft, TRight>(item.Value) : Either.Right<TLeft, TRight>(other);
+
+    public static Try<T> Or<T>(this Maybe<T> item, Try<T> other)
+        => item.HasValue ? Try.Value(item.Value) : other;
+
+    public static Maybe<T> Or<T>(this Try<T> item, Maybe<T> other)
+        => item.Success ? Maybe.Value(item.Value) : other;
 }
 
 }
