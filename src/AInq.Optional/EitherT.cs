@@ -53,7 +53,7 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     public override int GetHashCode()
         => HasLeft ? _left?.GetHashCode() ?? 0 : _right?.GetHashCode() ?? 0;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
         => obj is Either<TLeft, TRight> other
             ? (HasLeft, other.HasLeft) switch
             {
@@ -72,7 +72,7 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     public bool Equals(Either<TLeft, TRight> other)
         => (HasLeft, other.HasLeft) switch
         {
-            (true, true) => EqualityComparer<TLeft>.Default.Equals(_left, other.Left),
+            (true, true) => EqualityComparer<TLeft>.Default.Equals(_left, other._left),
             (false, false) => EqualityComparer<TRight>.Default.Equals(_right, other._right),
             _ => false
         };
@@ -101,29 +101,29 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     public static bool operator !=(Either<TLeft, TRight> left, Either<TRight, TLeft> right)
         => !left.Equals(right.Invert());
 
-    public static bool operator ==(Either<TLeft, TRight> left, TLeft right)
-        => left.HasLeft && EqualityComparer<TLeft>.Default.Equals(left._left, right);
+    public static bool operator ==(Either<TLeft, TRight> left, TLeft? right)
+        => left.HasLeft && EqualityComparer<TLeft?>.Default.Equals(left._left, right);
 
-    public static bool operator !=(Either<TLeft, TRight> left, TLeft right)
-        => !left.HasLeft || !EqualityComparer<TLeft>.Default.Equals(left._left, right);
+    public static bool operator !=(Either<TLeft, TRight> left, TLeft? right)
+        => !left.HasLeft || !EqualityComparer<TLeft?>.Default.Equals(left._left, right);
 
-    public static bool operator ==(Either<TLeft, TRight> left, TRight right)
-        => !left.HasLeft && EqualityComparer<TRight>.Default.Equals(left._right, right);
+    public static bool operator ==(Either<TLeft, TRight> left, TRight? right)
+        => !left.HasLeft && EqualityComparer<TRight?>.Default.Equals(left._right, right);
 
-    public static bool operator !=(Either<TLeft, TRight> left, TRight right)
-        => left.HasLeft || !EqualityComparer<TRight>.Default.Equals(left._right, right);
+    public static bool operator !=(Either<TLeft, TRight> left, TRight? right)
+        => left.HasLeft || !EqualityComparer<TRight?>.Default.Equals(left._right, right);
 
-    public static bool operator ==(TLeft left, Either<TLeft, TRight> right)
-        => right.HasLeft && EqualityComparer<TLeft>.Default.Equals(left, right._left);
+    public static bool operator ==(TLeft? left, Either<TLeft, TRight> right)
+        => right.HasLeft && EqualityComparer<TLeft?>.Default.Equals(left, right._left);
 
-    public static bool operator !=(TLeft left, Either<TLeft, TRight> right)
-        => !right.HasLeft && !EqualityComparer<TLeft>.Default.Equals(left, right._left);
+    public static bool operator !=(TLeft? left, Either<TLeft, TRight> right)
+        => !right.HasLeft && !EqualityComparer<TLeft?>.Default.Equals(left, right._left);
 
-    public static bool operator ==(TRight left, Either<TLeft, TRight> right)
-        => !right.HasLeft && EqualityComparer<TRight>.Default.Equals(left, right._right);
+    public static bool operator ==(TRight? left, Either<TLeft, TRight> right)
+        => !right.HasLeft && EqualityComparer<TRight?>.Default.Equals(left, right._right);
 
-    public static bool operator !=(TRight left, Either<TLeft, TRight> right)
-        => right.HasLeft || !EqualityComparer<TRight>.Default.Equals(left, right._right);
+    public static bool operator !=(TRight? left, Either<TLeft, TRight> right)
+        => right.HasLeft || !EqualityComparer<TRight?>.Default.Equals(left, right._right);
 }
 
 }

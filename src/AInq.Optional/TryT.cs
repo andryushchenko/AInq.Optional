@@ -44,7 +44,7 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
     public override int GetHashCode()
         => Exception == null ? _value?.GetHashCode() ?? 0 : 1;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
         => obj is Try<T> other
            && (Exception, other.Exception) switch
            {
@@ -61,8 +61,8 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
             _ => false
         };
 
-    public bool Equals(T other)
-        => Exception == null && EqualityComparer<T>.Default.Equals(_value, other);
+    public bool Equals(T? other)
+        => Exception == null && EqualityComparer<T?>.Default.Equals(_value, other);
 
     public int CompareTo(Try<T> other)
         => (Exception, other.Exception) switch
@@ -73,8 +73,8 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
             _ => Comparer<T>.Default.Compare(_value, other._value)
         };
 
-    public int CompareTo(T other)
-        => Exception == null ? Comparer<T>.Default.Compare(_value, other) : -1;
+    public int CompareTo(T? other)
+        => Exception == null ? Comparer<T?>.Default.Compare(_value, other) : -1;
 
     public static explicit operator Try<T>(T item)
         => new(item);
@@ -103,40 +103,40 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
     public static bool operator >=(Try<T> left, Try<T> right)
         => left.CompareTo(right) >= 0;
 
-    public static bool operator ==(Try<T> left, T right)
+    public static bool operator ==(Try<T> left, T? right)
         => left.Equals(right);
 
-    public static bool operator !=(Try<T> left, T right)
+    public static bool operator !=(Try<T> left, T? right)
         => !left.Equals(right);
 
-    public static bool operator <(Try<T> left, T right)
+    public static bool operator <(Try<T> left, T? right)
         => left.CompareTo(right) < 0;
 
-    public static bool operator >(Try<T> left, T right)
+    public static bool operator >(Try<T> left, T? right)
         => left.CompareTo(right) > 0;
 
-    public static bool operator <=(Try<T> left, T right)
+    public static bool operator <=(Try<T> left, T? right)
         => left.CompareTo(right) <= 0;
 
-    public static bool operator >=(Try<T> left, T right)
+    public static bool operator >=(Try<T> left, T? right)
         => left.CompareTo(right) >= 0;
 
-    public static bool operator ==(T left, Try<T> right)
+    public static bool operator ==(T? left, Try<T> right)
         => right.Equals(left);
 
-    public static bool operator !=(T left, Try<T> right)
+    public static bool operator !=(T? left, Try<T> right)
         => right.Equals(left);
 
-    public static bool operator <(T left, Try<T> right)
+    public static bool operator <(T? left, Try<T> right)
         => right.CompareTo(left) >= 0;
 
-    public static bool operator >(T left, Try<T> right)
+    public static bool operator >(T? left, Try<T> right)
         => right.CompareTo(left) <= 0;
 
-    public static bool operator <=(T left, Try<T> right)
+    public static bool operator <=(T? left, Try<T> right)
         => right.CompareTo(left) > 0;
 
-    public static bool operator >=(T left, Try<T> right)
+    public static bool operator >=(T? left, Try<T> right)
         => right.CompareTo(left) < 0;
 }
 
