@@ -15,9 +15,8 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>AInq;Monade;Optional;Try;Either</PackageTags>
-    <Description></Description>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
+    <Description>Simple optional types for .NET with basic helpers</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
