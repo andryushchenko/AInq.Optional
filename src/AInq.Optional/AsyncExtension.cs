@@ -18,45 +18,63 @@ using System.Threading.Tasks;
 namespace AInq.Optional
 {
 
+/// <summary>
+///     Asynchronous Try utils
+/// </summary>
 public static class AsyncExtension
 {
+    /// <summary>
+    ///     Create Try from async value generator
+    /// </summary>
+    /// <param name="generator">Value generator</param>
+    /// <typeparam name="T">Value type</typeparam>
     public static async Task<Try<T>> ResultAsync<T>(Func<Task<T>> generator)
     {
         try
         {
             var result = await generator.Invoke();
-            return Try.Value(result);
+            return new Try<T>(result);
         }
         catch (Exception ex)
         {
-            return Try.Error<T>(ex);
+            return new Try<T>(ex);
         }
     }
 
+    /// <summary>
+    ///     Create Try from value task
+    /// </summary>
+    /// <param name="task">Value task</param>
+    /// <typeparam name="T">Value type</typeparam>
     public static async Task<Try<T>> ResultAsync<T>(Task<T> task)
     {
         try
         {
             var result = await task;
-            return Try.Value(result);
+            return new Try<T>(result);
         }
         catch (Exception ex)
         {
-            return Try.Error<T>(ex);
+            return new Try<T>(ex);
         }
     }
 
+    /// <summary>
+    ///     Unwrap to Task
+    /// </summary>
+    /// <param name="task">Try with task</param>
+    /// <typeparam name="T">Value type</typeparam>
     public static async Task<Try<T>> UnwrapAsync<T>(Try<Task<T>> task)
     {
-        if(!task.Success) return Try.Error<T>(task.Exception!);
+        if (!task.Success) return Try.Error<T>(task.Exception!);
         try
         {
             var result = await task.Value;
-            return Try.Value(result);
+            return new Try<T>(result);
         }
         catch (Exception ex)
         {
-            return Try.Error<T>(ex);
+            return new Try<T>(ex);
         }
     }
 }

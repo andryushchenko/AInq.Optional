@@ -18,6 +18,10 @@ using System.Collections.Generic;
 namespace AInq.Optional
 {
 
+/// <summary>
+///     Try monad
+/// </summary>
+/// <typeparam name="T">Value type</typeparam>
 public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<Try<T>>, IComparable<T>
 {
     private readonly T _value;
@@ -34,16 +38,27 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
         Exception = exception ?? throw new ArgumentNullException(nameof(exception));
     }
 
+    /// <summary>
+    ///     Check if item is success
+    /// </summary>
     public bool Success => Exception == null;
+
+    /// <summary>
+    ///     Item value (if success)
+    /// </summary>
     public T Value => Exception == null ? _value : throw Exception;
+
     internal Exception? Exception { get; }
 
+    /// <inheritdoc />
     public override string ToString()
         => Exception == null ? _value?.ToString() ?? "Null" : Exception.ToString();
 
+    /// <inheritdoc />
     public override int GetHashCode()
         => Exception == null ? _value?.GetHashCode() ?? 0 : 1;
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
         => obj is Try<T> other
            && (Exception, other.Exception) switch
@@ -53,6 +68,7 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
                _ => false
            };
 
+    /// <inheritdoc />
     public bool Equals(Try<T> other)
         => (Exception, other.Exception) switch
         {
@@ -61,9 +77,11 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
             _ => false
         };
 
+    /// <inheritdoc />
     public bool Equals(T? other)
         => Exception == null && EqualityComparer<T?>.Default.Equals(_value, other);
 
+    /// <inheritdoc />
     public int CompareTo(Try<T> other)
         => (Exception, other.Exception) switch
         {
@@ -73,71 +91,174 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
             _ => Comparer<T>.Default.Compare(_value, other._value)
         };
 
+    /// <inheritdoc />
     public int CompareTo(T? other)
         => Exception == null ? Comparer<T?>.Default.Compare(_value, other) : -1;
 
+    /// <summary>
+    ///     Explicit cast to Try
+    /// </summary>
+    /// <param name="item">Value</param>
     public static explicit operator Try<T>(T item)
         => new(item);
 
+    /// <summary>
+    ///     Explicit cast to Try
+    /// </summary>
+    /// <param name="exception">Exception</param>
     public static explicit operator Try<T>(Exception exception)
         => new(exception);
 
+    /// <summary>
+    ///     Explicit cast to value type
+    /// </summary>
+    /// <param name="item">Try item</param>
     public static explicit operator T(Try<T> item)
         => item.Value;
 
-    public static bool operator ==(Try<T> left, Try<T> right)
-        => left.Equals(right);
+    /// <summary>
+    ///     Equality comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator ==(Try<T> a, Try<T> b)
+        => a.Equals(b);
 
-    public static bool operator !=(Try<T> left, Try<T> right)
-        => !left.Equals(right);
+    /// <summary>
+    ///     Inequality comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator !=(Try<T> a, Try<T> b)
+        => !a.Equals(b);
 
-    public static bool operator <(Try<T> left, Try<T> right)
-        => left.CompareTo(right) < 0;
+    /// <summary>
+    ///     Less comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator <(Try<T> a, Try<T> b)
+        => a.CompareTo(b) < 0;
 
-    public static bool operator >(Try<T> left, Try<T> right)
-        => left.CompareTo(right) > 0;
+    /// <summary>
+    ///     Greater comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator >(Try<T> a, Try<T> b)
+        => a.CompareTo(b) > 0;
 
-    public static bool operator <=(Try<T> left, Try<T> right)
-        => left.CompareTo(right) <= 0;
+    /// <summary>
+    ///     Less or equal comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator <=(Try<T> a, Try<T> b)
+        => a.CompareTo(b) <= 0;
 
-    public static bool operator >=(Try<T> left, Try<T> right)
-        => left.CompareTo(right) >= 0;
+    /// <summary>
+    ///     Greater or equal comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator >=(Try<T> a, Try<T> b)
+        => a.CompareTo(b) >= 0;
 
-    public static bool operator ==(Try<T> left, T? right)
-        => left.Equals(right);
+    /// <summary>
+    ///     Equality comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator ==(Try<T> a, T? b)
+        => a.Equals(b);
 
-    public static bool operator !=(Try<T> left, T? right)
-        => !left.Equals(right);
+    /// <summary>
+    ///     Inequality comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator !=(Try<T> a, T? b)
+        => !a.Equals(b);
 
-    public static bool operator <(Try<T> left, T? right)
-        => left.CompareTo(right) < 0;
+    /// <summary>
+    ///     Less comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator <(Try<T> a, T? b)
+        => a.CompareTo(b) < 0;
 
-    public static bool operator >(Try<T> left, T? right)
-        => left.CompareTo(right) > 0;
+    /// <summary>
+    ///     Greater comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator >(Try<T> a, T? b)
+        => a.CompareTo(b) > 0;
 
-    public static bool operator <=(Try<T> left, T? right)
-        => left.CompareTo(right) <= 0;
+    /// <summary>
+    ///     Less or equal comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator <=(Try<T> a, T? b)
+        => a.CompareTo(b) <= 0;
 
-    public static bool operator >=(Try<T> left, T? right)
-        => left.CompareTo(right) >= 0;
+    /// <summary>
+    ///     Greater or equal comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator >=(Try<T> a, T? b)
+        => a.CompareTo(b) >= 0;
 
-    public static bool operator ==(T? left, Try<T> right)
-        => right.Equals(left);
+    /// <summary>
+    ///     Equality comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator ==(T? a, Try<T> b)
+        => b.Equals(a);
 
-    public static bool operator !=(T? left, Try<T> right)
-        => right.Equals(left);
+    /// <summary>
+    ///     Inequality comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator !=(T? a, Try<T> b)
+        => b.Equals(a);
 
-    public static bool operator <(T? left, Try<T> right)
-        => right.CompareTo(left) >= 0;
+    /// <summary>
+    ///     Less comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator <(T? a, Try<T> b)
+        => b.CompareTo(a) >= 0;
 
-    public static bool operator >(T? left, Try<T> right)
-        => right.CompareTo(left) <= 0;
+    /// <summary>
+    ///     Greater comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator >(T? a, Try<T> b)
+        => b.CompareTo(a) <= 0;
 
-    public static bool operator <=(T? left, Try<T> right)
-        => right.CompareTo(left) > 0;
+    /// <summary>
+    ///     Less or equal comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator <=(T? a, Try<T> b)
+        => b.CompareTo(a) > 0;
 
-    public static bool operator >=(T? left, Try<T> right)
-        => right.CompareTo(left) < 0;
+    /// <summary>
+    ///     Greater or equal comparison
+    /// </summary>
+    /// <param name="a">First element</param>
+    /// <param name="b">Second element</param>
+    public static bool operator >=(T? a, Try<T> b)
+        => b.CompareTo(a) < 0;
 }
 
 }

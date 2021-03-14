@@ -17,7 +17,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
     <Description>Simple optional types for .NET with basic helpers</Description>
-    <PackageReleaseNotes>[ADD] Extensions</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] Unumerable and async extensions
+[ADD] Documentation</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
