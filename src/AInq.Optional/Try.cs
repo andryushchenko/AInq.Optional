@@ -22,8 +22,8 @@ public static class Try
     public static Try<T> Value<T>(T value)
         => new(value);
 
-    public static Try<T> Error<T>(Exception ex)
-        => new(ex);
+    public static Try<T> Error<T>(Exception exception)
+        => new(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
 
     public static Try<T> Result<T>(Func<T> generator)
     {
