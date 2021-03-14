@@ -738,6 +738,11 @@
                 Item value (if success)
             </summary>
         </member>
+        <member name="P:AInq.Optional.Try`1.Error">
+            <summary>
+                Exception or null if success
+            </summary>
+        </member>
         <member name="M:AInq.Optional.Try`1.ToString">
             <inheritdoc />
         </member>

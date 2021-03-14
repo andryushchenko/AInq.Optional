@@ -66,7 +66,7 @@ public static class AsyncExtension
     /// <typeparam name="T">Value type</typeparam>
     public static async Task<Try<T>> UnwrapAsync<T>(Try<Task<T>> task)
     {
-        if (!task.Success) return Try.Error<T>(task.Exception!);
+        if (!task.Success) return Try.Error<T>(task.Error!);
         try
         {
             var result = await task.Value;

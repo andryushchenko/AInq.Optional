@@ -63,7 +63,7 @@ public static class Try
     /// <typeparam name="T">Source value type</typeparam>
     /// <typeparam name="TResult">Result value type</typeparam>
     public static Try<TResult> Select<T, TResult>(this Try<T> item, Func<T, TResult> selector)
-        => item.Success ? Result(() => selector.Invoke(item.Value)) : Error<TResult>(item.Exception!);
+        => item.Success ? Result(() => selector.Invoke(item.Value)) : Error<TResult>(item.Error!);
 
     /// <summary>
     ///     Convert to other value type
@@ -73,7 +73,7 @@ public static class Try
     /// <typeparam name="T">Source value type</typeparam>
     /// <typeparam name="TResult">Result value type</typeparam>
     public static Try<TResult> Select<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector)
-        => item.Success ? selector.Invoke(item.Value) : Error<TResult>(item.Exception!);
+        => item.Success ? selector.Invoke(item.Value) : Error<TResult>(item.Error!);
 
     /// <summary>
     ///     Get value or default
@@ -108,7 +108,7 @@ public static class Try
     /// <param name="item">Source</param>
     /// <typeparam name="T">Value type</typeparam>
     public static Try<T> Unwrap<T>(this Try<Try<T>> item)
-        => item.Success ? item.Value : Error<T>(item.Exception!);
+        => item.Success ? item.Value : Error<T>(item.Error!);
 }
 
 }

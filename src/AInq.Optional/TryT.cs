@@ -29,39 +29,42 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
     internal Try(T value)
     {
         _value = value;
-        Exception = null;
+        Error = null;
     }
 
     internal Try(Exception exception)
     {
         _value = default!;
-        Exception = exception ?? throw new ArgumentNullException(nameof(exception));
+        Error = exception ?? throw new ArgumentNullException(nameof(exception));
     }
 
     /// <summary>
     ///     Check if item is success
     /// </summary>
-    public bool Success => Exception == null;
+    public bool Success => Error == null;
 
     /// <summary>
     ///     Item value (if success)
     /// </summary>
-    public T Value => Exception == null ? _value : throw Exception;
+    public T Value => Error == null ? _value : throw Error;
 
-    internal Exception? Exception { get; }
+    /// <summary>
+    ///     Exception or null if success
+    /// </summary>
+    public Exception? Error { get; }
 
     /// <inheritdoc />
     public override string ToString()
-        => Exception == null ? _value?.ToString() ?? "Null" : Exception.ToString();
+        => Error == null ? _value?.ToString() ?? "Null" : Error.ToString();
 
     /// <inheritdoc />
     public override int GetHashCode()
-        => Exception == null ? _value?.GetHashCode() ?? 0 : 1;
+        => Error == null ? _value?.GetHashCode() ?? 0 : 1;
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
         => obj is Try<T> other
-           && (Exception, other.Exception) switch
+           && (Error, other.Error) switch
            {
                (not null, not null) => true,
                (null, null) => EqualityComparer<T>.Default.Equals(_value, other._value),
@@ -70,7 +73,7 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
 
     /// <inheritdoc />
     public bool Equals(Try<T> other)
-        => (Exception, other.Exception) switch
+        => (Error, other.Error) switch
         {
             (not null, not null) => true,
             (null, null) => EqualityComparer<T>.Default.Equals(_value, other._value),
@@ -79,11 +82,11 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
 
     /// <inheritdoc />
     public bool Equals(T? other)
-        => Exception == null && EqualityComparer<T?>.Default.Equals(_value, other);
+        => Error == null && EqualityComparer<T?>.Default.Equals(_value, other);
 
     /// <inheritdoc />
     public int CompareTo(Try<T> other)
-        => (Exception, other.Exception) switch
+        => (Error, other.Error) switch
         {
             (not null, not null) => 0,
             (not null, null) => -1,
@@ -93,7 +96,7 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
 
     /// <inheritdoc />
     public int CompareTo(T? other)
-        => Exception == null ? Comparer<T?>.Default.Compare(_value, other) : -1;
+        => Error == null ? Comparer<T?>.Default.Compare(_value, other) : -1;
 
     /// <summary>
     ///     Explicit cast to Try
