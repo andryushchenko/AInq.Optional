@@ -11,13 +11,13 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
     <Description>Simple optional types for .NET with basic helpers</Description>
-    <PackageReleaseNotes>Minor package description fix</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] Extensions</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
