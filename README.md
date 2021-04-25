@@ -15,4 +15,4 @@ Simple optional types for .NET with basic helpers
 If you find a bug, have a question or something else - you are friendly welcome to open an issue.
 
 ## License
-[Apache-2.0](LICENSE)
+Copyright © 2021 Anton Andryushchenko. AInq.Optional is licensed under Apache License 2.0
