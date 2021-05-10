@@ -405,6 +405,20 @@
             <param name="other">Maybe</param>
             <typeparam name="T">Value type</typeparam>
         </member>
+        <member name="M:AInq.Optional.Extension.AsTry``1(AInq.Optional.Maybe{``0})">
+            <summary>
+                Convert <see cref="T:AInq.Optional.Maybe`1"/> to <see cref="T:AInq.Optional.Try`1"/>
+            </summary>
+            <param name="item">Maybe</param>
+            <typeparam name="T">Value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Extension.AsMaybe``1(AInq.Optional.Try{``0})">
+            <summary>
+                Convert <see cref="T:AInq.Optional.Try`1"/> to <see cref="T:AInq.Optional.Maybe`1"/>
+            </summary>
+            <param name="item">Try</param>
+            <typeparam name="T">Value type</typeparam>
+        </member>
         <member name="T:AInq.Optional.Maybe">
             <summary>
                 Maybe utils
@@ -432,12 +446,52 @@
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
+        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,``1},``1)">
+            <summary>
+                Convert to other value type or default
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultValue">Default value</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,``1},System.Func{``1})">
+            <summary>
+                Convert to other value type or default from generator
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultGenerator">Default value generator</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
         <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}})">
             <summary>
                 Convert to other value type
             </summary>
             <param name="item">Source</param>
             <param name="selector">Converter</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}},``1)">
+            <summary>
+                Convert to other value type or default
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultValue">Default value</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}},System.Func{``1})">
+            <summary>
+                Convert to other value type or default from generator
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultGenerator">Default value generator</param>
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
@@ -682,12 +736,52 @@
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
+        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,``1},``1)">
+            <summary>
+                Convert to other value type or default
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultValue">Default value</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,``1},System.Func{``1})">
+            <summary>
+                Convert to other value type or default from generator
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultGenerator">Default value generator</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
         <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}})">
             <summary>
                 Convert to other value type
             </summary>
             <param name="item">Source</param>
             <param name="selector">Converter</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}},``1)">
+            <summary>
+                Convert to other value type or default
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultValue">Default value</param>
+            <typeparam name="T">Source value type</typeparam>
+            <typeparam name="TResult">Result value type</typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}},System.Func{``1})">
+            <summary>
+                Convert to other value type or default from generator
+            </summary>
+            <param name="item">Source</param>
+            <param name="selector">Converter</param>
+            <param name="defaultGenerator">Default value generator</param>
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
