@@ -99,6 +99,22 @@ public static class Extension
     /// <typeparam name="T">Value type</typeparam>
     public static Maybe<T> Or<T>(this Try<T> item, Maybe<T> other)
         => item.Success ? Maybe.Value(item.Value) : other;
+
+    /// <summary>
+    ///     Convert <see cref="Maybe{T}"/> to <see cref="Try{T}"/>
+    /// </summary>
+    /// <param name="item">Maybe</param>
+    /// <typeparam name="T">Value type</typeparam>
+    public static Try<T> AsTry<T>(this Maybe<T> item)
+        => Try.Result(() => item.Value);
+
+    /// <summary>
+    ///     Convert <see cref="Try{T}"/> to <see cref="Maybe{T}"/>
+    /// </summary>
+    /// <param name="item">Try</param>
+    /// <typeparam name="T">Value type</typeparam>
+    public static Maybe<T> AsMaybe<T>(this Try<T> item)
+        => item.Success ? Maybe.Value(item.Value) : Maybe.None<T>();
 }
 
 }

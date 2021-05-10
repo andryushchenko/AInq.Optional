@@ -66,6 +66,28 @@ public static class Try
         => item.Success ? Result(() => selector.Invoke(item.Value)) : Error<TResult>(item.Error!);
 
     /// <summary>
+    ///     Convert to other value type or default
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultValue">Default value</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, TResult> selector, TResult defaultValue)
+        => item.Select(selector).ValueOrDefault(defaultValue);
+
+    /// <summary>
+    ///     Convert to other value type or default from generator
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultGenerator">Default value generator</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, TResult> selector, Func<TResult> defaultGenerator)
+        => item.Select(selector).ValueOrDefault(defaultGenerator);
+
+    /// <summary>
     ///     Convert to other value type
     /// </summary>
     /// <param name="item">Source</param>
@@ -74,6 +96,28 @@ public static class Try
     /// <typeparam name="TResult">Result value type</typeparam>
     public static Try<TResult> Select<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector)
         => item.Success ? selector.Invoke(item.Value) : Error<TResult>(item.Error!);
+
+    /// <summary>
+    ///     Convert to other value type or default
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultValue">Default value</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector, TResult defaultValue)
+        => item.Select(selector).ValueOrDefault(defaultValue);
+
+    /// <summary>
+    ///     Convert to other value type or default from generator
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultGenerator">Default value generator</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector, Func<TResult> defaultGenerator)
+        => item.Select(selector).ValueOrDefault(defaultGenerator);
 
     /// <summary>
     ///     Get value or default

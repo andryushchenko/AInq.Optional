@@ -11,13 +11,15 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
     <Description>Simple optional types for .NET with basic helpers</Description>
-    <PackageReleaseNotes>[ADD] Error in Try</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] SelectOrDefault extension for Maybe and Try
+[ADD] Maybe &lt;-&gt; Try convert extension
+[FIX] Minor bugfix in async extensions</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

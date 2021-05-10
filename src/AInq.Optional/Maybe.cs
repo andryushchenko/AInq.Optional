@@ -48,6 +48,28 @@ public static class Maybe
         => item.HasValue ? Value(selector.Invoke(item.Value)) : None<TResult>();
 
     /// <summary>
+    ///     Convert to other value type or default
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultValue">Default value</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult Select<T, TResult>(this Maybe<T> item, Func<T, TResult> selector, TResult defaultValue)
+        => item.Select(selector).ValueOrDefault(defaultValue);
+
+    /// <summary>
+    ///     Convert to other value type or default from generator
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultGenerator">Default value generator</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult Select<T, TResult>(this Maybe<T> item, Func<T, TResult> selector, Func<TResult> defaultGenerator)
+        => item.Select(selector).ValueOrDefault(defaultGenerator);
+
+    /// <summary>
     ///     Convert to other value type
     /// </summary>
     /// <param name="item">Source</param>
@@ -56,6 +78,28 @@ public static class Maybe
     /// <typeparam name="TResult">Result value type</typeparam>
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector)
         => item.HasValue ? selector.Invoke(item.Value) : None<TResult>();
+
+    /// <summary>
+    ///     Convert to other value type or default
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultValue">Default value</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult Select<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector, TResult defaultValue)
+        => item.Select(selector).ValueOrDefault(defaultValue);
+
+    /// <summary>
+    ///     Convert to other value type or default from generator
+    /// </summary>
+    /// <param name="item">Source</param>
+    /// <param name="selector">Converter</param>
+    /// <param name="defaultGenerator">Default value generator</param>
+    /// <typeparam name="T">Source value type</typeparam>
+    /// <typeparam name="TResult">Result value type</typeparam>
+    public static TResult Select<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector, Func<TResult> defaultGenerator)
+        => item.Select(selector).ValueOrDefault(defaultGenerator);
 
     /// <summary>
     ///     Get value or default

@@ -32,7 +32,7 @@ public static class AsyncExtension
     {
         try
         {
-            var result = await generator.Invoke();
+            var result = await generator.Invoke().ConfigureAwait(false);
             return new Try<T>(result);
         }
         catch (Exception ex)
@@ -50,7 +50,7 @@ public static class AsyncExtension
     {
         try
         {
-            var result = await task;
+            var result = await task.ConfigureAwait(false);
             return new Try<T>(result);
         }
         catch (Exception ex)
@@ -69,7 +69,7 @@ public static class AsyncExtension
         if (!task.Success) return Try.Error<T>(task.Error!);
         try
         {
-            var result = await task.Value;
+            var result = await task.Value.ConfigureAwait(false);
             return new Try<T>(result);
         }
         catch (Exception ex)
