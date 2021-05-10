@@ -446,7 +446,7 @@
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
-        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,``1},``1)">
+        <member name="M:AInq.Optional.Maybe.SelectOrDefault``2(AInq.Optional.Maybe{``0},System.Func{``0,``1},``1)">
             <summary>
                 Convert to other value type or default
             </summary>
@@ -456,7 +456,7 @@
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
-        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,``1},System.Func{``1})">
+        <member name="M:AInq.Optional.Maybe.SelectOrDefault``2(AInq.Optional.Maybe{``0},System.Func{``0,``1},System.Func{``1})">
             <summary>
                 Convert to other value type or default from generator
             </summary>
@@ -475,7 +475,7 @@
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
-        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}},``1)">
+        <member name="M:AInq.Optional.Maybe.SelectOrDefault``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}},``1)">
             <summary>
                 Convert to other value type or default
             </summary>
@@ -485,7 +485,7 @@
             <typeparam name="T">Source value type</typeparam>
             <typeparam name="TResult">Result value type</typeparam>
         </member>
-        <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}},System.Func{``1})">
+        <member name="M:AInq.Optional.Maybe.SelectOrDefault``2(AInq.Optional.Maybe{``0},System.Func{``0,AInq.Optional.Maybe{``1}},System.Func{``1})">
             <summary>
                 Convert to other value type or default from generator
             </summary>
