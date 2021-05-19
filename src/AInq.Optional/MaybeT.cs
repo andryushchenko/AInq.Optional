@@ -18,10 +18,8 @@ using System.Collections.Generic;
 namespace AInq.Optional
 {
 
-/// <summary>
-///     Maybe monad
-/// </summary>
-/// <typeparam name="T">Value type</typeparam>
+/// <summary> Maybe monad </summary>
+/// <typeparam name="T"> Value type </typeparam>
 public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparable<Maybe<T>>, IComparable<T>
 {
     private readonly T _value;
@@ -32,14 +30,10 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
         HasValue = hasValue;
     }
 
-    /// <summary>
-    ///     Check if item contains value
-    /// </summary>
+    /// <summary> Check if item contains value </summary>
     public bool HasValue { get; }
 
-    /// <summary>
-    ///     Item value (if exists)
-    /// </summary>
+    /// <summary> Item value (if exists) </summary>
     public T Value => HasValue ? _value : throw new InvalidOperationException("No value");
 
     /// <inheritdoc />
@@ -87,161 +81,121 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
     public int CompareTo(T? other)
         => HasValue ? Comparer<T?>.Default.Compare(_value, other) : -1;
 
-    /// <summary>
-    ///     Explicit cast to Maybe
-    /// </summary>
-    /// <param name="item">Value</param>
+    /// <summary> Explicit cast to Maybe </summary>
+    /// <param name="item"> Value </param>
     public static explicit operator Maybe<T>(T item)
         => new(item, true);
 
-    /// <summary>
-    ///     Explicit cast to value type
-    /// </summary>
-    /// <param name="item">Maybe item</param>
+    /// <summary> Explicit cast to value type </summary>
+    /// <param name="item"> Maybe item </param>
     public static explicit operator T(Maybe<T> item)
         => item.Value;
 
-    /// <summary>
-    ///     Equality comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Equality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator ==(Maybe<T> a, Maybe<T> b)
         => a.Equals(b);
 
-    /// <summary>
-    ///     Inequality comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Inequality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator !=(Maybe<T> a, Maybe<T> b)
         => !a.Equals(b);
 
-    /// <summary>
-    ///     Less comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Less comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator <(Maybe<T> a, Maybe<T> b)
         => a.CompareTo(b) < 0;
 
-    /// <summary>
-    ///     Greater comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Greater comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator >(Maybe<T> a, Maybe<T> b)
         => a.CompareTo(b) > 0;
 
-    /// <summary>
-    ///     Less or equal comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Less or equal comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator <=(Maybe<T> a, Maybe<T> b)
         => a.CompareTo(b) <= 0;
 
-    /// <summary>
-    ///     Greater or equal comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Greater or equal comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator >=(Maybe<T> a, Maybe<T> b)
         => a.CompareTo(b) >= 0;
 
-    /// <summary>
-    ///     Equality comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Equality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator ==(Maybe<T> a, T? b)
         => a.Equals(b);
 
-    /// <summary>
-    ///     Inequality comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Inequality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator !=(Maybe<T> a, T? b)
         => !a.Equals(b);
 
-    /// <summary>
-    ///     Less comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Less comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator <(Maybe<T> a, T? b)
         => a.CompareTo(b) < 0;
 
-    /// <summary>
-    ///     Greater comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Greater comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator >(Maybe<T> a, T? b)
         => a.CompareTo(b) > 0;
 
-    /// <summary>
-    ///     Less or equal comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Less or equal comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator <=(Maybe<T> a, T? b)
         => a.CompareTo(b) <= 0;
 
-    /// <summary>
-    ///     Greater or equal comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Greater or equal comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator >=(Maybe<T> a, T? b)
         => a.CompareTo(b) >= 0;
 
-    /// <summary>
-    ///     Equality comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Equality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator ==(T? a, Maybe<T> b)
         => b.Equals(a);
 
-    /// <summary>
-    ///     Inequality comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Inequality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator !=(T? a, Maybe<T> b)
         => b.Equals(a);
 
-    /// <summary>
-    ///     Less comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Less comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator <(T? a, Maybe<T> b)
         => b.CompareTo(a) >= 0;
 
-    /// <summary>
-    ///     Greater comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Greater comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator >(T? a, Maybe<T> b)
         => b.CompareTo(a) <= 0;
 
-    /// <summary>
-    ///     Less or equal comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Less or equal comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator <=(T? a, Maybe<T> b)
         => b.CompareTo(a) > 0;
 
-    /// <summary>
-    ///     Greater or equal comparison
-    /// </summary>
-    /// <param name="a">First element</param>
-    /// <param name="b">Second element</param>
+    /// <summary> Greater or equal comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
     public static bool operator >=(T? a, Maybe<T> b)
         => b.CompareTo(a) < 0;
 }

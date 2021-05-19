@@ -17,122 +17,96 @@ using System;
 namespace AInq.Optional
 {
 
-/// <summary>
-///     Maybe utils
-/// </summary>
+/// <summary> Maybe utils </summary>
 public static class Maybe
 {
-    /// <summary>
-    ///     Create empty Maybe
-    /// </summary>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Create empty Maybe </summary>
+    /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> None<T>()
         => new(default!, false);
 
-    /// <summary>
-    ///     Create Maybe from value
-    /// </summary>
-    /// <param name="value">Value</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Create Maybe from value </summary>
+    /// <param name="value"> Value </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Value<T>(T value)
         => new(value, true);
 
-    /// <summary>
-    ///     Convert to other value type
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="selector">Converter</param>
-    /// <typeparam name="T">Source value type</typeparam>
-    /// <typeparam name="TResult">Result value type</typeparam>
+    /// <summary> Convert to other value type </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, TResult> selector)
         => item.HasValue ? Value(selector.Invoke(item.Value)) : None<TResult>();
 
-    /// <summary>
-    ///     Convert to other value type or default
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="selector">Converter</param>
-    /// <param name="defaultValue">Default value</param>
-    /// <typeparam name="T">Source value type</typeparam>
-    /// <typeparam name="TResult">Result value type</typeparam>
+    /// <summary> Convert to other value type or default </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <param name="defaultValue"> Default value </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, TResult> selector, TResult defaultValue)
         => item.Select(selector).ValueOrDefault(defaultValue);
 
-    /// <summary>
-    ///     Convert to other value type or default from generator
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="selector">Converter</param>
-    /// <param name="defaultGenerator">Default value generator</param>
-    /// <typeparam name="T">Source value type</typeparam>
-    /// <typeparam name="TResult">Result value type</typeparam>
+    /// <summary> Convert to other value type or default from generator </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <param name="defaultGenerator"> Default value generator </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, TResult> selector, Func<TResult> defaultGenerator)
         => item.Select(selector).ValueOrDefault(defaultGenerator);
 
-    /// <summary>
-    ///     Convert to other value type
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="selector">Converter</param>
-    /// <typeparam name="T">Source value type</typeparam>
-    /// <typeparam name="TResult">Result value type</typeparam>
+    /// <summary> Convert to other value type </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector)
         => item.HasValue ? selector.Invoke(item.Value) : None<TResult>();
 
-    /// <summary>
-    ///     Convert to other value type or default
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="selector">Converter</param>
-    /// <param name="defaultValue">Default value</param>
-    /// <typeparam name="T">Source value type</typeparam>
-    /// <typeparam name="TResult">Result value type</typeparam>
+    /// <summary> Convert to other value type or default </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <param name="defaultValue"> Default value </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector, TResult defaultValue)
         => item.Select(selector).ValueOrDefault(defaultValue);
 
-    /// <summary>
-    ///     Convert to other value type or default from generator
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="selector">Converter</param>
-    /// <param name="defaultGenerator">Default value generator</param>
-    /// <typeparam name="T">Source value type</typeparam>
-    /// <typeparam name="TResult">Result value type</typeparam>
+    /// <summary> Convert to other value type or default from generator </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <param name="defaultGenerator"> Default value generator </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector, Func<TResult> defaultGenerator)
         => item.Select(selector).ValueOrDefault(defaultGenerator);
 
-    /// <summary>
-    ///     Get value or default
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="defaultValue">Default value</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Get value or default </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="defaultValue"> Default value </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static T ValueOrDefault<T>(this Maybe<T> item, T defaultValue)
         => item.HasValue ? item.Value : defaultValue;
 
-    /// <summary>
-    ///     Get value or default from generator
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="defaultGenerator">Default value generator</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Get value or default from generator </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="defaultGenerator"> Default value generator </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static T ValueOrDefault<T>(this Maybe<T> item, Func<T> defaultGenerator)
         => item.HasValue ? item.Value : defaultGenerator.Invoke();
 
-    /// <summary>
-    ///     Get value form this item or other
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <param name="other">Other</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Get value form this item or other </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="other"> Other </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Or<T>(this Maybe<T> item, Maybe<T> other)
         => item.HasValue ? item : other;
 
-    /// <summary>
-    ///     Unwrap nested Maybe
-    /// </summary>
-    /// <param name="item">Source</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Unwrap nested Maybe </summary>
+    /// <param name="item"> Source </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> item)
         => item.HasValue ? item.Value : None<T>();
 }

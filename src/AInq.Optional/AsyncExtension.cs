@@ -18,16 +18,12 @@ using System.Threading.Tasks;
 namespace AInq.Optional
 {
 
-/// <summary>
-///     Asynchronous Try utils
-/// </summary>
+/// <summary> Asynchronous Try utils </summary>
 public static class AsyncExtension
 {
-    /// <summary>
-    ///     Create Try from async value generator
-    /// </summary>
-    /// <param name="generator">Value generator</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Create Try from async value generator </summary>
+    /// <param name="generator"> Value generator </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static async Task<Try<T>> ResultAsync<T>(Func<Task<T>> generator)
     {
         try
@@ -41,11 +37,9 @@ public static class AsyncExtension
         }
     }
 
-    /// <summary>
-    ///     Create Try from value task
-    /// </summary>
-    /// <param name="task">Value task</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Create Try from value task </summary>
+    /// <param name="task"> Value task </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static async Task<Try<T>> ResultAsync<T>(Task<T> task)
     {
         try
@@ -59,11 +53,9 @@ public static class AsyncExtension
         }
     }
 
-    /// <summary>
-    ///     Unwrap to Task
-    /// </summary>
-    /// <param name="task">Try with task</param>
-    /// <typeparam name="T">Value type</typeparam>
+    /// <summary> Unwrap to Task </summary>
+    /// <param name="task"> Try with task </param>
+    /// <typeparam name="T"> Value type </typeparam>
     public static async Task<Try<T>> UnwrapAsync<T>(Try<Task<T>> task)
     {
         if (!task.Success) return Try.Error<T>(task.Error!);
