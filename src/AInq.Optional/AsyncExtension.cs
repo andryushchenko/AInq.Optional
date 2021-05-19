@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace AInq.Optional
 {
 
-/// <summary> Asynchronous Try utils </summary>
+/// <summary> Asynchronous utils </summary>
 public static class AsyncExtension
 {
     /// <summary> Create Try from async value generator </summary>
@@ -56,7 +56,7 @@ public static class AsyncExtension
     /// <summary> Unwrap to Task </summary>
     /// <param name="task"> Try with task </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static async Task<Try<T>> UnwrapAsync<T>(Try<Task<T>> task)
+    public static async Task<Try<T>> UnwrapAsync<T>(this Try<Task<T>> task)
     {
         if (!task.Success) return Try.Error<T>(task.Error!);
         try
@@ -69,6 +69,46 @@ public static class AsyncExtension
             return new Try<T>(ex);
         }
     }
+
+    /// <summary> Convert to other value type asynchronously </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
+    public static async Task<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> item, Func<T, Task<TResult>> selector)
+        => item.HasValue ? Maybe.Value(await selector.Invoke(item.Value).ConfigureAwait(false)) : Maybe.None<TResult>();
+
+    /// <summary> Convert to other value type asynchronously </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="selector"> Converter </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
+    public static async Task<Try<TResult>> SelectAsync<T, TResult>(this Try<T> item, Func<T, Task<TResult>> selector)
+        => item.Success ? await ResultAsync(selector.Invoke(item.Value)).ConfigureAwait(false) : Try.Error<TResult>(item.Error!);
+
+    /// <summary> Convert to other left value type asynchronously </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="leftSelector"> Converter </param>
+    /// <typeparam name="TLeft"> Left source type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    /// <typeparam name="TLeftResult"> Left result type </typeparam>
+    public static async Task<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> item,
+        Func<TLeft, Task<TLeftResult>> leftSelector)
+        => item.HasLeft
+            ? Either.Left<TLeftResult, TRight>(await leftSelector.Invoke(item.Left).ConfigureAwait(false))
+            : Either.Right<TLeftResult, TRight>(item.Right);
+
+    /// <summary> Convert to other right value type asynchronously </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="rightSelector"> Converter </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right source type </typeparam>
+    /// <typeparam name="TRightResult"> Right result type </typeparam>
+    public static async Task<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> item,
+        Func<TRight, Task<TRightResult>> rightSelector)
+        => item.HasLeft
+            ? Either.Left<TLeft, TRightResult>(item.Left)
+            : Either.Right<TLeft, TRightResult>(await rightSelector.Invoke(item.Right).ConfigureAwait(false));
 }
 
 }
