@@ -33,39 +33,63 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task})">
+        <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
             <summary> Do asynchronous action with value (if exists) </summary>
             <param name="item"> Source </param>
             <param name="action"> Action </param>
+            <param name="cancellation"> Cancellation Token </param>
+            <typeparam name="T"> Source value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task})">
+            <inheritdoc cref="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary> Do asynchronous action with value (if exists) </summary>
+            <param name="item"> Source </param>
+            <param name="action"> Action </param>
+            <param name="cancellation"> Cancellation Token </param>
             <typeparam name="T"> Source value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.Tasks.Task})">
-            <summary> Do asynchronous action with value (if exists) </summary>
-            <param name="item"> Source </param>
-            <param name="action"> Action </param>
-            <typeparam name="T"> Source value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.ActionExtension.DoLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task})">
+        <member name="M:AInq.Optional.ActionExtension.DoLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
             <summary> Do asynchronous action with left value (if exists) </summary>
             <param name="item"> Source </param>
             <param name="action"> Action </param>
+            <param name="cancellation"> Cancellation Token </param>
+            <typeparam name="TLeft"> Left value type </typeparam>
+            <typeparam name="TRight"> Right value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task})">
+            <inheritdoc cref="M:AInq.Optional.ActionExtension.DoLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoRightAsync``2(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary> Do asynchronous action with right value (if exists) </summary>
+            <param name="item"> Source </param>
+            <param name="action"> Action </param>
+            <param name="cancellation"> Cancellation Token </param>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ActionExtension.DoRightAsync``2(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task})">
-            <summary> Do asynchronous action with right value (if exists) </summary>
+            <inheritdoc cref="M:AInq.Optional.ActionExtension.DoRightAsync``2(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary> Do asynchronous action with left or right value </summary>
             <param name="item"> Source </param>
-            <param name="action"> Action </param>
+            <param name="leftAction"> Left value action </param>
+            <param name="rightAction"> Right value action </param>
+            <param name="cancellation"> Cancellation Token </param>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.ActionExtension.DoAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task},System.Func{``1,System.Threading.Tasks.Task})">
+            <inheritdoc
+                cref="M:AInq.Optional.ActionExtension.DoAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+        </member>
         <member name="T:AInq.Optional.AsyncExtension">
             <summary> Asynchronous utils </summary>
-        </member>
-        <member name="M:AInq.Optional.AsyncExtension.ResultAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
-            <summary> Create Try from async value generator </summary>
-            <param name="generator"> Value generator </param>
-            <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="M:AInq.Optional.AsyncExtension.ResultAsync``1(System.Threading.Tasks.Task{``0})">
             <summary> Create Try from value task </summary>
@@ -77,35 +101,67 @@
             <param name="task"> Try with task </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
             <summary> Convert to other value type asynchronously </summary>
             <param name="item"> Source </param>
             <param name="selector"> Converter </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="T"> Source value type </typeparam>
+            <typeparam name="TResult"> Result value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <summary> Convert to other value type asynchronously </summary>
+            <param name="item"> Source </param>
+            <param name="selector"> Converter </param>
+            <param name="cancellation"> Cancellation token </param>
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
-            <summary> Convert to other value type asynchronously </summary>
-            <param name="item"> Source </param>
-            <param name="selector"> Converter </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}})">
+        <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">
             <summary> Convert to other left value type asynchronously </summary>
             <param name="item"> Source </param>
-            <param name="leftSelector"> Converter </param>
+            <param name="leftSelector"> Left value converter </param>
+            <param name="cancellation"> Cancellation token </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
             <typeparam name="TLeftResult"> Left result type </typeparam>
         </member>
-        <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task{``2}})">
+        <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">
             <summary> Convert to other right value type asynchronously </summary>
             <param name="item"> Source </param>
-            <param name="rightSelector"> Converter </param>
+            <param name="rightSelector"> Right value converter </param>
+            <param name="cancellation"> Cancellation token </param>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TRightResult"> Right result type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task{``2}})">
+            <inheritdoc
+                cref="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)">
+            <summary> Convert to other type asynchronously </summary>
+            <param name="item"> Source </param>
+            <param name="leftSelector"> Left value converter </param>
+            <param name="rightSelector"> Right value converter </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="TLeft"> Left source type </typeparam>
+            <typeparam name="TRight"> Right source type </typeparam>
+            <typeparam name="TLeftResult"> Left result type </typeparam>
+            <typeparam name="TRightResult"> Right result type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.Tasks.Task{``3}})">
+            <inheritdoc
+                cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
         </member>
         <member name="T:AInq.Optional.ConvertExtension">
             <summary> Monad convert utils </summary>
@@ -196,7 +252,7 @@
         <member name="M:AInq.Optional.Either.SelectLeft``3(AInq.Optional.Either{``0,``1},System.Func{``0,``2})">
             <summary> Convert to other left value type </summary>
             <param name="item"> Source </param>
-            <param name="leftSelector"> Converter </param>
+            <param name="leftSelector"> Left value converter </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
             <typeparam name="TLeftResult"> Left result type </typeparam>
@@ -204,7 +260,7 @@
         <member name="M:AInq.Optional.Either.SelectRight``3(AInq.Optional.Either{``0,``1},System.Func{``1,``2})">
             <summary> Convert to other right value type </summary>
             <param name="item"> Source </param>
-            <param name="rightSelector"> Converter </param>
+            <param name="rightSelector"> Right value converter </param>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TRightResult"> Right result type </typeparam>
@@ -212,8 +268,8 @@
         <member name="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,``3})">
             <summary> Convert to other type </summary>
             <param name="item"> Source </param>
-            <param name="leftSelector"> Converter </param>
-            <param name="rightSelector"> Converter </param>
+            <param name="leftSelector"> Left value converter </param>
+            <param name="rightSelector"> Right value converter </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TLeftResult"> Left result type </typeparam>

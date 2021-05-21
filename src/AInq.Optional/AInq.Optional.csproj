@@ -12,15 +12,13 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
     <Description>Simple optional types for .NET with basic helpers</Description>
-    <PackageReleaseNotes>[ADD] Action extensions
-[ADD] SelectAsync extensions
-[FIX] Minor bugfix in async extensions</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] Cancellation in async operations</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

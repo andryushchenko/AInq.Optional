@@ -38,7 +38,7 @@ public static class Either
 
     /// <summary> Convert to other left value type </summary>
     /// <param name="item"> Source </param>
-    /// <param name="leftSelector"> Converter </param>
+    /// <param name="leftSelector"> Left value converter </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right value type </typeparam>
     /// <typeparam name="TLeftResult"> Left result type </typeparam>
@@ -48,7 +48,7 @@ public static class Either
 
     /// <summary> Convert to other right value type </summary>
     /// <param name="item"> Source </param>
-    /// <param name="rightSelector"> Converter </param>
+    /// <param name="rightSelector"> Right value converter </param>
     /// <typeparam name="TLeft"> Left value type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <typeparam name="TRightResult"> Right result type </typeparam>
@@ -58,8 +58,8 @@ public static class Either
 
     /// <summary> Convert to other type </summary>
     /// <param name="item"> Source </param>
-    /// <param name="leftSelector"> Converter </param>
-    /// <param name="rightSelector"> Converter </param>
+    /// <param name="leftSelector"> Left value converter </param>
+    /// <param name="rightSelector"> Right value converter </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <typeparam name="TLeftResult"> Left result type </typeparam>
