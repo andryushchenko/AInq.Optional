@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -11,26 +11,17 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.0.5</Version>
+    <Version>1.1.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
     <Description>Simple optional types for .NET with basic helpers</Description>
-    <PackageReleaseNotes>[ADD] Cancellation in async operations</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>..\..\doc\AInq.Optional.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
 
 </Project>
