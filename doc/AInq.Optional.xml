@@ -223,12 +223,12 @@
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.AsTry``1(AInq.Optional.Maybe{``0})">
-            <summary> Convert <see cref="T:AInq.Optional.Maybe`1"/> to <see cref="T:AInq.Optional.Try`1"/>  </summary>
+            <summary> Convert <see cref="T:AInq.Optional.Maybe`1" /> to <see cref="T:AInq.Optional.Try`1" />  </summary>
             <param name="item"> Maybe </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.AsMaybe``1(AInq.Optional.Try{``0})">
-            <summary> Convert <see cref="T:AInq.Optional.Try`1"/> to <see cref="T:AInq.Optional.Maybe`1"/>  </summary>
+            <summary> Convert <see cref="T:AInq.Optional.Try`1" /> to <see cref="T:AInq.Optional.Maybe`1" />  </summary>
             <param name="item"> Try </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
