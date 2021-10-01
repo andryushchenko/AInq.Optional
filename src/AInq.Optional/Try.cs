@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Try utils </summary>
 public static class Try
@@ -125,6 +122,4 @@ public static class Try
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> Unwrap<T>(this Try<Try<T>> item)
         => item.Success ? item.Value : Error<T>(item.Error!);
-}
-
 }

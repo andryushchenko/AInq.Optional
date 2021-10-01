@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Value processing extension </summary>
 public static class ActionExtension
@@ -138,6 +133,4 @@ public static class ActionExtension
     ///     cref="DoAsync{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task},Func{TRight,CancellationToken,Task},CancellationToken)" />
     public static async Task DoAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, Task> leftAction, Func<TRight, Task> rightAction)
         => await item.DoAsync((source, _) => leftAction.Invoke(source), (source, _) => rightAction.Invoke(source)).ConfigureAwait(false);
-}
-
 }

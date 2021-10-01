@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using System.Linq;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Monad collection utils </summary>
 public static class EnumerableExtension
@@ -54,6 +50,4 @@ public static class EnumerableExtension
     public static IEnumerable<TRight> RightValues<TLeft, TRight>(this IEnumerable<Either<TLeft, TRight>> collection)
         => collection.Where(item => item.HasRight)
                      .Select(item => item.Right);
-}
-
 }

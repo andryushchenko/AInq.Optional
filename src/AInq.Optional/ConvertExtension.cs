@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Monad convert utils </summary>
 public static class ConvertExtension
@@ -93,6 +92,4 @@ public static class ConvertExtension
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> AsMaybe<T>(this Try<T> item)
         => item.Success ? Maybe.Value(item.Value) : Maybe.None<T>();
-}
-
 }

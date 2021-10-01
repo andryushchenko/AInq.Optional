@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Asynchronous utils </summary>
 public static class AsyncExtension
@@ -141,6 +136,4 @@ public static class AsyncExtension
     public static async Task<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> item,
         Func<TLeft, Task<TLeftResult>> leftSelector, Func<TRight, Task<TRightResult>> rightSelector)
         => await item.SelectAsync((source, _) => leftSelector.Invoke(source), (source, _) => rightSelector.Invoke(source)).ConfigureAwait(false);
-}
-
 }

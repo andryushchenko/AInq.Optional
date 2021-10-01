@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Try monad </summary>
 /// <typeparam name="T"> Value type </typeparam>
@@ -212,6 +208,4 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
     /// <param name="b"> Second element </param>
     public static bool operator >=(T? a, Try<T> b)
         => b.CompareTo(a) < 0;
-}
-
 }

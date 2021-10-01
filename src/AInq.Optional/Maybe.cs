@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Maybe utils </summary>
 public static class Maybe
@@ -109,6 +106,4 @@ public static class Maybe
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> item)
         => item.HasValue ? item.Value : None<T>();
-}
-
 }

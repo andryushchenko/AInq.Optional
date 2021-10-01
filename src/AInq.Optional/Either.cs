@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary>
 ///     Either utils
@@ -115,6 +112,4 @@ public static class Either
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight ToRight<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, TRight> leftToRight)
         => item.HasLeft ? leftToRight.Invoke(item.Left) : item.Right;
-}
-
 }

@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary> Maybe monad </summary>
 /// <typeparam name="T"> Value type </typeparam>
@@ -198,6 +194,4 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
     /// <param name="b"> Second element </param>
     public static bool operator >=(T? a, Maybe<T> b)
         => b.CompareTo(a) < 0;
-}
-
 }

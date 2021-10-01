@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
-namespace AInq.Optional
-{
+namespace AInq.Optional;
 
 /// <summary>Either monad </summary>
 /// <typeparam name="TLeft"> Left value type </typeparam>
@@ -182,6 +178,4 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     /// <param name="b"> Second element </param>
     public static bool operator !=(TRight? a, Either<TLeft, TRight> b)
         => b.HasLeft || !EqualityComparer<TRight?>.Default.Equals(a, b._right);
-}
-
 }
