@@ -1,0 +1,31 @@
+name: ReSharper code cleanup
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup:
+    if: contains(github.event.push.commits.*.message, '[AUTO]') == 'false'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+    - run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.3.0-eap01
+    - name: Code cleanup
+      run: jb cleanupcode --profile="Full" AInq.Optional.sln
+    - name: Check for modified files
+      id: git-check
+      run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+    - name: Push changes
+      if: steps.git-check.outputs.modified == 'true'
+      run: |
+        git config --global user.name 'Anton Andryushchenko'
+        git config --global user.email 'andryushchenko@users.noreply.github.com'
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git commit -am "[AUTO] Code cleanup"
+        git push
