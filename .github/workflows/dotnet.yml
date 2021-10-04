@@ -7,7 +7,7 @@ on:
 
 jobs:
   cleanup:
-    if: contains(github.event.push.commits.*.message, '[AUTO]') == 'false'
+    if: contains(github.event.push.commits.*.message, '[AUTO]') == false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
