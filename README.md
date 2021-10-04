@@ -1,6 +1,6 @@
 # AInq.Optional
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Optional)](https://github.com/andryushchenko/AInq.Optional/releases) [![Nuget](https://img.shields.io/nuget/v/AInq.Optional)](https://www.nuget.org/packages/AInq.Optional/) [![netstandard 2.0](https://img.shields.io/badge/netstandard-2.0-blue.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) [![netstandard 2.1](https://img.shields.io/badge/netstandard-2.1-blue.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) [![net 5.0](https://img.shields.io/badge/net-5.0-blue.svg)](https://dotnet.microsoft.com/learn/dotnet/what-is-dotnet) [![net 6.0](https://img.shields.io/badge/net-6.0-blue.svg)](https://dotnet.microsoft.com/learn/dotnet/what-is-dotnet) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Optional)](LICENSE)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Optional)](https://github.com/andryushchenko/AInq.Optional/releases) [![Nuget](https://img.shields.io/nuget/v/AInq.Optional)](https://www.nuget.org/packages/AInq.Optional/) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Optional)](LICENSE)
 
 ## What is it?
 
