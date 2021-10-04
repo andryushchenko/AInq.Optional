@@ -16,7 +16,7 @@ namespace AInq.Optional;
 
 /// <summary> Try monad </summary>
 /// <typeparam name="T"> Value type </typeparam>
-/// <remarks> DO NOT create <see cref="Try{T}"/> directly, use <see cref="Try.Value{T}"/> and <see cref="Try.Error{T}"/> </remarks>
+/// <remarks> DO NOT create <see cref="Try{T}" /> directly, use <see cref="Try.Value{T}" /> and <see cref="Try.Error{T}" /> </remarks>
 public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<Try<T>>, IComparable<T>
 {
     private readonly T _value;

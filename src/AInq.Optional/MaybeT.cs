@@ -16,7 +16,7 @@ namespace AInq.Optional;
 
 /// <summary> Maybe monad </summary>
 /// <typeparam name="T"> Value type </typeparam>
-/// <remarks> DO NOT create <see cref="Maybe{T}"/> directly, use <see cref="Maybe.Value{T}"/> and <see cref="Maybe.None{T}"/> </remarks>
+/// <remarks> DO NOT create <see cref="Maybe{T}" /> directly, use <see cref="Maybe.Value{T}" /> and <see cref="Maybe.None{T}" /> </remarks>
 public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparable<Maybe<T>>, IComparable<T>
 {
     private readonly T _value;
