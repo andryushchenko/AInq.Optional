@@ -11,16 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@v1
+    - name: .NET setup
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0.x'
         include-prerelease: true
-    - run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.3.0-eap02
+    - name: ReSharper tools setup
+      run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.3.0-eap02
     - name: Code cleanup
       run: jb cleanupcode --profile="Full" AInq.Optional.sln
     - name: Check for modified files
       id: git-check
-      run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+      run: echo ::set-output name=modified::$(if git diff-index --quiet --ignore-cr-at-eol HEAD ; then echo "false"; else echo "true"; fi)
     - name: Push changes
       if: steps.git-check.outputs.modified == 'true'
       run: |
