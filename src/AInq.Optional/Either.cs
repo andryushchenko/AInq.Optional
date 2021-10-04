@@ -14,9 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary>
-///     Either utils
-/// </summary>
+/// <summary> Either utils </summary>
 public static class Either
 {
     /// <summary> Create Either from left value </summary>

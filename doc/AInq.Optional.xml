@@ -233,9 +233,7 @@
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="T:AInq.Optional.Either">
-            <summary>
-                Either utils
-            </summary>
+            <summary> Either utils </summary>
         </member>
         <member name="M:AInq.Optional.Either.Left``2(``0)">
             <summary> Create Either from left value </summary>
@@ -318,9 +316,10 @@
             <typeparam name="TRight"> Right source type </typeparam>
         </member>
         <member name="T:AInq.Optional.Either`2">
-            <summary>Either monad </summary>
+            <summary> Either monad </summary>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
+            <remarks> DO NOT create <see cref="T:AInq.Optional.Either`2" /> directly, use <see cref="M:AInq.Optional.Either.Right``2(``1)" /> and <see cref="M:AInq.Optional.Either.Left``2(``0)" /> </remarks>
         </member>
         <member name="P:AInq.Optional.Either`2.HasLeft">
             <summary> Check if item contains left value </summary>
@@ -538,6 +537,7 @@
         <member name="T:AInq.Optional.Maybe`1">
             <summary> Maybe monad </summary>
             <typeparam name="T"> Value type </typeparam>
+            <remarks> DO NOT create <see cref="T:AInq.Optional.Maybe`1"/> directly, use <see cref="M:AInq.Optional.Maybe.Value``1(``0)"/> and <see cref="M:AInq.Optional.Maybe.None``1"/> </remarks>
         </member>
         <member name="P:AInq.Optional.Maybe`1.HasValue">
             <summary> Check if item contains value </summary>
@@ -754,6 +754,7 @@
         <member name="T:AInq.Optional.Try`1">
             <summary> Try monad </summary>
             <typeparam name="T"> Value type </typeparam>
+            <remarks> DO NOT create <see cref="T:AInq.Optional.Try`1"/> directly, use <see cref="M:AInq.Optional.Try.Value``1(``0)"/> and <see cref="M:AInq.Optional.Try.Error``1(System.Exception)"/> </remarks>
         </member>
         <member name="P:AInq.Optional.Try`1.Success">
             <summary> Check if item is success </summary>

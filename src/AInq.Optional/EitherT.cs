@@ -14,9 +14,10 @@
 
 namespace AInq.Optional;
 
-/// <summary>Either monad </summary>
+/// <summary> Either monad </summary>
 /// <typeparam name="TLeft"> Left value type </typeparam>
 /// <typeparam name="TRight"> Right value type </typeparam>
+/// <remarks> DO NOT create <see cref="Either{TLeft,TRight}" /> directly, use <see cref="Either.Right{TLeft,TRight}" /> and <see cref="Either.Left{TLeft,TRight}" /> </remarks>
 public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 
 {
