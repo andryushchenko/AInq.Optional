@@ -23,16 +23,26 @@ public static class ActionExtension
     /// <typeparam name="T"> Source value type </typeparam>
     public static void Do<T>(this Maybe<T> item, Action<T> action)
     {
-        if (item.HasValue) action.Invoke(item.Value);
+        if (item.HasValue) (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value);
     }
 
-    /// <summary> Do action with value (if exists) </summary>
+    /// <summary> Try do action with value </summary>
     /// <param name="item"> Source </param>
     /// <param name="action"> Action </param>
     /// <typeparam name="T"> Source value type </typeparam>
     public static void Do<T>(this Try<T> item, Action<T> action)
     {
-        if (item.Success) action.Invoke(item.Value);
+        if (!item.Success) throw item.Error!;
+        (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value);
+    }
+
+    /// <summary> Do action with value (if success) </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="action"> Action </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void DoIfSuccess<T>(this Try<T> item, Action<T> action)
+    {
+        if (item.Success) (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value);
     }
 
     /// <summary> Do action with left value (if exists) </summary>
@@ -42,7 +52,7 @@ public static class ActionExtension
     /// <typeparam name="TRight"> Right value type </typeparam>
     public static void DoLeft<TLeft, TRight>(this Either<TLeft, TRight> item, Action<TLeft> action)
     {
-        if (item.HasLeft) action.Invoke(item.Left);
+        if (item.HasLeft) (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Left);
     }
 
     /// <summary> Do action with right value (if exists) </summary>
@@ -52,7 +62,7 @@ public static class ActionExtension
     /// <typeparam name="TRight"> Right value type </typeparam>
     public static void DoRight<TLeft, TRight>(this Either<TLeft, TRight> item, Action<TRight> action)
     {
-        if (item.HasRight) action.Invoke(item.Right);
+        if (item.HasRight) (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Right);
     }
 
     /// <summary> Do asynchronous action with value (if exists) </summary>
@@ -62,26 +72,52 @@ public static class ActionExtension
     /// <typeparam name="T"> Source value type </typeparam>
     public static async Task DoAsync<T>(this Maybe<T> item, Func<T, CancellationToken, Task> action, CancellationToken cancellation = default)
     {
-        if (item.HasValue) await action.Invoke(item.Value, cancellation).ConfigureAwait(false);
+        if (item.HasValue)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value, cancellation).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoAsync{T}(Maybe{T},Func{T,CancellationToken,Task},CancellationToken)" />
     public static async Task DoAsync<T>(this Maybe<T> item, Func<T, Task> action)
-        => await item.DoAsync((source, _) => action.Invoke(source));
+    {
+        if (item.HasValue)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value).ConfigureAwait(false);
+    }
 
     /// <summary> Do asynchronous action with value (if exists) </summary>
     /// <param name="item"> Source </param>
     /// <param name="action"> Action </param>
     /// <param name="cancellation"> Cancellation Token </param>
     /// <typeparam name="T"> Source value type </typeparam>
+    public static async Task DoIfSuccessAsync<T>(this Try<T> item, Func<T, CancellationToken, Task> action, CancellationToken cancellation = default)
+    {
+        if (item.Success)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value, cancellation).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="DoIfSuccessAsync{T}(Try{T},Func{T,CancellationToken,Task},CancellationToken)" />
+    public static async Task DoIfSuccessAsync<T>(this Try<T> item, Func<T, Task> action)
+    {
+        if (item.Success)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value).ConfigureAwait(false);
+    }
+
+    /// <summary> Try do asynchronous action with value </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="action"> Action </param>
+    /// <param name="cancellation"> Cancellation Token </param>
+    /// <typeparam name="T"> Source value type </typeparam>
     public static async Task DoAsync<T>(this Try<T> item, Func<T, CancellationToken, Task> action, CancellationToken cancellation = default)
     {
-        if (item.Success) await action.Invoke(item.Value, cancellation).ConfigureAwait(false);
+        if (!item.Success) throw item.Error!;
+        await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value, cancellation).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoAsync{T}(Try{T},Func{T,CancellationToken,Task},CancellationToken)" />
     public static async Task DoAsync<T>(this Try<T> item, Func<T, Task> action)
-        => await item.DoAsync((source, _) => action.Invoke(source));
+    {
+        if (!item.Success) throw item.Error!;
+        await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Value).ConfigureAwait(false);
+    }
 
     /// <summary> Do asynchronous action with left value (if exists) </summary>
     /// <param name="item"> Source </param>
@@ -92,12 +128,16 @@ public static class ActionExtension
     public static async Task DoLeftAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, CancellationToken, Task> action,
         CancellationToken cancellation = default)
     {
-        if (item.HasLeft) await action.Invoke(item.Left, cancellation).ConfigureAwait(false);
+        if (item.HasLeft)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Left, cancellation).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoLeftAsync{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task},CancellationToken)" />
     public static async Task DoLeftAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, Task> action)
-        => await item.DoLeftAsync((source, _) => action.Invoke(source)).ConfigureAwait(false);
+    {
+        if (item.HasLeft)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Left).ConfigureAwait(false);
+    }
 
     /// <summary> Do asynchronous action with right value (if exists) </summary>
     /// <param name="item"> Source </param>
@@ -108,12 +148,16 @@ public static class ActionExtension
     public static async Task DoRightAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TRight, CancellationToken, Task> action,
         CancellationToken cancellation = default)
     {
-        if (item.HasRight) await action.Invoke(item.Right, cancellation).ConfigureAwait(false);
+        if (item.HasRight)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Right, cancellation).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoRightAsync{TLeft,TRight}(Either{TLeft,TRight},Func{TRight,CancellationToken,Task},CancellationToken)" />
     public static async Task DoRightAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TRight, Task> action)
-        => await item.DoRightAsync((source, _) => action.Invoke(source)).ConfigureAwait(false);
+    {
+        if (item.HasRight)
+            await (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Right).ConfigureAwait(false);
+    }
 
     /// <summary> Do asynchronous action with left or right value </summary>
     /// <param name="item"> Source </param>
@@ -125,12 +169,17 @@ public static class ActionExtension
     public static async Task DoAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, CancellationToken, Task> leftAction,
         Func<TRight, CancellationToken, Task> rightAction, CancellationToken cancellation = default)
     {
-        if (item.HasLeft) await leftAction.Invoke(item.Left, cancellation).ConfigureAwait(false);
-        else await rightAction.Invoke(item.Right, cancellation).ConfigureAwait(false);
+        if (item.HasLeft)
+            await (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(item.Left, cancellation).ConfigureAwait(false);
+        else await (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(item.Right, cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc
-    ///     cref="DoAsync{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task},Func{TRight,CancellationToken,Task},CancellationToken)" />
-    public static async Task DoAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, Task> leftAction, Func<TRight, Task> rightAction)
-        => await item.DoAsync((source, _) => leftAction.Invoke(source), (source, _) => rightAction.Invoke(source)).ConfigureAwait(false);
+    /// <inheritdoc cref="DoAsync{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task},Func{TRight,CancellationToken,Task},CancellationToken)" />
+    public static async Task DoAsync<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, Task> leftAction,
+        Func<TRight, Task> rightAction)
+    {
+        if (item.HasLeft)
+            await (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(item.Left).ConfigureAwait(false);
+        else await (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(item.Right).ConfigureAwait(false);
+    }
 }

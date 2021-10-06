@@ -14,7 +14,13 @@
             <typeparam name="T"> Source value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ActionExtension.Do``1(AInq.Optional.Try{``0},System.Action{``0})">
-            <summary> Do action with value (if exists) </summary>
+            <summary> Try do action with value </summary>
+            <param name="item"> Source </param>
+            <param name="action"> Action </param>
+            <typeparam name="T"> Source value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoIfSuccess``1(AInq.Optional.Try{``0},System.Action{``0})">
+            <summary> Do action with value (if success) </summary>
             <param name="item"> Source </param>
             <param name="action"> Action </param>
             <typeparam name="T"> Source value type </typeparam>
@@ -43,8 +49,18 @@
         <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task})">
             <inheritdoc cref="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+        <member name="M:AInq.Optional.ActionExtension.DoIfSuccessAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
             <summary> Do asynchronous action with value (if exists) </summary>
+            <param name="item"> Source </param>
+            <param name="action"> Action </param>
+            <param name="cancellation"> Cancellation Token </param>
+            <typeparam name="T"> Source value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoIfSuccessAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.Tasks.Task})">
+            <inheritdoc cref="M:AInq.Optional.ActionExtension.DoIfSuccessAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary> Try do asynchronous action with value </summary>
             <param name="item"> Source </param>
             <param name="action"> Action </param>
             <param name="cancellation"> Cancellation Token </param>
@@ -85,8 +101,7 @@
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ActionExtension.DoAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task},System.Func{``1,System.Threading.Tasks.Task})">
-            <inheritdoc
-                cref="M:AInq.Optional.ActionExtension.DoAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+            <inheritdoc cref="M:AInq.Optional.ActionExtension.DoAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
         </member>
         <member name="T:AInq.Optional.AsyncExtension">
             <summary> Asynchronous utils </summary>
@@ -145,8 +160,7 @@
             <typeparam name="TRightResult"> Right result type </typeparam>
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task{``2}})">
-            <inheritdoc
-                cref="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)">
             <summary> Convert to other type asynchronously </summary>
@@ -160,42 +174,41 @@
             <typeparam name="TRightResult"> Right result type </typeparam>
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.Tasks.Task{``3}})">
-            <inheritdoc
-                cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
         </member>
         <member name="T:AInq.Optional.ConvertExtension">
             <summary> Monad convert utils </summary>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.LeftOrNone``2(AInq.Optional.Either{``0,``1})">
-            <summary> Get left value or none  </summary>
+            <summary> Get left value or none </summary>
             <param name="item"> Source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Maybe with left value </returns>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.RightOrNone``2(AInq.Optional.Either{``0,``1})">
-            <summary> Get right value or none  </summary>
+            <summary> Get right value or none </summary>
             <param name="item"> Source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Maybe with right value </returns>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.TryLeft``2(AInq.Optional.Either{``0,``1})">
-            <summary> Try get left value  </summary>
+            <summary> Try get left value </summary>
             <param name="item"> Source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Try with left value </returns>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.TryRight``2(AInq.Optional.Either{``0,``1})">
-            <summary> Try get right value  </summary>
+            <summary> Try get right value </summary>
             <param name="item"> Source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Try with right value </returns>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.Or``2(AInq.Optional.Maybe{``0},``1)">
-            <summary> Get source value or other if empty  </summary>
+            <summary> Get source value or other if empty </summary>
             <param name="item"> Maybe source </param>
             <param name="other"> Other value </param>
             <typeparam name="TLeft"> Left source type </typeparam>
@@ -203,7 +216,7 @@
             <returns> Either </returns>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.Or``2(AInq.Optional.Try{``0},``1)">
-            <summary> Get source value or other if exception  </summary>
+            <summary> Get source value or other if exception </summary>
             <param name="item"> Maybe source </param>
             <param name="other"> Other value </param>
             <typeparam name="TLeft"> Left source type </typeparam>
@@ -211,29 +224,29 @@
             <returns> Either </returns>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.Or``1(AInq.Optional.Maybe{``0},AInq.Optional.Try{``0})">
-            <summary> Get value form this item or other  </summary>
+            <summary> Get value form this item or other </summary>
             <param name="item"> Maybe </param>
             <param name="other"> Try </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.Or``1(AInq.Optional.Try{``0},AInq.Optional.Maybe{``0})">
-            <summary> Get value form this item or other  </summary>
+            <summary> Get value form this item or other </summary>
             <param name="item"> Try </param>
             <param name="other"> Maybe </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.AsTry``1(AInq.Optional.Maybe{``0})">
-            <summary> Convert <see cref="T:AInq.Optional.Maybe`1" /> to <see cref="T:AInq.Optional.Try`1" />  </summary>
+            <summary> Convert <see cref="T:AInq.Optional.Maybe`1" /> to <see cref="T:AInq.Optional.Try`1" /> </summary>
             <param name="item"> Maybe </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="M:AInq.Optional.ConvertExtension.AsMaybe``1(AInq.Optional.Try{``0})">
-            <summary> Convert <see cref="T:AInq.Optional.Try`1" /> to <see cref="T:AInq.Optional.Maybe`1" />  </summary>
+            <summary> Convert <see cref="T:AInq.Optional.Try`1" /> to <see cref="T:AInq.Optional.Maybe`1" /> </summary>
             <param name="item"> Try </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="T:AInq.Optional.Either">
-            <summary> Either utils </summary>
+            <summary> Either monad utils </summary>
         </member>
         <member name="M:AInq.Optional.Either.Left``2(``0)">
             <summary> Create Either from left value </summary>
@@ -454,7 +467,7 @@
             <returns> Right values collection </returns>
         </member>
         <member name="T:AInq.Optional.Maybe">
-            <summary> Maybe utils </summary>
+            <summary> Maybe monad utils </summary>
         </member>
         <member name="M:AInq.Optional.Maybe.None``1">
             <summary> Create empty Maybe </summary>
@@ -537,7 +550,7 @@
         <member name="T:AInq.Optional.Maybe`1">
             <summary> Maybe monad </summary>
             <typeparam name="T"> Value type </typeparam>
-            <remarks> DO NOT create <see cref="T:AInq.Optional.Maybe`1"/> directly, use <see cref="M:AInq.Optional.Maybe.Value``1(``0)"/> and <see cref="M:AInq.Optional.Maybe.None``1"/> </remarks>
+            <remarks> DO NOT create <see cref="T:AInq.Optional.Maybe`1" /> directly, use <see cref="M:AInq.Optional.Maybe.Value``1(``0)" /> and <see cref="M:AInq.Optional.Maybe.None``1" /> </remarks>
         </member>
         <member name="P:AInq.Optional.Maybe`1.HasValue">
             <summary> Check if item contains value </summary>
@@ -665,7 +678,7 @@
             <param name="b"> Second element </param>
         </member>
         <member name="T:AInq.Optional.Try">
-            <summary> Try utils </summary>
+            <summary> Try monad utils </summary>
         </member>
         <member name="M:AInq.Optional.Try.Value``1(``0)">
             <summary> Create Try from value </summary>
@@ -697,14 +710,6 @@
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,``1},System.Func{``1})">
-            <summary> Convert to other value type or default from generator </summary>
-            <param name="item"> Source </param>
-            <param name="selector"> Converter </param>
-            <param name="defaultGenerator"> Default value generator </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
         <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}})">
             <summary> Convert to other value type </summary>
             <param name="item"> Source </param>
@@ -717,14 +722,6 @@
             <param name="item"> Source </param>
             <param name="selector"> Converter </param>
             <param name="defaultValue"> Default value </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}},System.Func{``1})">
-            <summary> Convert to other value type or default from generator </summary>
-            <param name="item"> Source </param>
-            <param name="selector"> Converter </param>
-            <param name="defaultGenerator"> Default value generator </param>
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
@@ -754,7 +751,7 @@
         <member name="T:AInq.Optional.Try`1">
             <summary> Try monad </summary>
             <typeparam name="T"> Value type </typeparam>
-            <remarks> DO NOT create <see cref="T:AInq.Optional.Try`1"/> directly, use <see cref="M:AInq.Optional.Try.Value``1(``0)"/> and <see cref="M:AInq.Optional.Try.Error``1(System.Exception)"/> </remarks>
+            <remarks> DO NOT create <see cref="T:AInq.Optional.Try`1" /> directly, use <see cref="M:AInq.Optional.Try.Value``1(``0)" /> and <see cref="M:AInq.Optional.Try.Error``1(System.Exception)" /> </remarks>
         </member>
         <member name="P:AInq.Optional.Try`1.Success">
             <summary> Check if item is success </summary>

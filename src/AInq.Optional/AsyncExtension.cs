@@ -58,11 +58,19 @@ public static class AsyncExtension
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static async Task<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> item, Func<T, CancellationToken, Task<TResult>> selector,
         CancellationToken cancellation = default)
-        => item.HasValue ? Maybe.Value(await selector.Invoke(item.Value, cancellation).ConfigureAwait(false)) : Maybe.None<TResult>();
+        => item.HasValue
+            ? Maybe.Value(await (selector ?? throw new ArgumentNullException(nameof(selector)))
+                                .Invoke(item.Value, cancellation)
+                                .ConfigureAwait(false))
+            : Maybe.None<TResult>();
 
     /// <inheritdoc cref="SelectAsync{T,TResult}(Maybe{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
     public static async Task<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> item, Func<T, Task<TResult>> selector)
-        => await item.SelectAsync((value, _) => selector.Invoke(value)).ConfigureAwait(false);
+        => item.HasValue
+            ? Maybe.Value(await (selector ?? throw new ArgumentNullException(nameof(selector)))
+                                .Invoke(item.Value)
+                                .ConfigureAwait(false))
+            : Maybe.None<TResult>();
 
     /// <summary> Convert to other value type asynchronously </summary>
     /// <param name="item"> Source </param>
@@ -72,11 +80,19 @@ public static class AsyncExtension
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static async Task<Try<TResult>> SelectAsync<T, TResult>(this Try<T> item, Func<T, CancellationToken, Task<TResult>> selector,
         CancellationToken cancellation = default)
-        => item.Success ? await ResultAsync(selector.Invoke(item.Value, cancellation)).ConfigureAwait(false) : Try.Error<TResult>(item.Error!);
+        => item.Success
+            ? await ResultAsync((selector ?? throw new ArgumentNullException(nameof(selector)))
+                    .Invoke(item.Value, cancellation))
+                .ConfigureAwait(false)
+            : Try.Error<TResult>(item.Error!);
 
     /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
     public static async Task<Try<TResult>> SelectAsync<T, TResult>(this Try<T> item, Func<T, Task<TResult>> selector)
-        => await item.SelectAsync((source, _) => selector.Invoke(source)).ConfigureAwait(false);
+        => item.Success
+            ? await ResultAsync((selector ?? throw new ArgumentNullException(nameof(selector)))
+                    .Invoke(item.Value))
+                .ConfigureAwait(false)
+            : Try.Error<TResult>(item.Error!);
 
     /// <summary> Convert to other left value type asynchronously </summary>
     /// <param name="item"> Source </param>
@@ -88,13 +104,19 @@ public static class AsyncExtension
     public static async Task<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> item,
         Func<TLeft, CancellationToken, Task<TLeftResult>> leftSelector, CancellationToken cancellation = default)
         => item.HasLeft
-            ? Either.Left<TLeftResult, TRight>(await leftSelector.Invoke(item.Left, cancellation).ConfigureAwait(false))
+            ? Either.Left<TLeftResult, TRight>(await (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector)))
+                                                     .Invoke(item.Left, cancellation)
+                                                     .ConfigureAwait(false))
             : Either.Right<TLeftResult, TRight>(item.Right);
 
     /// <inheritdoc cref="SelectLeftAsync{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task{TLeftResult}},CancellationToken)" />
     public static async Task<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> item,
         Func<TLeft, Task<TLeftResult>> leftSelector)
-        => await item.SelectLeftAsync((source, _) => leftSelector.Invoke(source)).ConfigureAwait(false);
+        => item.HasLeft
+            ? Either.Left<TLeftResult, TRight>(await (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector)))
+                                                     .Invoke(item.Left)
+                                                     .ConfigureAwait(false))
+            : Either.Right<TLeftResult, TRight>(item.Right);
 
     /// <summary> Convert to other right value type asynchronously </summary>
     /// <param name="item"> Source </param>
@@ -107,13 +129,18 @@ public static class AsyncExtension
         Func<TRight, CancellationToken, Task<TRightResult>> rightSelector, CancellationToken cancellation = default)
         => item.HasLeft
             ? Either.Left<TLeft, TRightResult>(item.Left)
-            : Either.Right<TLeft, TRightResult>(await rightSelector.Invoke(item.Right, cancellation).ConfigureAwait(false));
+            : Either.Right<TLeft, TRightResult>(await (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector)))
+                                                      .Invoke(item.Right, cancellation)
+                                                      .ConfigureAwait(false));
 
-    /// <inheritdoc
-    ///     cref="SelectRightAsync{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,CancellationToken,Task{TRightResult}},CancellationToken)" />
+    /// <inheritdoc cref="SelectRightAsync{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,CancellationToken,Task{TRightResult}},CancellationToken)" />
     public static async Task<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> item,
         Func<TRight, Task<TRightResult>> rightSelector)
-        => await item.SelectRightAsync((source, _) => rightSelector.Invoke(source)).ConfigureAwait(false);
+        => item.HasLeft
+            ? Either.Left<TLeft, TRightResult>(item.Left)
+            : Either.Right<TLeft, TRightResult>(await (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector)))
+                                                      .Invoke(item.Right)
+                                                      .ConfigureAwait(false));
 
     /// <summary> Convert to other type asynchronously </summary>
     /// <param name="item"> Source </param>
@@ -128,12 +155,21 @@ public static class AsyncExtension
         Func<TLeft, CancellationToken, Task<TLeftResult>> leftSelector, Func<TRight, CancellationToken, Task<TRightResult>> rightSelector,
         CancellationToken cancellation = default)
         => item.HasLeft
-            ? Either.Left<TLeftResult, TRightResult>(await leftSelector.Invoke(item.Left, cancellation).ConfigureAwait(false))
-            : Either.Right<TLeftResult, TRightResult>(await rightSelector.Invoke(item.Right, cancellation).ConfigureAwait(false));
+            ? Either.Left<TLeftResult, TRightResult>(await (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector)))
+                                                           .Invoke(item.Left, cancellation)
+                                                           .ConfigureAwait(false))
+            : Either.Right<TLeftResult, TRightResult>(await (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector)))
+                                                            .Invoke(item.Right, cancellation)
+                                                            .ConfigureAwait(false));
 
-    /// <inheritdoc
-    ///     cref="SelectAsync{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task{TLeftResult}},Func{TRight,CancellationToken,Task{TRightResult}},CancellationToken)" />
+    /// <inheritdoc cref="SelectAsync{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,CancellationToken,Task{TLeftResult}},Func{TRight,CancellationToken,Task{TRightResult}},CancellationToken)" />
     public static async Task<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> item,
         Func<TLeft, Task<TLeftResult>> leftSelector, Func<TRight, Task<TRightResult>> rightSelector)
-        => await item.SelectAsync((source, _) => leftSelector.Invoke(source), (source, _) => rightSelector.Invoke(source)).ConfigureAwait(false);
+        => item.HasLeft
+            ? Either.Left<TLeftResult, TRightResult>(await (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector)))
+                                                           .Invoke(item.Left)
+                                                           .ConfigureAwait(false))
+            : Either.Right<TLeftResult, TRightResult>(await (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector)))
+                                                            .Invoke(item.Right)
+                                                            .ConfigureAwait(false));
 }

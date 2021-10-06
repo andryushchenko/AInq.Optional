@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Either utils </summary>
+/// <summary> Either monad utils </summary>
 public static class Either
 {
     /// <summary> Create Either from left value </summary>
@@ -39,7 +39,9 @@ public static class Either
     /// <typeparam name="TLeftResult"> Left result type </typeparam>
     public static Either<TLeftResult, TRight> SelectLeft<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> item,
         Func<TLeft, TLeftResult> leftSelector)
-        => item.HasLeft ? Left<TLeftResult, TRight>(leftSelector.Invoke(item.Left)) : Right<TLeftResult, TRight>(item.Right);
+        => item.HasLeft
+            ? Left<TLeftResult, TRight>((leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left))
+            : Right<TLeftResult, TRight>(item.Right);
 
     /// <summary> Convert to other right value type </summary>
     /// <param name="item"> Source </param>
@@ -49,7 +51,9 @@ public static class Either
     /// <typeparam name="TRightResult"> Right result type </typeparam>
     public static Either<TLeft, TRightResult> SelectRight<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> item,
         Func<TRight, TRightResult> rightSelector)
-        => item.HasLeft ? Left<TLeft, TRightResult>(item.Left) : Right<TLeft, TRightResult>(rightSelector.Invoke(item.Right));
+        => item.HasLeft
+            ? Left<TLeft, TRightResult>(item.Left)
+            : Right<TLeft, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right));
 
     /// <summary> Convert to other type </summary>
     /// <param name="item"> Source </param>
@@ -61,7 +65,9 @@ public static class Either
     /// <typeparam name="TRightResult"> Right result type </typeparam>
     public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> item,
         Func<TLeft, TLeftResult> leftSelector, Func<TRight, TRightResult> rightSelector)
-        => item.HasLeft ? Left<TLeftResult, TRightResult>(leftSelector(item.Left)) : Right<TLeftResult, TRightResult>(rightSelector(item.Right));
+        => item.HasLeft
+            ? Left<TLeftResult, TRightResult>((leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left))
+            : Right<TLeftResult, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right));
 
     /// <summary> Get left value or default </summary>
     /// <param name="item"> Source </param>
@@ -77,7 +83,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TLeft LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft> defaultGenerator)
-        => item.HasLeft ? item.Left : defaultGenerator.Invoke();
+        => item.HasLeft ? item.Left : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <summary> Get right value or default </summary>
     /// <param name="item"> Source </param>
@@ -93,7 +99,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TRight> defaultGenerator)
-        => item.HasLeft ? defaultGenerator.Invoke() : item.Right;
+        => item.HasLeft ? (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke() : item.Right;
 
     /// <summary> Convert to left value type </summary>
     /// <param name="item"> Source </param>
@@ -101,7 +107,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TLeft ToLeft<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TRight, TLeft> rightToLeft)
-        => item.HasLeft ? item.Left : rightToLeft.Invoke(item.Right);
+        => item.HasLeft ? item.Left : (rightToLeft ?? throw new ArgumentNullException(nameof(rightToLeft))).Invoke(item.Right);
 
     /// <summary> Convert to right value type </summary>
     /// <param name="item"> Source </param>
@@ -109,5 +115,5 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight ToRight<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, TRight> leftToRight)
-        => item.HasLeft ? leftToRight.Invoke(item.Left) : item.Right;
+        => item.HasLeft ? (leftToRight ?? throw new ArgumentNullException(nameof(leftToRight))).Invoke(item.Left) : item.Right;
 }
