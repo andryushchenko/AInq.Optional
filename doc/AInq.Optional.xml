@@ -332,7 +332,16 @@
             <summary> Either monad </summary>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
-            <remarks> DO NOT create <see cref="T:AInq.Optional.Either`2" /> directly, use <see cref="M:AInq.Optional.Either.Right``2(``1)" /> and <see cref="M:AInq.Optional.Either.Left``2(``0)" /> </remarks>
+        </member>
+        <member name="M:AInq.Optional.Either`2.#ctor">
+            <summary> Create empty <see cref="T:AInq.Optional.Either`2" /> </summary>
+            <remarks> DO NOT use this </remarks>
+        </member>
+        <member name="M:AInq.Optional.Either`2.#ctor(`0)">
+            <summary> Create <see cref="T:AInq.Optional.Either`2" /> with left value </summary>
+        </member>
+        <member name="M:AInq.Optional.Either`2.#ctor(`1)">
+            <summary> Create <see cref="T:AInq.Optional.Either`2" /> with left value </summary>
         </member>
         <member name="P:AInq.Optional.Either`2.HasLeft">
             <summary> Check if item contains left value </summary>
@@ -550,7 +559,12 @@
         <member name="T:AInq.Optional.Maybe`1">
             <summary> Maybe monad </summary>
             <typeparam name="T"> Value type </typeparam>
-            <remarks> DO NOT create <see cref="T:AInq.Optional.Maybe`1" /> directly, use <see cref="M:AInq.Optional.Maybe.Value``1(``0)" /> and <see cref="M:AInq.Optional.Maybe.None``1" /> </remarks>
+        </member>
+        <member name="M:AInq.Optional.Maybe`1.#ctor">
+            <summary> Create empty <see cref="T:AInq.Optional.Maybe`1" /> </summary>
+        </member>
+        <member name="M:AInq.Optional.Maybe`1.#ctor(`0)">
+            <summary> Create <see cref="T:AInq.Optional.Maybe`1" /> with value </summary>
         </member>
         <member name="P:AInq.Optional.Maybe`1.HasValue">
             <summary> Check if item contains value </summary>
@@ -751,7 +765,16 @@
         <member name="T:AInq.Optional.Try`1">
             <summary> Try monad </summary>
             <typeparam name="T"> Value type </typeparam>
-            <remarks> DO NOT create <see cref="T:AInq.Optional.Try`1" /> directly, use <see cref="M:AInq.Optional.Try.Value``1(``0)" /> and <see cref="M:AInq.Optional.Try.Error``1(System.Exception)" /> </remarks>
+        </member>
+        <member name="M:AInq.Optional.Try`1.#ctor">
+            <summary> Create <see cref="T:AInq.Optional.Try`1" /> with default error </summary>
+            <remarks> DO NOT use this </remarks>
+        </member>
+        <member name="M:AInq.Optional.Try`1.#ctor(`0)">
+            <summary> Create <see cref="T:AInq.Optional.Try`1" /> with value </summary>
+        </member>
+        <member name="M:AInq.Optional.Try`1.#ctor(System.Exception)">
+            <summary> Create <see cref="T:AInq.Optional.Try`1" /> with error </summary>
         </member>
         <member name="P:AInq.Optional.Try`1.Success">
             <summary> Check if item is success </summary>

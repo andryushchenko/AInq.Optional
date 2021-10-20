@@ -16,15 +16,22 @@ namespace AInq.Optional;
 
 /// <summary> Maybe monad </summary>
 /// <typeparam name="T"> Value type </typeparam>
-/// <remarks> DO NOT create <see cref="Maybe{T}" /> directly, use <see cref="Maybe.Value{T}" /> and <see cref="Maybe.None{T}" /> </remarks>
 public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparable<Maybe<T>>, IComparable<T>
 {
     private readonly T _value;
 
-    internal Maybe(T value, bool hasValue)
+    /// <summary> Create empty <see cref="Maybe{T}" /> </summary>
+    public Maybe()
+    {
+        _value = default!;
+        HasValue = false;
+    }
+
+    /// <summary> Create <see cref="Maybe{T}" /> with value </summary>
+    public Maybe(T value)
     {
         _value = value;
-        HasValue = hasValue;
+        HasValue = true;
     }
 
     /// <summary> Check if item contains value </summary>
@@ -81,7 +88,7 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
     /// <summary> Explicit cast to Maybe </summary>
     /// <param name="item"> Value </param>
     public static explicit operator Maybe<T>(T item)
-        => new(item, true);
+        => new(item);
 
     /// <summary> Explicit cast to value type </summary>
     /// <param name="item"> Maybe item </param>

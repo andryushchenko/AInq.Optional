@@ -20,13 +20,13 @@ public static class Maybe
     /// <summary> Create empty Maybe </summary>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> None<T>()
-        => new(default!, false);
+        => new();
 
     /// <summary> Create Maybe from value </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Value<T>(T value)
-        => new(value, true);
+        => new(value);
 
     /// <summary> Convert to other value type </summary>
     /// <param name="item"> Source </param>

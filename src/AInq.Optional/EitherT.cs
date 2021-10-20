@@ -17,23 +17,36 @@ namespace AInq.Optional;
 /// <summary> Either monad </summary>
 /// <typeparam name="TLeft"> Left value type </typeparam>
 /// <typeparam name="TRight"> Right value type </typeparam>
-/// <remarks> DO NOT create <see cref="Either{TLeft,TRight}" /> directly, use <see cref="Either.Right{TLeft,TRight}" /> and <see cref="Either.Left{TLeft,TRight}" /> </remarks>
 public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 
 {
     private readonly TLeft _left;
     private readonly TRight _right;
 
-    internal Either(TLeft left)
+    /// <summary> Create empty <see cref="Either{TLeft,TRight}" /> </summary>
+    /// <remarks> DO NOT use this </remarks>
+    public Either()
+    {
+        HasLeft = false;
+        HasRight = false;
+        _left = default!;
+        _right = default!;
+    }
+
+    /// <summary> Create <see cref="Either{TLeft,TRight}" /> with left value </summary>
+    public Either(TLeft left)
     {
         HasLeft = true;
+        HasRight = false;
         _left = left;
         _right = default!;
     }
 
-    internal Either(TRight right)
+    /// <summary> Create <see cref="Either{TLeft,TRight}" /> with left value </summary>
+    public Either(TRight right)
     {
         HasLeft = false;
+        HasRight = true;
         _left = default!;
         _right = right;
     }
@@ -42,13 +55,13 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     public bool HasLeft { get; }
 
     /// <summary> Check if item contains right value </summary>
-    public bool HasRight => !HasLeft;
+    public bool HasRight { get; }
 
     /// <summary> Left value (if exists) </summary>
     public TLeft Left => HasLeft ? _left : throw new InvalidOperationException("No left value");
 
     /// <summary> Right value (if exists) </summary>
-    public TRight Right => !HasLeft ? _right : throw new InvalidOperationException("No right value");
+    public TRight Right => HasRight ? _right : throw new InvalidOperationException("No right value");
 
     /// <summary> Swap left and right values </summary>
     public Either<TRight, TLeft> Invert()

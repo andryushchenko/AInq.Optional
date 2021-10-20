@@ -16,18 +16,27 @@ namespace AInq.Optional;
 
 /// <summary> Try monad </summary>
 /// <typeparam name="T"> Value type </typeparam>
-/// <remarks> DO NOT create <see cref="Try{T}" /> directly, use <see cref="Try.Value{T}" /> and <see cref="Try.Error{T}" /> </remarks>
 public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<Try<T>>, IComparable<T>
 {
     private readonly T _value;
 
-    internal Try(T value)
+    /// <summary> Create <see cref="Try{T}" /> with default error </summary>
+    /// <remarks> DO NOT use this </remarks>
+    public Try()
+    {
+        _value = default!;
+        Error = new Exception();
+    }
+
+    /// <summary> Create <see cref="Try{T}" /> with value </summary>
+    public Try(T value)
     {
         _value = value;
         Error = null;
     }
 
-    internal Try(Exception exception)
+    /// <summary> Create <see cref="Try{T}" /> with error </summary>
+    public Try(Exception exception)
     {
         _value = default!;
         Error = exception ?? throw new ArgumentNullException(nameof(exception));
