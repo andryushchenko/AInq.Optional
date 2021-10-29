@@ -328,6 +328,15 @@
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Either.ToValue``3(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,``2})">
+            <summary> Convert to other value type </summary>
+            <param name="item"> Source </param>
+            <param name="fromLeft"> Left value converter </param>
+            <param name="fromRight"> Right value converter </param>
+            <typeparam name="TLeft"> Left source type </typeparam>
+            <typeparam name="TRight"> Right source type </typeparam>
+            <typeparam name="TResult"> Left result type </typeparam>
+        </member>
         <member name="T:AInq.Optional.Either`2">
             <summary> Either monad </summary>
             <typeparam name="TLeft"> Left value type </typeparam>

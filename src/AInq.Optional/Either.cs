@@ -116,4 +116,17 @@ public static class Either
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight ToRight<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, TRight> leftToRight)
         => item.HasLeft ? (leftToRight ?? throw new ArgumentNullException(nameof(leftToRight))).Invoke(item.Left) : item.Right;
+
+    /// <summary> Convert to other value type </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="fromLeft"> Left value converter </param>
+    /// <param name="fromRight"> Right value converter </param>
+    /// <typeparam name="TLeft"> Left source type </typeparam>
+    /// <typeparam name="TRight"> Right source type </typeparam>
+    /// <typeparam name="TResult"> Left result type </typeparam>
+    public static TResult ToValue<TLeft, TRight, TResult>(this Either<TLeft, TRight> item, Func<TLeft, TResult> fromLeft,
+        Func<TRight, TResult> fromRight)
+        => item.HasLeft
+            ? (fromLeft ?? throw new ArgumentNullException(nameof(fromLeft))).Invoke(item.Left)
+            : (fromRight ?? throw new ArgumentNullException(nameof(fromRight))).Invoke(item.Right);
 }
