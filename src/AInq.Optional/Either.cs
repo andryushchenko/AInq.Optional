@@ -71,6 +71,13 @@ public static class Either
 
     /// <summary> Get left value or default </summary>
     /// <param name="item"> Source </param>
+    /// <typeparam name="TLeft"> Left source type </typeparam>
+    /// <typeparam name="TRight"> Right source type </typeparam>
+    public static TLeft? LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> item)
+        => item.HasLeft ? item.Left : default;
+
+    /// <summary> Get left value or default </summary>
+    /// <param name="item"> Source </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
@@ -87,11 +94,18 @@ public static class Either
 
     /// <summary> Get right value or default </summary>
     /// <param name="item"> Source </param>
+    /// <typeparam name="TLeft"> Left source type </typeparam>
+    /// <typeparam name="TRight"> Right source type </typeparam>
+    public static TRight? RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> item)
+        => item.HasRight ? item.Right : default;
+
+    /// <summary> Get right value or default </summary>
+    /// <param name="item"> Source </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> item, TRight defaultValue)
-        => item.HasLeft ? defaultValue : item.Right;
+        => item.HasRight ? item.Right : defaultValue;
 
     /// <summary> Get right value or default from generator </summary>
     /// <param name="item"> Source </param>
@@ -99,7 +113,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TRight> defaultGenerator)
-        => item.HasLeft ? (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke() : item.Right;
+        => item.HasRight ? item.Right : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <summary> Convert to left value type </summary>
     /// <param name="item"> Source </param>
@@ -115,7 +129,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     public static TRight ToRight<TLeft, TRight>(this Either<TLeft, TRight> item, Func<TLeft, TRight> leftToRight)
-        => item.HasLeft ? (leftToRight ?? throw new ArgumentNullException(nameof(leftToRight))).Invoke(item.Left) : item.Right;
+        => item.HasRight ? item.Right : (leftToRight ?? throw new ArgumentNullException(nameof(leftToRight))).Invoke(item.Left);
 
     /// <summary> Convert to other value type </summary>
     /// <param name="item"> Source </param>
