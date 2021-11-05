@@ -50,22 +50,16 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
-        => obj is Maybe<T> other
-           && (HasValue, other.HasValue) switch
-           {
-               (false, false) => true,
-               (true, true) => EqualityComparer<T>.Default.Equals(_value, other._value),
-               _ => false
-           };
+        => obj switch
+        {
+            Maybe<T> other => Equals(other),
+            T value => Equals(value),
+            _ => false
+        };
 
     /// <inheritdoc />
     public bool Equals(Maybe<T> other)
-        => (HasValue, other.HasValue) switch
-        {
-            (false, false) => true,
-            (true, true) => EqualityComparer<T>.Default.Equals(_value, other._value),
-            _ => false
-        };
+        => !(HasValue ^ other.HasValue) && (!HasValue || EqualityComparer<T>.Default.Equals(_value, other._value));
 
     /// <inheritdoc />
     public bool Equals(T? other)
@@ -177,7 +171,7 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
     public static bool operator !=(T? a, Maybe<T> b)
-        => b.Equals(a);
+        => !b.Equals(a);
 
     /// <summary> Less comparison </summary>
     /// <param name="a"> First element </param>

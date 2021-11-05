@@ -61,26 +61,20 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
-        => obj is Try<T> other
-           && (Error, other.Error) switch
-           {
-               (not null, not null) => true,
-               (null, null) => EqualityComparer<T>.Default.Equals(_value, other._value),
-               _ => false
-           };
-
-    /// <inheritdoc />
-    public bool Equals(Try<T> other)
-        => (Error, other.Error) switch
+        => obj switch
         {
-            (not null, not null) => true,
-            (null, null) => EqualityComparer<T>.Default.Equals(_value, other._value),
+            Try<T> other => Equals(other),
+            T value => Equals(value),
             _ => false
         };
 
     /// <inheritdoc />
+    public bool Equals(Try<T> other)
+        => !(Success ^ other.Success) && (!Success || EqualityComparer<T>.Default.Equals(_value, other._value));
+
+    /// <inheritdoc />
     public bool Equals(T? other)
-        => Error == null && EqualityComparer<T?>.Default.Equals(_value, other);
+        => Success && EqualityComparer<T?>.Default.Equals(_value, other);
 
     /// <inheritdoc />
     public int CompareTo(Try<T> other)
@@ -193,7 +187,7 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
     public static bool operator !=(T? a, Try<T> b)
-        => b.Equals(a);
+        => !b.Equals(a);
 
     /// <summary> Less comparison </summary>
     /// <param name="a"> First element </param>

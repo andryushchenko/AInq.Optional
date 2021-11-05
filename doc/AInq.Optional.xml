@@ -391,6 +391,15 @@
         <member name="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})">
             <inheritdoc />
         </member>
+        <member name="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`1,`0})">
+            <inheritdoc cref="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})" />
+        </member>
+        <member name="M:AInq.Optional.Either`2.Equals(`1)">
+            <inheritdoc cref="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})" />
+        </member>
+        <member name="M:AInq.Optional.Either`2.Equals(`0)">
+            <inheritdoc cref="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})" />
+        </member>
         <member name="M:AInq.Optional.Either`2.op_Explicit(`0)~AInq.Optional.Either{`0,`1}">
             <summary> Explicit cast to Either </summary>
             <param name="item"> Value </param>
