@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{32FB9D82-8E27-4E7D-A376-A6F491071BA8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{32FB9D82-8E27-4E7D-A376-A6F491071BA8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{4FCA6A24-5F37-4EE2-B25C-AF89FB88BB77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Optional", "src\AInq.Optional\AInq.Optional.csproj", "{687C04FA-51B9-4DF3-86CC-82B605A51459}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBEC2ABE-02E0-4901-8410-15FFC21AB0C1}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		AInq.Optional.sln.DotSettings = AInq.Optional.sln.DotSettings
@@ -13,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{4FCA6A24-5
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Optional", "src\AInq.Optional\AInq.Optional.csproj", "{687C04FA-51B9-4DF3-86CC-82B605A51459}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
