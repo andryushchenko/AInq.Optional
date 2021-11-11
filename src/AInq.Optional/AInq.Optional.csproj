@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
-		<Description>Simple optional types for .NET with basic helpers</Description>
-	</PropertyGroup>
+    <PropertyGroup>
+        <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
+        <Description>Simple optional types for .NET with basic helpers</Description>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>..\..\doc\AInq.Optional.xml</DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DocumentationFile>..\..\doc\AInq.Optional.xml</DocumentationFile>
+    </PropertyGroup>
 
 </Project>

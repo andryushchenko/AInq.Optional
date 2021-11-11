@@ -69,10 +69,10 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 
     /// <inheritdoc />
     public override string ToString()
-        => HasLeft 
-            ? _left?.ToString() ?? "Null" 
-            : HasRight 
-                ? _right?.ToString() ?? "Null" 
+        => HasLeft
+            ? _left?.ToString() ?? "Null"
+            : HasRight
+                ? _right?.ToString() ?? "Null"
                 : "None";
 
     /// <inheritdoc />
