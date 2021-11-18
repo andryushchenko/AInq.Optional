@@ -43,6 +43,13 @@ public static class Either
             ? Left<TLeftResult, TRight>((leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left))
             : Right<TLeftResult, TRight>(item.Right);
 
+    /// <inheritdoc cref="SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
+    public static Either<TLeftResult, TRight> SelectLeft<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> item,
+        Func<TLeft, Either<TLeftResult, TRight>> leftSelector)
+        => item.HasLeft
+            ? (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left)
+            : Right<TLeftResult, TRight>(item.Right);
+
     /// <summary> Convert to other right value type </summary>
     /// <param name="item"> Source </param>
     /// <param name="rightSelector"> Right value converter </param>
@@ -51,9 +58,16 @@ public static class Either
     /// <typeparam name="TRightResult"> Right result type </typeparam>
     public static Either<TLeft, TRightResult> SelectRight<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> item,
         Func<TRight, TRightResult> rightSelector)
-        => item.HasLeft
-            ? Left<TLeft, TRightResult>(item.Left)
-            : Right<TLeft, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right));
+        => item.HasRight
+            ? Right<TLeft, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right))
+            : Left<TLeft, TRightResult>(item.Left);
+
+    /// <inheritdoc cref="SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
+    public static Either<TLeft, TRightResult> SelectRight<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> item,
+        Func<TRight, Either<TLeft, TRightResult>> rightSelector)
+        => item.HasRight
+            ? (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right)
+            : Left<TLeft, TRightResult>(item.Left);
 
     /// <summary> Convert to other type </summary>
     /// <param name="item"> Source </param>
@@ -68,6 +82,27 @@ public static class Either
         => item.HasLeft
             ? Left<TLeftResult, TRightResult>((leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left))
             : Right<TLeftResult, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right));
+
+    /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
+    public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> item,
+        Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector, Func<TRight, TRightResult> rightSelector)
+        => item.HasLeft
+            ? (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left)
+            : Right<TLeftResult, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right));
+
+    /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
+    public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> item,
+        Func<TLeft, TLeftResult> leftSelector, Func<TRight, Either<TLeftResult, TRightResult>> rightSelector)
+        => item.HasLeft
+            ? Left<TLeftResult, TRightResult>((leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left))
+            : (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right);
+
+    /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
+    public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> item,
+        Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector, Func<TRight, Either<TLeftResult, TRightResult>> rightSelector)
+        => item.HasLeft
+            ? (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(item.Left)
+            : (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(item.Right);
 
     /// <summary> Get left value or default </summary>
     /// <param name="item"> Source </param>

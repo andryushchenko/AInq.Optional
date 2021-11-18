@@ -159,7 +159,13 @@
             <typeparam name="TRight"> Right value type </typeparam>
             <typeparam name="TLeftResult"> Left result type </typeparam>
         </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+        </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``1}}})">
             <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">
@@ -171,7 +177,13 @@
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TRightResult"> Right result type </typeparam>
         </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Either{``0,``2}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+        </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task{``2}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task{AInq.Optional.Either{``0,``2}}})">
             <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectRightAsync``3(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)">
@@ -185,8 +197,61 @@
             <typeparam name="TLeftResult"> Left result type </typeparam>
             <typeparam name="TRightResult"> Right result type </typeparam>
         </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.Tasks.Task{``3}})">
             <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}},System.Func{``1,System.Threading.Tasks.Task{``3}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}},System.Func{``1,System.Threading.Tasks.Task{AInq.Optional.Either{``2,``3}}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``4(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``3}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.ToLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)">
+            <summary> Convert to left value type asynchronously </summary>
+            <param name="item"> Source </param>
+            <param name="rightToLeft"> Right to left converter </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="TLeft"> Left source type </typeparam>
+            <typeparam name="TRight"> Right source type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.ToRightAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <summary> Convert to right value type asynchronously </summary>
+            <param name="item"> Source </param>
+            <param name="leftToRight"> Left to right converter </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="TLeft"> Left source type </typeparam>
+            <typeparam name="TRight"> Right source type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.ToValueAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">
+            <summary> Convert to other value type asynchronously </summary>
+            <param name="item"> Source </param>
+            <param name="fromLeft"> Left value converter </param>
+            <param name="fromRight"> Right value converter </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="TLeft"> Left source type </typeparam>
+            <typeparam name="TRight"> Right source type </typeparam>
+            <typeparam name="TResult"> Left result type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.ToLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.ToLeftAsync``2(AInq.Optional.Either{``0,``1},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.ToRightAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.ToRightAsync``2(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.ToValueAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.Tasks.Task{``2}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.ToValueAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Func{``1,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)" />
         </member>
         <member name="T:AInq.Optional.ConvertExtension">
             <summary> Monad convert utils </summary>
@@ -280,6 +345,9 @@
             <typeparam name="TRight"> Right value type </typeparam>
             <typeparam name="TLeftResult"> Left result type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Either.SelectLeft``3(AInq.Optional.Either{``0,``1},System.Func{``0,AInq.Optional.Either{``2,``1}})">
+            <inheritdoc cref="M:AInq.Optional.Either.SelectLeft``3(AInq.Optional.Either{``0,``1},System.Func{``0,``2})" />
+        </member>
         <member name="M:AInq.Optional.Either.SelectRight``3(AInq.Optional.Either{``0,``1},System.Func{``1,``2})">
             <summary> Convert to other right value type </summary>
             <param name="item"> Source </param>
@@ -287,6 +355,9 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TRightResult"> Right result type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Either.SelectRight``3(AInq.Optional.Either{``0,``1},System.Func{``1,AInq.Optional.Either{``0,``2}})">
+            <inheritdoc cref="M:AInq.Optional.Either.SelectRight``3(AInq.Optional.Either{``0,``1},System.Func{``1,``2})" />
         </member>
         <member name="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,``3})">
             <summary> Convert to other type </summary>
@@ -297,6 +368,15 @@
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TLeftResult"> Left result type </typeparam>
             <typeparam name="TRightResult"> Right result type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,AInq.Optional.Either{``2,``3}},System.Func{``1,``3})">
+            <inheritdoc cref="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,``3})" />
+        </member>
+        <member name="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,AInq.Optional.Either{``2,``3}})">
+            <inheritdoc cref="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,``3})" />
+        </member>
+        <member name="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,AInq.Optional.Either{``2,``3}},System.Func{``1,AInq.Optional.Either{``2,``3}})">
+            <inheritdoc cref="M:AInq.Optional.Either.Select``4(AInq.Optional.Either{``0,``1},System.Func{``0,``2},System.Func{``1,``3})" />
         </member>
         <member name="M:AInq.Optional.Either.LeftOrDefault``2(AInq.Optional.Either{``0,``1})">
             <summary> Get left value or default </summary>
