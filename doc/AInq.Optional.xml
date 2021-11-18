@@ -124,7 +124,13 @@
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}})">
             <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
@@ -135,7 +141,13 @@
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Try{``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Try{``1}}})">
             <inheritdoc cref="M:AInq.Optional.AsyncExtension.SelectAsync``2(AInq.Optional.Try{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.AsyncExtension.SelectLeftAsync``3(AInq.Optional.Either{``0,``1},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">

@@ -65,11 +65,28 @@ public static class AsyncExtension
             : Maybe.None<TResult>();
 
     /// <inheritdoc cref="SelectAsync{T,TResult}(Maybe{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
+    public static async Task<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> item, Func<T, CancellationToken, Task<Maybe<TResult>>> selector,
+        CancellationToken cancellation = default)
+        => item.HasValue
+            ? await (selector ?? throw new ArgumentNullException(nameof(selector)))
+                    .Invoke(item.Value, cancellation)
+                    .ConfigureAwait(false)
+            : Maybe.None<TResult>();
+
+    /// <inheritdoc cref="SelectAsync{T,TResult}(Maybe{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
     public static async Task<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> item, Func<T, Task<TResult>> selector)
         => item.HasValue
             ? Maybe.Value(await (selector ?? throw new ArgumentNullException(nameof(selector)))
                                 .Invoke(item.Value)
                                 .ConfigureAwait(false))
+            : Maybe.None<TResult>();
+
+    /// <inheritdoc cref="SelectAsync{T,TResult}(Maybe{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
+    public static async Task<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> item, Func<T, Task<Maybe<TResult>>> selector)
+        => item.HasValue
+            ? await (selector ?? throw new ArgumentNullException(nameof(selector)))
+                    .Invoke(item.Value)
+                    .ConfigureAwait(false)
             : Maybe.None<TResult>();
 
     /// <summary> Convert to other value type asynchronously </summary>
@@ -87,11 +104,28 @@ public static class AsyncExtension
             : Try.Error<TResult>(item.Error!);
 
     /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
+    public static async Task<Try<TResult>> SelectAsync<T, TResult>(this Try<T> item, Func<T, CancellationToken, Task<Try<TResult>>> selector,
+        CancellationToken cancellation = default)
+        => item.Success
+            ? await (selector ?? throw new ArgumentNullException(nameof(selector)))
+                    .Invoke(item.Value, cancellation)
+                    .ConfigureAwait(false)
+            : Try.Error<TResult>(item.Error!);
+
+    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
     public static async Task<Try<TResult>> SelectAsync<T, TResult>(this Try<T> item, Func<T, Task<TResult>> selector)
         => item.Success
             ? await ResultAsync((selector ?? throw new ArgumentNullException(nameof(selector)))
                     .Invoke(item.Value))
                 .ConfigureAwait(false)
+            : Try.Error<TResult>(item.Error!);
+
+    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
+    public static async Task<Try<TResult>> SelectAsync<T, TResult>(this Try<T> item, Func<T, Task<Try<TResult>>> selector)
+        => item.Success
+            ? await (selector ?? throw new ArgumentNullException(nameof(selector)))
+                    .Invoke(item.Value)
+                    .ConfigureAwait(false)
             : Try.Error<TResult>(item.Error!);
 
     /// <summary> Convert to other left value type asynchronously </summary>
