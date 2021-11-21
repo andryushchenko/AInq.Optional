@@ -8,16 +8,15 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-        <Version>2.0.2</Version>
-        <LangVersion>preview</LangVersion>
+        <Version>2.0.3</Version>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>AInq.Optional</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>[ADD] New Either Select overloads
-[ADD] Either ToLeftAsync, ToRightAsync and ToValueAsync</PackageReleaseNotes>
+        <PackageReleaseNotes>[FIX] Add missed Either Do extension</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

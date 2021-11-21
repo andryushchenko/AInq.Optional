@@ -39,6 +39,14 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.ActionExtension.Do``2(AInq.Optional.Either{``0,``1},System.Action{``0},System.Action{``1})">
+            <summary> Do action with left or right value </summary>
+            <param name="item"> Source </param>
+            <param name="leftAction"> Left value action </param>
+            <param name="rightAction"> Right value action </param>
+            <typeparam name="TLeft"> Left value type </typeparam>
+            <typeparam name="TRight"> Right value type </typeparam>
+        </member>
         <member name="M:AInq.Optional.ActionExtension.DoAsync``1(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
             <summary> Do asynchronous action with value (if exists) </summary>
             <param name="item"> Source </param>

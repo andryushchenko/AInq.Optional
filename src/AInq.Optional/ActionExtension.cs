@@ -65,6 +65,18 @@ public static class ActionExtension
         if (item.HasRight) (action ?? throw new ArgumentNullException(nameof(action))).Invoke(item.Right);
     }
 
+    /// <summary> Do action with left or right value </summary>
+    /// <param name="item"> Source </param>
+    /// <param name="leftAction"> Left value action </param>
+    /// <param name="rightAction"> Right value action </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    public static void Do<TLeft, TRight>(this Either<TLeft, TRight> item, Action<TLeft> leftAction, Action<TRight> rightAction)
+    {
+        if (item.HasLeft) (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(item.Left);
+        else if (item.HasRight) (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(item.Right);
+    }
+
     /// <summary> Do asynchronous action with value (if exists) </summary>
     /// <param name="item"> Source </param>
     /// <param name="action"> Action </param>
