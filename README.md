@@ -4,7 +4,7 @@
 
 ## What is it?
 
-Simple optional types for .NET with basic helpers
+Simple optional types with basic helpers
 
 - **`Maybe<T>`** value or nothing
 - **`Try<T>`** value or error

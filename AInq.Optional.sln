@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Optional.Async", "src\AInq.Optional.Async\AInq.Optional.Async.csproj", "{29EAEAB8-3615-4E92-8233-B75860B2F6CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,12 +28,17 @@ Global
 		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{687C04FA-51B9-4DF3-86CC-82B605A51459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29EAEAB8-3615-4E92-8233-B75860B2F6CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29EAEAB8-3615-4E92-8233-B75860B2F6CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29EAEAB8-3615-4E92-8233-B75860B2F6CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29EAEAB8-3615-4E92-8233-B75860B2F6CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{687C04FA-51B9-4DF3-86CC-82B605A51459} = {32FB9D82-8E27-4E7D-A376-A6F491071BA8}
+		{29EAEAB8-3615-4E92-8233-B75860B2F6CE} = {32FB9D82-8E27-4E7D-A376-A6F491071BA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {41B2CF89-3E90-467F-A5AF-F5AF0D3324AF}

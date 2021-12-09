@@ -41,113 +41,156 @@ public static class Maybe
         => value == null ? new Maybe<T>() : new Maybe<T>(value.Value);
 
     /// <summary> Convert to other value type </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, TResult> selector)
-        => item.HasValue ? Value((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value)) : None<TResult>();
+    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
+        => maybe.HasValue ? Value((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)) : None<TResult>();
 
     /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, TResult> selector)
-        => item.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value) : default;
+    public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
+        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : default;
 
     /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, TResult> selector, TResult defaultValue)
-        => item.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value) : defaultValue;
+    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector, TResult defaultValue)
+        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : defaultValue;
 
     /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, TResult> selector, Func<TResult> defaultGenerator)
-        => item.HasValue
-            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value)
+    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector, Func<TResult> defaultGenerator)
+        => maybe.HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <summary> Convert to other value type </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector)
-        => item.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value) : None<TResult>();
+    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
+        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : None<TResult>();
 
     /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector)
-        => item.HasValue
-            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value).ValueOrDefault()
-            : default;
+    public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
+        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault() : default;
 
     /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector, TResult defaultValue)
-        => item.HasValue
-            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value).ValueOrDefault(defaultValue)
+    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, TResult defaultValue)
+        => maybe.HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault(defaultValue)
             : defaultValue;
 
     /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> item, Func<T, Maybe<TResult>> selector, Func<TResult> defaultGenerator)
-        => item.HasValue
+    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, Func<TResult> defaultGenerator)
+        => maybe.HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector)))
-              .Invoke(item.Value)
+              .Invoke(maybe.Value)
               .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <summary> Get value or default </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static T? ValueOrDefault<T>(this Maybe<T> item)
-        => item.HasValue ? item.Value : default;
+    public static T? ValueOrDefault<T>(this Maybe<T> maybe)
+        => maybe.HasValue ? maybe.Value : default;
 
     /// <summary> Get value or default </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static T ValueOrDefault<T>(this Maybe<T> item, T defaultValue)
-        => item.HasValue ? item.Value : defaultValue;
+    public static T ValueOrDefault<T>(this Maybe<T> maybe, T defaultValue)
+        => maybe.HasValue ? maybe.Value : defaultValue;
 
     /// <summary> Get value or default from generator </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static T ValueOrDefault<T>(this Maybe<T> item, Func<T> defaultGenerator)
-        => item.HasValue ? item.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+    public static T ValueOrDefault<T>(this Maybe<T> maybe, Func<T> defaultGenerator)
+        => maybe.HasValue ? maybe.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <summary> Get value form this item or other </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="item"> Maybe item </param>
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Or<T>(this Maybe<T> item, Maybe<T> other)
         => item.HasValue ? item : other;
 
-    /// <summary> Unwrap nested Maybe </summary>
-    /// <param name="item"> Source </param>
+    /// <summary> Filter value </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="filter"> Filter </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> item)
-        => item.HasValue ? item.Value : None<T>();
+    public static Maybe<T> Filter<T>(this Maybe<T> maybe, Func<T, bool> filter)
+        => !maybe.HasValue || maybe.HasValue && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value) ? maybe : None<T>();
+
+    /// <summary> Unwrap nested Maybe </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> maybe)
+        => maybe.HasValue ? maybe.Value : None<T>();
+
+    /// <summary> Select existing values </summary>
+    /// <param name="collection"> Maybe collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Values collection </returns>
+    public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           .Where(item => item.HasValue)
+           .Select(item => item.Value);
+
+    /// <summary> Do action with value (if exists) </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void Do<T>(this Maybe<T> maybe, Action<T> valueAction)
+    {
+        if (maybe.HasValue) (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
+    }
+
+    /// <summary> Do action </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="emptyAction"> Action if empty </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void Do<T>(this Maybe<T> maybe, Action<T> valueAction, Action emptyAction)
+    {
+        if (maybe.HasValue) (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
+        else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+    }
+
+    /// <summary> Do action if empty </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="emptyAction"> Action if empty </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void DoIfEmpty<T>(this Maybe<T> maybe, Action emptyAction)
+    {
+        if (!maybe.HasValue) (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+    }
 }
