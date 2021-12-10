@@ -17,6 +17,8 @@ namespace AInq.Optional;
 /// <summary> Maybe monad utils </summary>
 public static class Maybe
 {
+#region Value
+
     /// <summary> Create empty Maybe </summary>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> None<T>()
@@ -28,7 +30,7 @@ public static class Maybe
     public static Maybe<T> Value<T>(T value)
         => new(value);
 
-    /// <inheritdoc cref="Value{T}"/>
+    /// <inheritdoc cref="Value{T}" />
     public static Maybe<T> AsMaybe<T>(this T value)
         => new(value);
 
@@ -54,6 +56,10 @@ public static class Maybe
         where T : struct
         => ValueIfNotNull(value);
 
+#endregion
+
+#region Select
+
     /// <summary> Convert to other value type </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
@@ -61,6 +67,14 @@ public static class Maybe
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
         => maybe.HasValue ? Value((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)) : None<TResult>();
+
+    /// <inheritdoc cref="Select{T,TResult}(Maybe{T},Func{T,TResult})" />
+    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
+        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : None<TResult>();
+
+#endregion
+
+#region SelectOrDefault
 
     /// <summary> Convert to other value type or default </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -70,6 +84,10 @@ public static class Maybe
     public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
         => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : default;
 
+    /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
+    public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
+        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault() : default;
+
     /// <summary> Convert to other value type or default </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <param name="selector"> Converter </param>
@@ -78,6 +96,12 @@ public static class Maybe
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector, TResult defaultValue)
         => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : defaultValue;
+
+    /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult}, TResult)" />
+    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, TResult defaultValue)
+        => maybe.HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault(defaultValue)
+            : defaultValue;
 
     /// <summary> Convert to other value type or default from generator </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -90,45 +114,17 @@ public static class Maybe
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
-    /// <summary> Convert to other value type </summary>
-    /// <param name="maybe"> Maybe item </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
-        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : None<TResult>();
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="maybe"> Maybe item </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
-        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault() : default;
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="maybe"> Maybe item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, TResult defaultValue)
-        => maybe.HasValue
-            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault(defaultValue)
-            : defaultValue;
-
-    /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="maybe"> Maybe item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
+    /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, Func<TResult> defaultGenerator)
         => maybe.HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector)))
               .Invoke(maybe.Value)
               .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+
+#endregion
+
+#region ValueOrDefault
 
     /// <summary> Get value or default </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -150,12 +146,16 @@ public static class Maybe
     public static T ValueOrDefault<T>(this Maybe<T> maybe, Func<T> defaultGenerator)
         => maybe.HasValue ? maybe.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
+#endregion
+
+#region Utils
+
     /// <summary> Get value form this item or other </summary>
-    /// <param name="item"> Maybe item </param>
+    /// <param name="maybe"> Maybe item </param>
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static Maybe<T> Or<T>(this Maybe<T> item, Maybe<T> other)
-        => item.HasValue ? item : other;
+    public static Maybe<T> Or<T>(this Maybe<T> maybe, Maybe<T> other)
+        => maybe.HasValue ? maybe : other;
 
     /// <summary> Filter value </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -178,6 +178,10 @@ public static class Maybe
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item.HasValue)
            .Select(item => item.Value);
+
+#endregion
+
+#region Do
 
     /// <summary> Do action with value (if exists) </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -207,4 +211,6 @@ public static class Maybe
     {
         if (!maybe.HasValue) (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
     }
+
+#endregion
 }
