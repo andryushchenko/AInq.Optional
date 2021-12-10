@@ -88,6 +88,18 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Either.AsEither``2(``0)">
+            <summary> Convert left value to Either </summary>
+            <param name="left"> Left value </param>
+            <typeparam name="TLeft"> Left value type </typeparam>
+            <typeparam name="TRight"> Right value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Either.AsEither``2(``1)">
+            <summary> Convert right value to Either </summary>
+            <param name="right"> Right value </param>
+            <typeparam name="TLeft"> Left value type </typeparam>
+            <typeparam name="TRight"> Right value type </typeparam>
+        </member>
         <member name="M:AInq.Optional.Either.SelectLeft``3(AInq.Optional.Either{``0,``1},System.Func{``0,``2})">
             <summary> Convert to other left value type </summary>
             <param name="either"> Either item </param>
@@ -279,11 +291,11 @@
         <member name="M:AInq.Optional.Either`2.Equals(`0)">
             <inheritdoc cref="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})" />
         </member>
-        <member name="M:AInq.Optional.Either`2.op_Implicit(`0)~AInq.Optional.Either{`0,`1}">
+        <member name="M:AInq.Optional.Either`2.op_Explicit(`0)~AInq.Optional.Either{`0,`1}">
             <summary> Explicit cast to Either </summary>
             <param name="item"> Value </param>
         </member>
-        <member name="M:AInq.Optional.Either`2.op_Implicit(`1)~AInq.Optional.Either{`0,`1}">
+        <member name="M:AInq.Optional.Either`2.op_Explicit(`1)~AInq.Optional.Either{`0,`1}">
             <summary> Explicit cast to Either </summary>
             <param name="item"> Value </param>
         </member>
@@ -367,12 +379,21 @@
             <param name="value"> Value </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Maybe.AsMaybe``1(``0)">
+            <inheritdoc cref="M:AInq.Optional.Maybe.Value``1(``0)"/>
+        </member>
         <member name="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)">
             <summary> Create Maybe from value if not null </summary>
             <param name="value"> Value </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Maybe.AsMaybeIfNotNull``1(``0)">
+            <inheritdoc cref="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)" />
+        </member>
         <member name="M:AInq.Optional.Maybe.ValueIfNotNull``1(System.Nullable{``0})">
+            <inheritdoc cref="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)" />
+        </member>
+        <member name="M:AInq.Optional.Maybe.AsMaybeIfNotNull``1(System.Nullable{``0})">
             <inheritdoc cref="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)" />
         </member>
         <member name="M:AInq.Optional.Maybe.Select``2(AInq.Optional.Maybe{``0},System.Func{``0,``1})">
@@ -531,7 +552,7 @@
         <member name="M:AInq.Optional.Maybe`1.CompareTo(`0)">
             <inheritdoc />
         </member>
-        <member name="M:AInq.Optional.Maybe`1.op_Implicit(`0)~AInq.Optional.Maybe{`0}">
+        <member name="M:AInq.Optional.Maybe`1.op_Explicit(`0)~AInq.Optional.Maybe{`0}">
             <summary> Explicit cast to Maybe </summary>
             <param name="item"> Value </param>
         </member>
@@ -637,8 +658,18 @@
             <param name="value"> Value </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Try.AsTry``1(``0)">
+            <summary> Convert value to Try </summary>
+            <param name="value"> Value </param>
+            <typeparam name="T"> Value type </typeparam>
+        </member>
         <member name="M:AInq.Optional.Try.Error``1(System.Exception)">
             <summary> Create Try from exception </summary>
+            <param name="exception"> Exception </param>
+            <typeparam name="T"> Value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.AsTry``1(System.Exception)">
+            <summary> Convert exception to Try </summary>
             <param name="exception"> Exception </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
@@ -647,8 +678,16 @@
             <param name="value"> Value </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Try.AsTryIfNotNull``1(``0)">
+            <summary> Convert value to Try if not null </summary>
+            <param name="value"> Value </param>
+            <typeparam name="T"> Value type </typeparam>
+        </member>
         <member name="M:AInq.Optional.Try.ValueIfNotNull``1(System.Nullable{``0})">
             <inheritdoc cref="M:AInq.Optional.Try.ValueIfNotNull``1(``0)" />
+        </member>
+        <member name="M:AInq.Optional.Try.AsTryIfNotNull``1(System.Nullable{``0})">
+            <inheritdoc cref="M:AInq.Optional.Try.AsTryIfNotNull``1(``0)" />
         </member>
         <member name="M:AInq.Optional.Try.Result``1(System.Func{``0})">
             <summary> Create Try from value generator </summary>
@@ -819,7 +858,7 @@
         <member name="M:AInq.Optional.Try`1.CompareTo(`0)">
             <inheritdoc />
         </member>
-        <member name="M:AInq.Optional.Try`1.op_Implicit(`0)~AInq.Optional.Try{`0}">
+        <member name="M:AInq.Optional.Try`1.op_Explicit(`0)~AInq.Optional.Try{`0}">
             <summary> Explicit cast to Try </summary>
             <param name="item"> Value </param>
         </member>

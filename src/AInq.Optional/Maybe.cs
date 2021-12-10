@@ -28,6 +28,10 @@ public static class Maybe
     public static Maybe<T> Value<T>(T value)
         => new(value);
 
+    /// <inheritdoc cref="Value{T}"/>
+    public static Maybe<T> AsMaybe<T>(this T value)
+        => new(value);
+
     /// <summary> Create Maybe from value if not null </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
@@ -36,9 +40,19 @@ public static class Maybe
         => value == null ? new Maybe<T>() : new Maybe<T>(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
+    public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
+        where T : class
+        => ValueIfNotNull(value);
+
+    /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : struct
         => value == null ? new Maybe<T>() : new Maybe<T>(value.Value);
+
+    /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
+    public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
+        where T : struct
+        => ValueIfNotNull(value);
 
     /// <summary> Convert to other value type </summary>
     /// <param name="maybe"> Maybe item </param>

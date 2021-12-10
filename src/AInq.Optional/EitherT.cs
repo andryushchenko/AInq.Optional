@@ -118,12 +118,12 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 
     /// <summary> Explicit cast to Either </summary>
     /// <param name="item"> Value </param>
-    public static implicit operator Either<TLeft, TRight>(TLeft item)
+    public static explicit operator Either<TLeft, TRight>(TLeft item)
         => new(item);
 
     /// <summary> Explicit cast to Either </summary>
     /// <param name="item"> Value </param>
-    public static implicit operator Either<TLeft, TRight>(TRight item)
+    public static explicit operator Either<TLeft, TRight>(TRight item)
         => new(item);
 
     /// <summary> Explicit cast to left value type </summary>

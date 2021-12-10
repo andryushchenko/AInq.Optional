@@ -81,7 +81,7 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>, IComparab
 
     /// <summary> Explicit cast to Maybe </summary>
     /// <param name="item"> Value </param>
-    public static implicit operator Maybe<T>(T item)
+    public static explicit operator Maybe<T>(T item)
         => new(item);
 
     /// <summary> Explicit cast to value type </summary>

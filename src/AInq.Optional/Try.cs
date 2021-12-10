@@ -23,10 +23,22 @@ public static class Try
     public static Try<T> Value<T>(T value)
         => new(value);
 
+    /// <summary> Convert value to Try </summary>
+    /// <param name="value"> Value </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static Try<T> AsTry<T>(this T value)
+        => new(value);
+
     /// <summary> Create Try from exception </summary>
     /// <param name="exception"> Exception </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> Error<T>(Exception exception)
+        => new(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
+
+    /// <summary> Convert exception to Try </summary>
+    /// <param name="exception"> Exception </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static Try<T> AsTry<T>(this Exception exception)
         => new(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
 
     /// <summary> Create Try from value if not null </summary>
@@ -36,10 +48,22 @@ public static class Try
         where T : class
         => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
 
+    /// <summary> Convert value to Try if not null </summary>
+    /// <param name="value"> Value </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static Try<T> AsTryIfNotNull<T>(this T? value)
+        where T : class
+        => ValueIfNotNull(value);
+
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Try<T> ValueIfNotNull<T>(T? value)
         where T : struct
         => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value.Value);
+
+    /// <inheritdoc cref="AsTryIfNotNull{T}(T)" />
+    public static Try<T> AsTryIfNotNull<T>(this T? value)
+        where T : struct
+        => ValueIfNotNull(value);
 
     /// <summary> Create Try from value generator </summary>
     /// <param name="generator"> Value generator </param>

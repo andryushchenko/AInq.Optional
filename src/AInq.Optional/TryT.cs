@@ -92,7 +92,7 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
 
     /// <summary> Explicit cast to Try </summary>
     /// <param name="item"> Value </param>
-    public static implicit operator Try<T>(T item)
+    public static explicit operator Try<T>(T item)
         => new(item);
 
     /// <summary> Explicit cast to Try </summary>

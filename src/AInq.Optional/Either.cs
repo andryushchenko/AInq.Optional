@@ -31,6 +31,20 @@ public static class Either
     public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight right)
         => new(right);
 
+    /// <summary> Convert left value to Either </summary>
+    /// <param name="left"> Left value </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TLeft left)
+        => new(left);
+
+    /// <summary> Convert right value to Either </summary>
+    /// <param name="right"> Right value </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TRight right)
+        => new(right);
+
     /// <summary> Convert to other left value type </summary>
     /// <param name="either"> Either item </param>
     /// <param name="leftSelector"> Left value converter </param>
