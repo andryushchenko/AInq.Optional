@@ -51,6 +51,14 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
     /// <summary> Exception or null if success </summary>
     public Exception? Error { get; }
 
+    /// <summary> Throw if contains exception of target type </summary>
+    /// <typeparam name="TException"> Target exception type </typeparam>
+    public void Throw<TException>()
+        where TException : Exception
+    {
+        if (Error is TException exception) throw exception;
+    }
+
     /// <inheritdoc />
     public override string ToString()
         => Error == null ? _value?.ToString() ?? "Null" : Error.ToString();
