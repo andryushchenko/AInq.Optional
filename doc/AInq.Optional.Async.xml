@@ -5,47 +5,49 @@
     </assembly>
     <members>
         <member name="T:AInq.Optional.MaybeAsync">
-            <summary> Maybe monad utils </summary>
+            <summary> Maybe async extension </summary>
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0})">
+        <member name="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
             <summary> Create Maybe from value asynchronously </summary>
             <param name="value"> Value </param>
+            <param name="cancellation"> Cancellation token </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.ValueTask{``0})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0})" />
+        <member name="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.ValueTask{``0},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.AsMaybeAsync``1(System.Threading.Tasks.Task{``0})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0})" />
+        <member name="M:AInq.Optional.MaybeAsync.AsMaybeAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.AsMaybeAsync``1(System.Threading.Tasks.ValueTask{``0})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0})" />
+        <member name="M:AInq.Optional.MaybeAsync.AsMaybeAsync``1(System.Threading.Tasks.ValueTask{``0},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{``0})">
+        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
             <summary> Create Maybe from value if not null asynchronously </summary>
             <param name="value"> Value </param>
+            <param name="cancellation"> Cancellation token </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.ValueTask{``0})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.ValueTask{``0},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.Task{``0})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.ValueTask{``0})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.ValueTask{``0},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}})">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}})" />
+        <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
@@ -357,6 +359,9 @@
         </member>
         <member name="M:AInq.Optional.MaybeAsync.DoIfEmpty``1(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Action,System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.DoIfEmptyAsync``1(AInq.Optional.Maybe{``0},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)" />
+        </member>
+        <member name="T:AInq.Optional.TryAsync">
+            <summary> Try async extension </summary>
         </member>
     </members>
 </doc>

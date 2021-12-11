@@ -17,6 +17,8 @@ namespace AInq.Optional;
 /// <summary> Try monad utils </summary>
 public static class Try
 {
+#region Value
+
     /// <summary> Create Try from value </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
@@ -80,6 +82,40 @@ public static class Try
         }
     }
 
+    /// <summary> Create Try from value generator if not null </summary>
+    /// <param name="generator"> Value generator </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static Try<T> ResultIfNotNull<T>(Func<T?> generator)
+        where T : class
+    {
+        try
+        {
+            return ValueIfNotNull(generator.Invoke());
+        }
+        catch (Exception ex)
+        {
+            return Error<T>(ex);
+        }
+    }
+
+    /// <inheritdoc cref="ResultIfNotNull{T}(Func{T?})" />
+    public static Try<T> ResultIfNotNull<T>(Func<T?> generator)
+        where T : struct
+    {
+        try
+        {
+            return ValueIfNotNull(generator.Invoke());
+        }
+        catch (Exception ex)
+        {
+            return Error<T>(ex);
+        }
+    }
+
+#endregion
+
+#region Select
+
     /// <summary> Convert to other value type </summary>
     /// <param name="try"> Try item </param>
     /// <param name="selector"> Converter </param>
@@ -87,6 +123,20 @@ public static class Try
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, TResult> selector)
         => @try.Success ? Result(() => selector.Invoke(@try.Value)) : Error<TResult>(@try.Error!);
+
+    /// <summary> Convert to other value type </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="selector"> Converter </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TResult"> Result value type </typeparam>
+    public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector)
+        => @try.Success
+            ? Result(() => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value)).Unwrap()
+            : Error<TResult>(@try.Error!);
+
+#endregion
+
+#region SelectOrDefault
 
     /// <summary> Convert to other value type or default </summary>
     /// <param name="try"> Try item </param>
@@ -115,16 +165,6 @@ public static class Try
         => @try.Success
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value)
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
-
-    /// <summary> Convert to other value type </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector)
-        => @try.Success
-            ? Result(() => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value)).Unwrap()
-            : Error<TResult>(@try.Error!);
 
     /// <summary> Convert to other value type or default </summary>
     /// <param name="try"> Try item </param>
@@ -156,6 +196,10 @@ public static class Try
               .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
+#endregion
+
+#region ValueOrDefault
+
     /// <summary> Get value or default </summary>
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>
@@ -175,6 +219,10 @@ public static class Try
     /// <typeparam name="T"> Value type </typeparam>
     public static T ValueOrDefault<T>(this Try<T> @try, Func<T> defaultGenerator)
         => @try.Success ? @try.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+
+#endregion
+
+#region Utils
 
     /// <summary> Get value form this item or other </summary>
     /// <param name="try"> Try item </param>
@@ -207,6 +255,10 @@ public static class Try
            .Where(item => !item.Success)
            .Select(item => item.Error!);
 
+#endregion
+
+#region Do
+
     /// <summary> Try do action with value </summary>
     /// <param name="try"> Try item </param>
     /// <param name="valueAction"> Action if value exists </param>
@@ -237,4 +289,6 @@ public static class Try
     {
         if (!@try.Success) (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
     }
+
+#endregion
 }

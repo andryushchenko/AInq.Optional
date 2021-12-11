@@ -676,7 +676,22 @@
             <param name="generator"> Value generator </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Try.ResultIfNotNull``1(System.Func{``0})">
+            <summary> Create Try from value generator if not null </summary>
+            <param name="generator"> Value generator </param>
+            <typeparam name="T"> Value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.ResultIfNotNull``1(System.Func{System.Nullable{``0}})">
+            <inheritdoc cref="M:AInq.Optional.Try.ResultIfNotNull``1(System.Func{System.Nullable{``0}})" />
+        </member>
         <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,``1})">
+            <summary> Convert to other value type </summary>
+            <param name="try"> Try item </param>
+            <param name="selector"> Converter </param>
+            <typeparam name="T"> Source value type </typeparam>
+            <typeparam name="TResult"> Result value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}})">
             <summary> Convert to other value type </summary>
             <param name="try"> Try item </param>
             <param name="selector"> Converter </param>
@@ -703,13 +718,6 @@
             <param name="try"> Try item </param>
             <param name="selector"> Converter </param>
             <param name="defaultGenerator"> Default value generator </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}})">
-            <summary> Convert to other value type </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
