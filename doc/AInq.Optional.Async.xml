@@ -49,6 +49,18 @@
         <member name="M:AInq.Optional.MaybeAsync.AsMaybeIfNotNullAsync``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}},System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.ValueIfNotNullAsync``1(System.Threading.Tasks.Task{System.Nullable{``0}},System.Threading.CancellationToken)" />
         </member>
+        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
         <member name="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
@@ -102,17 +114,298 @@
         <member name="M:AInq.Optional.MaybeAsync.SelectAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Threading.CancellationToken)">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Threading.CancellationToken)">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Threading.CancellationToken)">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,``1},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.Select``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Threading.CancellationToken)">
-            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,``1},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,``1},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefault``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,AInq.Optional.Maybe{``1}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <summary> Convert to other value type or default asynchronously </summary>
+            <param name="maybe"> Maybe item </param>
+            <param name="selector"> Converter </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="T"> Source value type </typeparam>
+            <typeparam name="TResult"> Result value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)">
+            <summary> Convert to other value type or default asynchronously </summary>
+            <param name="maybe"> Maybe item </param>
+            <param name="selector"> Converter </param>
+            <param name="defaultValue"> Default value </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="T"> Source value type </typeparam>
+            <typeparam name="TResult"> Result value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},``1)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},``1,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.Task{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},System.Threading.Tasks.ValueTask{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.Task{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.Tasks.ValueTask{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.Task{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},System.Threading.Tasks.ValueTask{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.Task{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.Tasks.ValueTask{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.Task{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.ValueTask{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.Task{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.ValueTask{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.Task{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.ValueTask{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.Task{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Threading.Tasks.ValueTask{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},``1,System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)">
+            <summary> Convert to other value type or default asynchronously </summary>
+            <param name="maybe"> Maybe item </param>
+            <param name="selector"> Converter </param>
+            <param name="defaultGenerator"> Default value generator </param>
+            <param name="cancellation"> Cancellation token </param>
+            <typeparam name="T"> Source value type </typeparam>
+            <typeparam name="TResult"> Result value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{``1})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{``1},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Func{System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},System.Func{System.Threading.Tasks.ValueTask{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Func{System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{``1}},System.Func{System.Threading.Tasks.ValueTask{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.Tasks.ValueTask{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.Tasks.Task{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.Tasks.ValueTask{``1}})">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
+        </member>
+        <member name="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``1}}},System.Func{System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:AInq.Optional.MaybeAsync.SelectOrDefaultAsync``2(AInq.Optional.Maybe{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}},System.Func{``1},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.MaybeAsync.ValueOrDefault``1(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)">
             <summary> Get value or default </summary>
@@ -189,10 +482,10 @@
         <member name="M:AInq.Optional.MaybeAsync.OrAsync``1(AInq.Optional.Maybe{``0},System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.OrAsync``1(AInq.Optional.Maybe{``0},System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.Or``1(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)">
+        <member name="M:AInq.Optional.MaybeAsync.OrAsync``1(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.OrAsync``1(AInq.Optional.Maybe{``0},System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)" />
         </member>
-        <member name="M:AInq.Optional.MaybeAsync.Or``1(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)">
+        <member name="M:AInq.Optional.MaybeAsync.OrAsync``1(System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Threading.Tasks.ValueTask{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)">
             <inheritdoc cref="M:AInq.Optional.MaybeAsync.OrAsync``1(AInq.Optional.Maybe{``0},System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},System.Threading.CancellationToken)" />
         </member>
         <member name="M:AInq.Optional.MaybeAsync.Or``1(System.Threading.Tasks.Task{AInq.Optional.Maybe{``0}},AInq.Optional.Maybe{``0},System.Threading.CancellationToken)">

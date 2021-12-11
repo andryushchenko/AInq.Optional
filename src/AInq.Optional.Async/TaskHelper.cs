@@ -14,8 +14,11 @@
 
 namespace AInq.Optional;
 
-internal static class CancellationHelper
+internal static class TaskHelper
 {
+    public static async ValueTask<T?> AsNullable<T>(this ValueTask<T> valueTask)
+        => await valueTask.ConfigureAwait(false);
+
     public static ValueTask<T> WaitAsync<T>(this ValueTask<T> valueTask, CancellationToken cancellation)
         => cancellation.CanBeCanceled && !valueTask.IsCompleted
             ? cancellation.IsCancellationRequested
