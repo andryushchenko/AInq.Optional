@@ -15,4 +15,130 @@
 namespace AInq.Optional;
 
 /// <summary> Try async extension </summary>
-public static class TryAsync { }
+public static class TryAsync
+{
+#region Result
+
+    /// <summary> Create Try from async value generator </summary>
+    /// <param name="generator"> Value generator </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    /// <param name="throwIfCanceled"> Throw exception if cancelled </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static async ValueTask<Try<T>> ResultAsync<T>(Task<T> generator, CancellationToken cancellation = default, bool throwIfCanceled = true)
+    {
+        Try<T> result;
+        try
+        {
+            result = new Try<T>(await generator.WaitAsync(cancellation).ConfigureAwait(false));
+        }
+        catch (Exception ex)
+        {
+            result = new Try<T>(ex);
+        }
+        if (throwIfCanceled) result.Throw<OperationCanceledException>();
+        return result;
+    }
+
+    /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken,bool)" />
+    public static async ValueTask<Try<T>> ResultAsync<T>(ValueTask<T> generator, CancellationToken cancellation = default,
+        bool throwIfCanceled = true)
+    {
+        Try<T> result;
+        try
+        {
+            result = new Try<T>(await generator.WaitAsync(cancellation).ConfigureAwait(false));
+        }
+        catch (Exception ex)
+        {
+            result = new Try<T>(ex);
+        }
+        if (throwIfCanceled) result.Throw<OperationCanceledException>();
+        return result;
+    }
+
+    /// <summary> Create Try from async value generator if not null </summary>
+    /// <param name="generator"> Value generator </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    /// <param name="throwIfCanceled"> Throw exception if cancelled </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(Task<T?> generator, CancellationToken cancellation = default,
+        bool throwIfCanceled = true)
+        where T : class
+
+    {
+        Try<T> result;
+        try
+        {
+            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
+            result = value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
+        }
+        catch (Exception ex)
+        {
+            result = new Try<T>(ex);
+        }
+        if (throwIfCanceled) result.Throw<OperationCanceledException>();
+        return result;
+    }
+
+    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T?},CancellationToken,bool)" />
+    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(ValueTask<T?> generator, CancellationToken cancellation = default,
+        bool throwIfCanceled = true)
+        where T : class
+
+    {
+        Try<T> result;
+        try
+        {
+            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
+            result = value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
+        }
+        catch (Exception ex)
+        {
+            result = new Try<T>(ex);
+        }
+        if (throwIfCanceled) result.Throw<OperationCanceledException>();
+        return result;
+    }
+
+    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T?},CancellationToken,bool)" />
+    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(Task<T?> generator, CancellationToken cancellation = default,
+        bool throwIfCanceled = true)
+        where T : struct
+
+    {
+        Try<T> result;
+        try
+        {
+            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
+            result = value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
+        }
+        catch (Exception ex)
+        {
+            result = new Try<T>(ex);
+        }
+        if (throwIfCanceled) result.Throw<OperationCanceledException>();
+        return result;
+    }
+
+    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T?},CancellationToken,bool)" />
+    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(ValueTask<T?> generator, CancellationToken cancellation = default,
+        bool throwIfCanceled = true)
+        where T : struct
+
+    {
+        Try<T> result;
+        try
+        {
+            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
+            result = value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
+        }
+        catch (Exception ex)
+        {
+            result = new Try<T>(ex);
+        }
+        if (throwIfCanceled) result.Throw<OperationCanceledException>();
+        return result;
+    }
+
+#endregion
+}

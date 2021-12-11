@@ -44,17 +44,17 @@ public static class Maybe
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : class
-        => ValueIfNotNull(value);
+        => value == null ? new Maybe<T>() : new Maybe<T>(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : struct
-        => value == null ? new Maybe<T>() : new Maybe<T>(value.Value);
+        => value.HasValue ? new Maybe<T>(value.Value) : new Maybe<T>();
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : struct
-        => ValueIfNotNull(value);
+        => value.HasValue ? new Maybe<T>(value.Value) : new Maybe<T>();
 
 #endregion
 

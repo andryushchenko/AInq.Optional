@@ -55,17 +55,21 @@ public static class Try
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> AsTryIfNotNull<T>(this T? value)
         where T : class
-        => ValueIfNotNull(value);
+        => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Try<T> ValueIfNotNull<T>(T? value)
         where T : struct
-        => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value.Value);
+        => value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
 
     /// <inheritdoc cref="AsTryIfNotNull{T}(T)" />
     public static Try<T> AsTryIfNotNull<T>(this T? value)
         where T : struct
-        => ValueIfNotNull(value);
+        => value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
+
+#endregion
+
+#region Result
 
     /// <summary> Create Try from value generator </summary>
     /// <param name="generator"> Value generator </param>
@@ -90,7 +94,8 @@ public static class Try
     {
         try
         {
-            return ValueIfNotNull(generator.Invoke());
+            var value = generator.Invoke();
+            return value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
         }
         catch (Exception ex)
         {
@@ -104,7 +109,8 @@ public static class Try
     {
         try
         {
-            return ValueIfNotNull(generator.Invoke());
+            var value = generator.Invoke();
+            return value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
         }
         catch (Exception ex)
         {
