@@ -29,7 +29,7 @@ public static class TryAsync
         {
             return Try.Value(await task.WaitAsync(cancellation).ConfigureAwait(false));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return Try.Error<T>(ex);
         }
@@ -63,7 +63,7 @@ public static class TryAsync
                 {
                     return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     return Try.Error<TResult>(ex);
                 }
@@ -83,7 +83,7 @@ public static class TryAsync
                 {
                     return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     return Try.Error<TResult>(ex);
                 }
@@ -102,7 +102,7 @@ public static class TryAsync
                 {
                     return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     return Try.Error<TResult>(ex);
                 }
@@ -121,7 +121,7 @@ public static class TryAsync
                 {
                     return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     return Try.Error<TResult>(ex);
                 }
@@ -144,8 +144,7 @@ public static class TryAsync
         if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion)
             return tryTask.Result.SelectAsync(asyncSelector, cancellation);
         _ = asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector));
-        return FromFunctionAsync(async ()
-            =>
+        return FromFunctionAsync(async () =>
         {
             try
             {
@@ -153,7 +152,7 @@ public static class TryAsync
                              .SelectAsync(asyncSelector, cancellation)
                              .ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return Try.Error<TResult>(ex);
             }
@@ -174,7 +173,7 @@ public static class TryAsync
                              .SelectAsync(asyncSelector, cancellation)
                              .ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return Try.Error<TResult>(ex);
             }
@@ -193,8 +192,7 @@ public static class TryAsync
         if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion)
             return tryTask.Result.SelectAsync(asyncSelector, cancellation);
         _ = asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector));
-        return FromFunctionAsync(async ()
-            =>
+        return FromFunctionAsync(async () =>
         {
             try
             {
@@ -202,7 +200,7 @@ public static class TryAsync
                              .SelectAsync(asyncSelector, cancellation)
                              .ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return Try.Error<TResult>(ex);
             }
@@ -223,7 +221,7 @@ public static class TryAsync
                              .SelectAsync(asyncSelector, cancellation)
                              .ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return Try.Error<TResult>(ex);
             }
@@ -244,7 +242,7 @@ public static class TryAsync
                 {
                     @try = await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     @try = Try.Error<T>(ex);
                 }
@@ -261,7 +259,7 @@ public static class TryAsync
                 {
                     @try = await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     @try = Try.Error<T>(ex);
                 }
@@ -277,7 +275,7 @@ public static class TryAsync
                 {
                     return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Unwrap();
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     return Try.Error<T>(ex);
                 }
@@ -292,7 +290,7 @@ public static class TryAsync
                 {
                     return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Unwrap();
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     return Try.Error<T>(ex);
                 }

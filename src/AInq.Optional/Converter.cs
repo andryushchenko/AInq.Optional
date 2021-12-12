@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Monad convert utils </summary>
+/// <summary> Converter utils </summary>
 public static class Converter
 {
     /// <summary> Get left value or none </summary>
