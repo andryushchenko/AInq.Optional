@@ -22,28 +22,32 @@ public static class Either
     /// <typeparam name="TLeft"> Left value type </typeparam>
     /// <typeparam name="TRight"> Right value type </typeparam>
     public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft left)
-        => new(left);
+        => new EitherLeft<TLeft, TRight>(left);
 
     /// <summary> Create Either from right value </summary>
     /// <param name="right"> Right value </param>
     /// <typeparam name="TLeft"> Left value type </typeparam>
     /// <typeparam name="TRight"> Right value type </typeparam>
     public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight right)
-        => new(right);
+        => new EitherRight<TLeft, TRight>(right);
 
     /// <summary> Convert left value to Either </summary>
     /// <param name="left"> Left value </param>
     /// <typeparam name="TLeft"> Left value type </typeparam>
     /// <typeparam name="TRight"> Right value type </typeparam>
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TLeft left)
-        => new(left);
+        => new EitherLeft<TLeft, TRight>(left);
 
     /// <summary> Convert right value to Either </summary>
     /// <param name="right"> Right value </param>
     /// <typeparam name="TLeft"> Left value type </typeparam>
     /// <typeparam name="TRight"> Right value type </typeparam>
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TRight right)
-        => new(right);
+        => new EitherRight<TLeft, TRight>(right);
+
+    /// <summary> Swap left and right values </summary>
+    public static Either<TRight, TLeft> Invert<TLeft, TRight>(this Either<TLeft, TRight> either)
+        => either.HasLeft ? Right<TRight, TLeft>(either.Left) : Left<TRight, TLeft>(either.Right);
 
     /// <summary> Convert to other left value type </summary>
     /// <param name="either"> Either item </param>

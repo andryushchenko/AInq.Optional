@@ -22,39 +22,39 @@ public static class Maybe
     /// <summary> Create empty Maybe </summary>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> None<T>()
-        => new();
+        => MaybeEmpty<T>.Empty;
 
     /// <summary> Create Maybe from value </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Value<T>(T value)
-        => new(value);
+        => new MaybeValue<T>(value);
 
     /// <inheritdoc cref="Value{T}" />
     public static Maybe<T> AsMaybe<T>(this T value)
-        => new(value);
+        => new MaybeValue<T>(value);
 
     /// <summary> Create Maybe from value if not null </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : class
-        => value == null ? new Maybe<T>() : new Maybe<T>(value);
+        => value == null ? MaybeEmpty<T>.Empty : new MaybeValue<T>(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : class
-        => value == null ? new Maybe<T>() : new Maybe<T>(value);
+        => value == null ? MaybeEmpty<T>.Empty : new MaybeValue<T>(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : struct
-        => value.HasValue ? new Maybe<T>(value.Value) : new Maybe<T>();
+        => value.HasValue ? new MaybeValue<T>(value.Value) : MaybeEmpty<T>.Empty;
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : struct
-        => value.HasValue ? new Maybe<T>(value.Value) : new Maybe<T>();
+        => value.HasValue ? new MaybeValue<T>(value.Value) : MaybeEmpty<T>.Empty;
 
 #endregion
 

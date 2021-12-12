@@ -100,6 +100,9 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Either.Invert``2(AInq.Optional.Either{``0,``1})">
+            <summary> Swap left and right values </summary>
+        </member>
         <member name="M:AInq.Optional.Either.SelectLeft``3(AInq.Optional.Either{``0,``1},System.Func{``0,``2})">
             <summary> Convert to other left value type </summary>
             <param name="either"> Either item </param>
@@ -245,16 +248,6 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Either`2.#ctor">
-            <summary> Create empty <see cref="T:AInq.Optional.Either`2" /> </summary>
-            <remarks> DO NOT use this </remarks>
-        </member>
-        <member name="M:AInq.Optional.Either`2.#ctor(`0)">
-            <summary> Create <see cref="T:AInq.Optional.Either`2" /> with left value </summary>
-        </member>
-        <member name="M:AInq.Optional.Either`2.#ctor(`1)">
-            <summary> Create <see cref="T:AInq.Optional.Either`2" /> with left value </summary>
-        </member>
         <member name="P:AInq.Optional.Either`2.HasLeft">
             <summary> Check if item contains left value </summary>
         </member>
@@ -267,8 +260,8 @@
         <member name="P:AInq.Optional.Either`2.Right">
             <summary> Right value (if exists) </summary>
         </member>
-        <member name="M:AInq.Optional.Either`2.Invert">
-            <summary> Swap left and right values </summary>
+        <member name="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})">
+            <inheritdoc />
         </member>
         <member name="M:AInq.Optional.Either`2.ToString">
             <inheritdoc />
@@ -279,9 +272,6 @@
         <member name="M:AInq.Optional.Either`2.Equals(System.Object)">
             <inheritdoc />
         </member>
-        <member name="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})">
-            <inheritdoc />
-        </member>
         <member name="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`1,`0})">
             <inheritdoc cref="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})" />
         </member>
@@ -290,22 +280,6 @@
         </member>
         <member name="M:AInq.Optional.Either`2.Equals(`0)">
             <inheritdoc cref="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})" />
-        </member>
-        <member name="M:AInq.Optional.Either`2.op_Explicit(`0)~AInq.Optional.Either{`0,`1}">
-            <summary> Explicit cast to Either </summary>
-            <param name="item"> Value </param>
-        </member>
-        <member name="M:AInq.Optional.Either`2.op_Explicit(`1)~AInq.Optional.Either{`0,`1}">
-            <summary> Explicit cast to Either </summary>
-            <param name="item"> Value </param>
-        </member>
-        <member name="M:AInq.Optional.Either`2.op_Explicit(AInq.Optional.Either{`0,`1})~`0">
-            <summary> Explicit cast to left value type </summary>
-            <param name="item"> Either item </param>
-        </member>
-        <member name="M:AInq.Optional.Either`2.op_Explicit(AInq.Optional.Either{`0,`1})~`1">
-            <summary> Explicit cast to right value type </summary>
-            <param name="item"> Either item </param>
         </member>
         <member name="M:AInq.Optional.Either`2.op_Equality(AInq.Optional.Either{`0,`1},AInq.Optional.Either{`0,`1})">
             <summary> Equality comparison </summary>
@@ -501,17 +475,17 @@
             <summary> Maybe monad </summary>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Maybe`1.#ctor">
-            <summary> Create empty <see cref="T:AInq.Optional.Maybe`1" /> </summary>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.#ctor(`0)">
-            <summary> Create <see cref="T:AInq.Optional.Maybe`1" /> with value </summary>
-        </member>
         <member name="P:AInq.Optional.Maybe`1.HasValue">
             <summary> Check if item contains value </summary>
         </member>
         <member name="P:AInq.Optional.Maybe`1.Value">
             <summary> Item value (if exists) </summary>
+        </member>
+        <member name="M:AInq.Optional.Maybe`1.Equals(AInq.Optional.Maybe{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:AInq.Optional.Maybe`1.Equals(`0)">
+            <inheritdoc />
         </member>
         <member name="M:AInq.Optional.Maybe`1.ToString">
             <inheritdoc />
@@ -522,26 +496,6 @@
         <member name="M:AInq.Optional.Maybe`1.Equals(System.Object)">
             <inheritdoc />
         </member>
-        <member name="M:AInq.Optional.Maybe`1.Equals(AInq.Optional.Maybe{`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.Equals(`0)">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.CompareTo(AInq.Optional.Maybe{`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.CompareTo(`0)">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_Explicit(`0)~AInq.Optional.Maybe{`0}">
-            <summary> Explicit cast to Maybe </summary>
-            <param name="item"> Value </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_Explicit(AInq.Optional.Maybe{`0})~`0">
-            <summary> Explicit cast to value type </summary>
-            <param name="item"> Maybe item </param>
-        </member>
         <member name="M:AInq.Optional.Maybe`1.op_Equality(AInq.Optional.Maybe{`0},AInq.Optional.Maybe{`0})">
             <summary> Equality comparison </summary>
             <param name="a"> First element </param>
@@ -549,26 +503,6 @@
         </member>
         <member name="M:AInq.Optional.Maybe`1.op_Inequality(AInq.Optional.Maybe{`0},AInq.Optional.Maybe{`0})">
             <summary> Inequality comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_LessThan(AInq.Optional.Maybe{`0},AInq.Optional.Maybe{`0})">
-            <summary> Less comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_GreaterThan(AInq.Optional.Maybe{`0},AInq.Optional.Maybe{`0})">
-            <summary> Greater comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_LessThanOrEqual(AInq.Optional.Maybe{`0},AInq.Optional.Maybe{`0})">
-            <summary> Less or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_GreaterThanOrEqual(AInq.Optional.Maybe{`0},AInq.Optional.Maybe{`0})">
-            <summary> Greater or equal comparison </summary>
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
         </member>
@@ -582,26 +516,6 @@
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
         </member>
-        <member name="M:AInq.Optional.Maybe`1.op_LessThan(AInq.Optional.Maybe{`0},`0)">
-            <summary> Less comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_GreaterThan(AInq.Optional.Maybe{`0},`0)">
-            <summary> Greater comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_LessThanOrEqual(AInq.Optional.Maybe{`0},`0)">
-            <summary> Less or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_GreaterThanOrEqual(AInq.Optional.Maybe{`0},`0)">
-            <summary> Greater or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
         <member name="M:AInq.Optional.Maybe`1.op_Equality(`0,AInq.Optional.Maybe{`0})">
             <summary> Equality comparison </summary>
             <param name="a"> First element </param>
@@ -609,26 +523,6 @@
         </member>
         <member name="M:AInq.Optional.Maybe`1.op_Inequality(`0,AInq.Optional.Maybe{`0})">
             <summary> Inequality comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_LessThan(`0,AInq.Optional.Maybe{`0})">
-            <summary> Less comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_GreaterThan(`0,AInq.Optional.Maybe{`0})">
-            <summary> Greater comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_LessThanOrEqual(`0,AInq.Optional.Maybe{`0})">
-            <summary> Less or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Maybe`1.op_GreaterThanOrEqual(`0,AInq.Optional.Maybe{`0})">
-            <summary> Greater or equal comparison </summary>
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
         </member>
@@ -698,69 +592,6 @@
             <typeparam name="T"> Source value type </typeparam>
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,``1})">
-            <summary> Convert to other value type or default </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,``1},``1)">
-            <summary> Convert to other value type or default </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <param name="defaultValue"> Default value </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,``1},System.Func{``1})">
-            <summary> Convert to other value type or default from generator </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <param name="defaultGenerator"> Default value generator </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}})">
-            <summary> Convert to other value type or default </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}},``1)">
-            <summary> Convert to other value type or default </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <param name="defaultValue"> Default value </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.SelectOrDefault``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}},System.Func{``1})">
-            <summary> Convert to other value type or default from generator </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <param name="defaultGenerator"> Default value generator </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ValueOrDefault``1(AInq.Optional.Try{``0})">
-            <summary> Get value or default </summary>
-            <param name="try"> Try item </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ValueOrDefault``1(AInq.Optional.Try{``0},``0)">
-            <summary> Get value or default </summary>
-            <param name="try"> Try item </param>
-            <param name="defaultValue"> Default value </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ValueOrDefault``1(AInq.Optional.Try{``0},System.Func{``0})">
-            <summary> Get value or default from generator </summary>
-            <param name="try"> Try item </param>
-            <param name="defaultGenerator"> Default value generator </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
         <member name="M:AInq.Optional.Try.Or``1(AInq.Optional.Try{``0},AInq.Optional.Try{``0})">
             <summary> Get value form this item or other </summary>
             <param name="try"> Try item </param>
@@ -808,16 +639,6 @@
             <summary> Try monad </summary>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Try`1.#ctor">
-            <summary> Create <see cref="T:AInq.Optional.Try`1" /> with default error </summary>
-            <remarks> DO NOT use this </remarks>
-        </member>
-        <member name="M:AInq.Optional.Try`1.#ctor(`0)">
-            <summary> Create <see cref="T:AInq.Optional.Try`1" /> with value </summary>
-        </member>
-        <member name="M:AInq.Optional.Try`1.#ctor(System.Exception)">
-            <summary> Create <see cref="T:AInq.Optional.Try`1" /> with error </summary>
-        </member>
         <member name="P:AInq.Optional.Try`1.Success">
             <summary> Check if item is success </summary>
         </member>
@@ -826,6 +647,12 @@
         </member>
         <member name="P:AInq.Optional.Try`1.Error">
             <summary> Exception or null if success </summary>
+        </member>
+        <member name="M:AInq.Optional.Try`1.Equals(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:AInq.Optional.Try`1.Equals(AInq.Optional.Try{`0})">
+            <inheritdoc />
         </member>
         <member name="M:AInq.Optional.Try`1.Throw``1">
             <summary> Throw if contains exception of target type </summary>
@@ -840,30 +667,6 @@
         <member name="M:AInq.Optional.Try`1.Equals(System.Object)">
             <inheritdoc />
         </member>
-        <member name="M:AInq.Optional.Try`1.Equals(AInq.Optional.Try{`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Try`1.Equals(`0)">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Try`1.CompareTo(AInq.Optional.Try{`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Try`1.CompareTo(`0)">
-            <inheritdoc />
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_Explicit(`0)~AInq.Optional.Try{`0}">
-            <summary> Explicit cast to Try </summary>
-            <param name="item"> Value </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_Explicit(System.Exception)~AInq.Optional.Try{`0}">
-            <summary> Explicit cast to Try </summary>
-            <param name="exception"> Exception </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_Explicit(AInq.Optional.Try{`0})~`0">
-            <summary> Explicit cast to value type </summary>
-            <param name="item"> Try item </param>
-        </member>
         <member name="M:AInq.Optional.Try`1.op_Equality(AInq.Optional.Try{`0},AInq.Optional.Try{`0})">
             <summary> Equality comparison </summary>
             <param name="a"> First element </param>
@@ -871,26 +674,6 @@
         </member>
         <member name="M:AInq.Optional.Try`1.op_Inequality(AInq.Optional.Try{`0},AInq.Optional.Try{`0})">
             <summary> Inequality comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_LessThan(AInq.Optional.Try{`0},AInq.Optional.Try{`0})">
-            <summary> Less comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_GreaterThan(AInq.Optional.Try{`0},AInq.Optional.Try{`0})">
-            <summary> Greater comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_LessThanOrEqual(AInq.Optional.Try{`0},AInq.Optional.Try{`0})">
-            <summary> Less or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_GreaterThanOrEqual(AInq.Optional.Try{`0},AInq.Optional.Try{`0})">
-            <summary> Greater or equal comparison </summary>
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
         </member>
@@ -904,26 +687,6 @@
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
         </member>
-        <member name="M:AInq.Optional.Try`1.op_LessThan(AInq.Optional.Try{`0},`0)">
-            <summary> Less comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_GreaterThan(AInq.Optional.Try{`0},`0)">
-            <summary> Greater comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_LessThanOrEqual(AInq.Optional.Try{`0},`0)">
-            <summary> Less or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_GreaterThanOrEqual(AInq.Optional.Try{`0},`0)">
-            <summary> Greater or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
         <member name="M:AInq.Optional.Try`1.op_Equality(`0,AInq.Optional.Try{`0})">
             <summary> Equality comparison </summary>
             <param name="a"> First element </param>
@@ -931,26 +694,6 @@
         </member>
         <member name="M:AInq.Optional.Try`1.op_Inequality(`0,AInq.Optional.Try{`0})">
             <summary> Inequality comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_LessThan(`0,AInq.Optional.Try{`0})">
-            <summary> Less comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_GreaterThan(`0,AInq.Optional.Try{`0})">
-            <summary> Greater comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_LessThanOrEqual(`0,AInq.Optional.Try{`0})">
-            <summary> Less or equal comparison </summary>
-            <param name="a"> First element </param>
-            <param name="b"> Second element </param>
-        </member>
-        <member name="M:AInq.Optional.Try`1.op_GreaterThanOrEqual(`0,AInq.Optional.Try{`0})">
-            <summary> Greater or equal comparison </summary>
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
         </member>

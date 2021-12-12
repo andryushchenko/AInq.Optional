@@ -23,49 +23,49 @@ public static class Try
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> Value<T>(T value)
-        => new(value);
+        => new TryValue<T>(value);
 
     /// <summary> Convert value to Try </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> AsTry<T>(this T value)
-        => new(value);
+        => new TryValue<T>(value);
 
     /// <summary> Create Try from exception </summary>
     /// <param name="exception"> Exception </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> Error<T>(Exception exception)
-        => new(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
+        => new TryError<T>(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
 
     /// <summary> Convert exception to Try </summary>
     /// <param name="exception"> Exception </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> AsTry<T>(this Exception exception)
-        => new(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
+        => new TryError<T>(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
 
     /// <summary> Create Try from value if not null </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> ValueIfNotNull<T>(T? value)
         where T : class
-        => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
+        => value == null ? new TryError<T>(new ArgumentException("No value specified")) : new TryValue<T>(value);
 
     /// <summary> Convert value to Try if not null </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> AsTryIfNotNull<T>(this T? value)
         where T : class
-        => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
+        => value == null ? new TryError<T>(new ArgumentException("No value specified")) : new TryValue<T>(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Try<T> ValueIfNotNull<T>(T? value)
         where T : struct
-        => value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
+        => value.HasValue ? new TryValue<T>(value.Value) : new TryError<T>(new ArgumentException("No value specified"));
 
     /// <inheritdoc cref="AsTryIfNotNull{T}(T)" />
     public static Try<T> AsTryIfNotNull<T>(this T? value)
         where T : struct
-        => value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
+        => value.HasValue ? new TryValue<T>(value.Value) : new TryError<T>(new ArgumentException("No value specified"));
 
 #endregion
 
@@ -78,7 +78,8 @@ public static class Try
     {
         try
         {
-            return Value(generator.Invoke());
+            var value = (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke();
+            return Value(value);
         }
         catch (Exception ex)
         {
@@ -94,8 +95,8 @@ public static class Try
     {
         try
         {
-            var value = generator.Invoke();
-            return value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
+            var value = (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke();
+            return value == null ? new TryError<T>(new ArgumentException("No value specified")) : new TryValue<T>(value);
         }
         catch (Exception ex)
         {
@@ -109,8 +110,8 @@ public static class Try
     {
         try
         {
-            var value = generator.Invoke();
-            return value.HasValue ? new Try<T>(value.Value) : new Try<T>(new ArgumentNullException(nameof(value)));
+            var value = (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke();
+            return value.HasValue ? new TryValue<T>(value.Value) : new TryError<T>(new ArgumentException("No value specified"));
         }
         catch (Exception ex)
         {
@@ -128,7 +129,9 @@ public static class Try
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, TResult> selector)
-        => @try.Success ? Result(() => selector.Invoke(@try.Value)) : Error<TResult>(@try.Error!);
+        => @try.Success
+            ? Result(() => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value))
+            : Error<TResult>(@try.Error!);
 
     /// <summary> Convert to other value type </summary>
     /// <param name="try"> Try item </param>
@@ -139,92 +142,6 @@ public static class Try
         => @try.Success
             ? Result(() => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value)).Unwrap()
             : Error<TResult>(@try.Error!);
-
-#endregion
-
-#region SelectOrDefault
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Try<T> @try, Func<T, TResult> selector)
-        => @try.Select(selector).ValueOrDefault();
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> @try, Func<T, TResult> selector, TResult defaultValue)
-        => @try.Select(selector).ValueOrDefault(defaultValue);
-
-    /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> @try, Func<T, TResult> selector, Func<TResult> defaultGenerator)
-        => @try.Success
-            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value)
-            : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector)
-        => @try.Select(selector).ValueOrDefault();
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector, TResult defaultValue)
-        => @try.Select(selector).ValueOrDefault(defaultValue);
-
-    /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector, Func<TResult> defaultGenerator)
-        => @try.Success
-            ? (selector ?? throw new ArgumentNullException(nameof(selector)))
-              .Invoke(@try.Value)
-              .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
-            : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
-
-#endregion
-
-#region ValueOrDefault
-
-    /// <summary> Get value or default </summary>
-    /// <param name="try"> Try item </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static T? ValueOrDefault<T>(this Try<T> @try)
-        => @try.Success ? @try.Value : default;
-
-    /// <summary> Get value or default </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static T ValueOrDefault<T>(this Try<T> @try, T defaultValue)
-        => @try.Success ? @try.Value : defaultValue;
-
-    /// <summary> Get value or default from generator </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static T ValueOrDefault<T>(this Try<T> @try, Func<T> defaultGenerator)
-        => @try.Success ? @try.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
 #endregion
 
