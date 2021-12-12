@@ -15,7 +15,7 @@
 namespace AInq.Optional;
 
 /// <summary> Monad convert utils </summary>
-public static class ConvertExtension
+public static class Converter
 {
     /// <summary> Get left value or none </summary>
     /// <param name="either"> Either source </param>

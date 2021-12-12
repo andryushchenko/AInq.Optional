@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Either monad utils </summary>
+/// <summary> Either utils </summary>
 public static class Either
 {
 #region Value
@@ -245,6 +245,19 @@ public static class Either
 
 #region Do
 
+    /// <summary> Do action with left or right value </summary>
+    /// <param name="either"> Either item </param>
+    /// <param name="leftAction"> Left value action </param>
+    /// <param name="rightAction"> Right value action </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    public static void Do<TLeft, TRight>(this Either<TLeft, TRight> either, Action<TLeft> leftAction, Action<TRight> rightAction)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasLeft)
+            (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(either.Left);
+        else if (either.HasRight) (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right);
+    }
+
     /// <summary> Do action with left value (if exists) </summary>
     /// <param name="either"> Either item </param>
     /// <param name="leftAction"> Left value action </param>
@@ -265,19 +278,6 @@ public static class Either
     {
         if ((either ?? throw new ArgumentNullException(nameof(either))).HasRight)
             (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right);
-    }
-
-    /// <summary> Do action with left or right value </summary>
-    /// <param name="either"> Either item </param>
-    /// <param name="leftAction"> Left value action </param>
-    /// <param name="rightAction"> Right value action </param>
-    /// <typeparam name="TLeft"> Left value type </typeparam>
-    /// <typeparam name="TRight"> Right value type </typeparam>
-    public static void Do<TLeft, TRight>(this Either<TLeft, TRight> either, Action<TLeft> leftAction, Action<TRight> rightAction)
-    {
-        if ((either ?? throw new ArgumentNullException(nameof(either))).HasLeft)
-            (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(either.Left);
-        else if (either.HasRight) (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right);
     }
 
 #endregion

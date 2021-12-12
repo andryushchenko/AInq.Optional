@@ -276,8 +276,7 @@ public static class MaybeAsync
                                                   .ConfigureAwait(false));
 
     public static ValueTask<T> ValueOrDefaultAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
-        Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator,
-        CancellationToken cancellation = default)
+        Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator, CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
             ? maybeValueTask.Result.ValueOrDefaultAsync(asyncDefaultGenerator, cancellation)
             : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))

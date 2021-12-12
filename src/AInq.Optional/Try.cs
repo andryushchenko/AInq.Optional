@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Try monad utils </summary>
+/// <summary> Try utils </summary>
 public static class Try
 {
 #region Value

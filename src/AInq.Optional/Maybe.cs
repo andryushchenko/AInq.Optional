@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Maybe monad utils </summary>
+/// <summary> Maybe utils </summary>
 public static class Maybe
 {
 #region Value
