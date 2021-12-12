@@ -30,26 +30,26 @@ public static class Maybe
     public static Maybe<T> Value<T>(T value)
         => new MaybeValue<T>(value);
 
-    /// <inheritdoc cref="Value{T}" />
-    public static Maybe<T> AsMaybe<T>(this T value)
-        => new MaybeValue<T>(value);
-
     /// <summary> Create Maybe from value if not null </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : class
-        => value == null ? MaybeEmpty<T>.Empty : new MaybeValue<T>(value);
-
-    /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
-    public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
-        where T : class
-        => value == null ? MaybeEmpty<T>.Empty : new MaybeValue<T>(value);
+        => value is not null ? new MaybeValue<T>(value) : MaybeEmpty<T>.Empty;
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : struct
         => value.HasValue ? new MaybeValue<T>(value.Value) : MaybeEmpty<T>.Empty;
+
+    /// <inheritdoc cref="Value{T}" />
+    public static Maybe<T> AsMaybe<T>(this T value)
+        => new MaybeValue<T>(value);
+
+    /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
+    public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
+        where T : class
+        => value is not null ? new MaybeValue<T>(value) : MaybeEmpty<T>.Empty;
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
@@ -66,11 +66,15 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
-        => maybe.HasValue ? Value((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)) : None<TResult>();
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? Value((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value))
+            : None<TResult>();
 
     /// <inheritdoc cref="Select{T,TResult}(Maybe{T},Func{T,TResult})" />
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
-        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : None<TResult>();
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
+            : None<TResult>();
 
 #endregion
 
@@ -82,11 +86,15 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
-        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : default;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
+            : default;
 
     /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
     public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
-        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault() : default;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault()
+            : default;
 
     /// <summary> Convert to other value type or default </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -95,11 +103,13 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector, TResult defaultValue)
-        => maybe.HasValue ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value) : defaultValue;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
+            : defaultValue;
 
     /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult}, TResult)" />
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, TResult defaultValue)
-        => maybe.HasValue
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault(defaultValue)
             : defaultValue;
 
@@ -110,13 +120,13 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector, Func<TResult> defaultGenerator)
-        => maybe.HasValue
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector, Func<TResult> defaultGenerator)
-        => maybe.HasValue
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector)))
               .Invoke(maybe.Value)
               .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
@@ -130,21 +140,23 @@ public static class Maybe
     /// <param name="maybe"> Maybe item </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static T? ValueOrDefault<T>(this Maybe<T> maybe)
-        => maybe.HasValue ? maybe.Value : default;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : default;
 
     /// <summary> Get value or default </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static T ValueOrDefault<T>(this Maybe<T> maybe, T defaultValue)
-        => maybe.HasValue ? maybe.Value : defaultValue;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : defaultValue;
 
     /// <summary> Get value or default from generator </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static T ValueOrDefault<T>(this Maybe<T> maybe, Func<T> defaultGenerator)
-        => maybe.HasValue ? maybe.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? maybe.Value
+            : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
 #endregion
 
@@ -155,20 +167,23 @@ public static class Maybe
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Or<T>(this Maybe<T> maybe, Maybe<T> other)
-        => maybe.HasValue ? maybe : other;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe : other;
 
     /// <summary> Filter value </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <param name="filter"> Filter </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Filter<T>(this Maybe<T> maybe, Func<T, bool> filter)
-        => !maybe.HasValue || maybe.HasValue && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value) ? maybe : None<T>();
+        => !(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+           || maybe.HasValue && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value)
+            ? maybe
+            : None<T>();
 
     /// <summary> Unwrap nested Maybe </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> maybe)
-        => maybe.HasValue ? maybe.Value : None<T>();
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : None<T>();
 
     /// <summary> Select existing values </summary>
     /// <param name="collection"> Maybe collection </param>
@@ -176,21 +191,13 @@ public static class Maybe
     /// <returns> Values collection </returns>
     public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item.HasValue)
+           // ReSharper disable once ConstantConditionalAccessQualifier
+           .Where(item => item?.HasValue ?? false)
            .Select(item => item.Value);
 
 #endregion
 
 #region Do
-
-    /// <summary> Do action with value (if exists) </summary>
-    /// <param name="maybe"> Maybe item </param>
-    /// <param name="valueAction"> Action if value exists </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    public static void Do<T>(this Maybe<T> maybe, Action<T> valueAction)
-    {
-        if (maybe.HasValue) (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
-    }
 
     /// <summary> Do action </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -199,8 +206,19 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     public static void Do<T>(this Maybe<T> maybe, Action<T> valueAction, Action emptyAction)
     {
-        if (maybe.HasValue) (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
+        if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
         else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+    }
+
+    /// <summary> Do action with value (if exists) </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void Do<T>(this Maybe<T> maybe, Action<T> valueAction)
+    {
+        if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
     }
 
     /// <summary> Do action if empty </summary>
@@ -209,7 +227,8 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     public static void DoIfEmpty<T>(this Maybe<T> maybe, Action emptyAction)
     {
-        if (!maybe.HasValue) (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+        if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
     }
 
 #endregion

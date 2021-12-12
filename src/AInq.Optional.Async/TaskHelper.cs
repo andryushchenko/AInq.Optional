@@ -16,30 +16,11 @@ namespace AInq.Optional;
 
 internal static class TaskHelper
 {
-    public static async ValueTask<T?> AsNullable<T>(this ValueTask<T> valueTask)
-        => await valueTask.ConfigureAwait(false);
+    public static ValueTask FromFunctionAsync(Func<Task> function)
+        => new(function.Invoke());
 
-    public static ValueTask<T> WaitAsync<T>(this ValueTask<T> valueTask, CancellationToken cancellation)
-        => cancellation.CanBeCanceled && !valueTask.IsCompleted
-            ? cancellation.IsCancellationRequested
-#if NET5_0_OR_GREATER
-                ? ValueTask.FromCanceled<T>(cancellation)
-#else
-                ? new ValueTask<T>(Task.FromCanceled<T>(cancellation))
-#endif
-                : WaitWithCancellationAsync(valueTask, cancellation)
-            : valueTask;
-
-    private static async ValueTask<T> WaitWithCancellationAsync<T>(ValueTask<T> valueTask, CancellationToken cancellation)
-    {
-        var completion = new TaskCompletionSource<T>();
-#if NETSTANDARD2_0
-        using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation));
-#else
-        await using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation));
-#endif
-        return await (await Task.WhenAny(valueTask.AsTask(), completion.Task).ConfigureAwait(false)).ConfigureAwait(false);
-    }
+    public static ValueTask<T> FromFunctionAsync<T>(Func<Task<T>> function)
+        => new(function.Invoke());
 
 #if !NET6_0_OR_GREATER
     public static Task<T> WaitAsync<T>(this Task<T> task, CancellationToken cancellation)
@@ -59,6 +40,5 @@ internal static class TaskHelper
 #endif
         return await (await Task.WhenAny(task, completion.Task).ConfigureAwait(false)).ConfigureAwait(false);
     }
-
 #endif
 }

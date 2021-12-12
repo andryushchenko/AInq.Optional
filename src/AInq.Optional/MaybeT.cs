@@ -22,7 +22,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     public bool HasValue => IsNotEmpty();
 
     /// <summary> Item value (if exists) </summary>
-    public T Value => GetValue();
+    public T Value => IsNotEmpty() ? GetValue() : throw new InvalidOperationException("No value");
 
     /// <inheritdoc />
     public bool Equals(Maybe<T>? other)

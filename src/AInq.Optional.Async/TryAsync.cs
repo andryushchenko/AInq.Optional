@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
+using static AInq.Optional.TaskHelper;
+
 namespace AInq.Optional;
 
 /// <summary> Try async extension </summary>
 public static class TryAsync
 {
-#region Result
+#region ResultAsync
 
-    /// <summary> Create Try from async value generator </summary>
-    /// <param name="generator"> Value generator </param>
-    /// <param name="cancellation"> Cancellation token </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static async ValueTask<Try<T>> ResultAsync<T>(Task<T> generator, CancellationToken cancellation = default)
+    public static async ValueTask<Try<T>> ResultAsync<T>(Task<T> task, CancellationToken cancellation = default)
     {
+        _ = task ?? throw new ArgumentNullException(nameof(task));
         try
         {
-            return Try.Value(await (generator ?? throw new ArgumentNullException(nameof(generator))).WaitAsync(cancellation).ConfigureAwait(false));
+            return Try.Value(await task.WaitAsync(cancellation).ConfigureAwait(false));
         }
         catch (Exception ex)
         {
@@ -35,390 +35,436 @@ public static class TryAsync
         }
     }
 
-    /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> ResultAsync<T>(ValueTask<T> generator, CancellationToken cancellation = default)
-    {
-        try
-        {
-            return Try.Value(await generator.WaitAsync(cancellation).ConfigureAwait(false));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
+    public static ValueTask<Try<T>> ResultAsync<T>(ValueTask<T> valueTask, CancellationToken cancellation = default)
+        => valueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(Try.Value(valueTask.Result))
+            : ResultAsync(valueTask.AsTask(), cancellation);
 
-    /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> AsTryAsync<T>(this Task<T> generator, CancellationToken cancellation = default)
-    {
-        try
-        {
-            return Try.Value(await (generator ?? throw new ArgumentNullException(nameof(generator))).WaitAsync(cancellation).ConfigureAwait(false));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
+    public static ValueTask<Try<T>> AsTryAsync<T>(this Task<T> task, CancellationToken cancellation = default)
+        => ResultAsync(task ?? throw new ArgumentNullException(nameof(task)), cancellation);
 
-    /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> AsTryAsync<T>(this ValueTask<T> generator, CancellationToken cancellation = default)
-    {
-        try
-        {
-            return Try.Value(await generator.WaitAsync(cancellation).ConfigureAwait(false));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <summary> Create Try from async value generator if not null </summary>
-    /// <param name="generator"> Value generator </param>
-    /// <param name="cancellation"> Cancellation token </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(Task<T?> generator, CancellationToken cancellation = default)
-        where T : class
-    {
-        try
-        {
-            var value = await (generator ?? throw new ArgumentNullException(nameof(generator))).WaitAsync(cancellation).ConfigureAwait(false);
-            return value == null ? Try.Error<T>(new ArgumentException("No value specified")) : Try.Value(value);
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(ValueTask<T?> generator, CancellationToken cancellation = default)
-        where T : class
-    {
-        try
-        {
-            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
-            return value == null ? Try.Error<T>(new ArgumentException("No value specified")) : Try.Value(value);
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(Task<T?> generator, CancellationToken cancellation = default)
-        where T : struct
-    {
-        try
-        {
-            var value = await (generator ?? throw new ArgumentNullException(nameof(generator))).WaitAsync(cancellation).ConfigureAwait(false);
-            return value.HasValue ? Try.Value(value.Value) : Try.Error<T>(new ArgumentException("No value specified"));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> ResultIfNotNullAsync<T>(ValueTask<T?> generator, CancellationToken cancellation = default)
-        where T : struct
-    {
-        try
-        {
-            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
-            return value.HasValue ? Try.Value(value.Value) : Try.Error<T>(new ArgumentException("No value specified"));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> AsTryIfNotNullAsync<T>(this Task<T?> generator, CancellationToken cancellation = default)
-        where T : class
-    {
-        try
-        {
-            var value = await (generator ?? throw new ArgumentNullException(nameof(generator))).WaitAsync(cancellation).ConfigureAwait(false);
-            return value == null ? Try.Error<T>(new ArgumentException("No value specified")) : Try.Value(value);
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> AsTryIfNotNullAsync<T>(this ValueTask<T?> generator, CancellationToken cancellation = default)
-        where T : class
-    {
-        try
-        {
-            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
-            return value == null ? Try.Error<T>(new ArgumentException("No value specified")) : Try.Value(value);
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> AsTryIfNotNullAsync<T>(this Task<T?> generator, CancellationToken cancellation = default)
-        where T : struct
-    {
-        try
-        {
-            var value = await (generator ?? throw new ArgumentNullException(nameof(generator))).WaitAsync(cancellation).ConfigureAwait(false);
-            return value.HasValue ? Try.Value(value.Value) : Try.Error<T>(new ArgumentException("No value specified"));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    /// <inheritdoc cref="ResultIfNotNullAsync{T}(Task{T},CancellationToken)" />
-    public static async ValueTask<Try<T>> AsTryIfNotNullAsync<T>(this ValueTask<T?> generator, CancellationToken cancellation = default)
-        where T : struct
-    {
-        try
-        {
-            var value = await generator.WaitAsync(cancellation).ConfigureAwait(false);
-            return value.HasValue ? Try.Value(value.Value) : Try.Error<T>(new ArgumentException("No value specified"));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-#endregion
-
-#region Result_Helper
-
-    private static async ValueTask<Try<T>> ResultAsync<T>(Func<CancellationToken, Task<T>> generator, CancellationToken cancellation = default)
-    {
-        try
-        {
-            return Try.Value(await (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke(cancellation).ConfigureAwait(false));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    private static async ValueTask<Try<T>> ResultAsync<T>(Func<CancellationToken, Task<Try<T>>> generator, CancellationToken cancellation = default)
-    {
-        try
-        {
-            return await (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke(cancellation).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    private static async ValueTask<Try<T>> ResultAsync<T>(Func<CancellationToken, ValueTask<T>> generator, CancellationToken cancellation = default)
-    {
-        try
-        {
-            return Try.Value(await (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke(cancellation).ConfigureAwait(false));
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
-
-    private static async ValueTask<Try<T>> ResultAsync<T>(Func<CancellationToken, ValueTask<Try<T>>> generator,
-        CancellationToken cancellation = default)
-    {
-        try
-        {
-            return await (generator ?? throw new ArgumentNullException(nameof(generator))).Invoke(cancellation).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            return Try.Error<T>(ex);
-        }
-    }
+    public static ValueTask<Try<T>> AsTryAsync<T>(this ValueTask<T> valueTask, CancellationToken cancellation = default)
+        => ResultAsync(valueTask, cancellation);
 
 #endregion
 
 #region Select
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> Select<T, TResult>(this Task<Try<T>> @try, Func<T, TResult> selector,
+    public static ValueTask<Try<TResult>> Select<T, TResult>(this Task<Try<T>> tryTask, Func<T, TResult> selector,
         CancellationToken cancellation = default)
-        => (await ResultAsync(@try, cancellation).ConfigureAwait(false)).Unwrap().Select(selector);
+    {
+        _ = tryTask ?? throw new ArgumentNullException(nameof(tryTask));
+        _ = selector ?? throw new ArgumentNullException(nameof(selector));
+        return tryTask.Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<TResult>>(tryTask.Result.Select(selector))
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
+                }
+                catch (Exception ex)
+                {
+                    return Try.Error<TResult>(ex);
+                }
+            });
+    }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> Select<T, TResult>(this ValueTask<Try<T>> @try, Func<T, TResult> selector,
+    public static ValueTask<Try<TResult>> Select<T, TResult>(this Task<Try<T>> tryTask, Func<T, Try<TResult>> selector,
         CancellationToken cancellation = default)
-        => (await ResultAsync(@try, cancellation).ConfigureAwait(false)).Unwrap().Select(selector);
+    {
+        _ = tryTask ?? throw new ArgumentNullException(nameof(tryTask));
+        _ = selector ?? throw new ArgumentNullException(nameof(selector));
+        return tryTask.Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<TResult>>(tryTask.Result.Select(selector))
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
+                }
+                catch (Exception ex)
+                {
+                    return Try.Error<TResult>(ex);
+                }
+            });
+    }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> Select<T, TResult>(this Task<Try<T>> @try, Func<T, Try<TResult>> selector,
+    public static ValueTask<Try<TResult>> Select<T, TResult>(this ValueTask<Try<T>> tryValueTask, Func<T, TResult> selector,
         CancellationToken cancellation = default)
-        => (await ResultAsync(@try, cancellation).ConfigureAwait(false)).Unwrap().Select(selector);
+    {
+        _ = selector ?? throw new ArgumentNullException(nameof(selector));
+        return tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<TResult>>(tryValueTask.Result.Select(selector))
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
+                }
+                catch (Exception ex)
+                {
+                    return Try.Error<TResult>(ex);
+                }
+            });
+    }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> Select<T, TResult>(this ValueTask<Try<T>> @try, Func<T, Try<TResult>> selector,
+    public static ValueTask<Try<TResult>> Select<T, TResult>(this ValueTask<Try<T>> tryValueTask, Func<T, Try<TResult>> selector,
         CancellationToken cancellation = default)
-        => (await ResultAsync(@try, cancellation).ConfigureAwait(false)).Unwrap().Select(selector);
+    {
+        _ = selector ?? throw new ArgumentNullException(nameof(selector));
+        return tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<TResult>>(tryValueTask.Result.Select(selector))
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
+                }
+                catch (Exception ex)
+                {
+                    return Try.Error<TResult>(ex);
+                }
+            });
+    }
 
 #endregion
 
 #region SelectAsync
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, Task<TResult>> selector)
-        => @try.Success
-            ? ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value))
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
-
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, ValueTask<TResult>> selector)
-        => @try.Success
-            ? ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value))
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
-
-    /// <summary> Convert to other value type asynchronously </summary>
-    /// <param name="try"> Try item </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="cancellation"> Cancellation token </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, CancellationToken, Task<TResult>> selector,
+    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
         CancellationToken cancellation = default)
-        => @try.Success
-            ? ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value, cancel), cancellation)
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(@try.Value, cancellation).AsTryAsync(cancellation)
             : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, CancellationToken, ValueTask<TResult>> selector,
-        CancellationToken cancellation = default)
-        => @try.Success
-            ? ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value, cancel), cancellation)
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
-
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> @try, Func<T, Task<TResult>> selector)
+    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> tryTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync().ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value)).ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion)
+            return tryTask.Result.SelectAsync(asyncSelector, cancellation);
+        _ = asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector));
+        return FromFunctionAsync(async ()
+            =>
+        {
+            try
+            {
+                return await (await tryTask.WaitAsync(cancellation).ConfigureAwait(false))
+                             .SelectAsync(asyncSelector, cancellation)
+                             .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                return Try.Error<TResult>(ex);
+            }
+        });
     }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> @try, Func<T, ValueTask<TResult>> selector)
+    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> tryValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync().ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value)).ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if (tryValueTask.IsCompletedSuccessfully)
+            return tryValueTask.Result.SelectAsync(asyncSelector, cancellation);
+        _ = asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector));
+        return FromFunctionAsync(async () =>
+        {
+            try
+            {
+                return await (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                             .SelectAsync(asyncSelector, cancellation)
+                             .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                return Try.Error<TResult>(ex);
+            }
+        });
     }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> @try, Func<T, CancellationToken, Task<TResult>> selector,
+    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector,
         CancellationToken cancellation = default)
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(@try.Value, cancellation)
+            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
+
+    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> tryTask,
+        Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector, CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync(cancellation).ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value, cancel), cancellation)
-                .ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion)
+            return tryTask.Result.SelectAsync(asyncSelector, cancellation);
+        _ = asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector));
+        return FromFunctionAsync(async ()
+            =>
+        {
+            try
+            {
+                return await (await tryTask.WaitAsync(cancellation).ConfigureAwait(false))
+                             .SelectAsync(asyncSelector, cancellation)
+                             .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                return Try.Error<TResult>(ex);
+            }
+        });
     }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> @try,
-        Func<T, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellation = default)
+    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> tryValueTask,
+        Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector, CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync(cancellation).ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value, cancel), cancellation)
-                .ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if (tryValueTask.IsCompletedSuccessfully)
+            return tryValueTask.Result.SelectAsync(asyncSelector, cancellation);
+        _ = asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector));
+        return FromFunctionAsync(async () =>
+        {
+            try
+            {
+                return await (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                             .SelectAsync(asyncSelector, cancellation)
+                             .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                return Try.Error<TResult>(ex);
+            }
+        });
     }
 
 #endregion
 
-#region SelectAsync_Try
+#region Utils
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, Task<Try<TResult>>> selector)
-        => @try.Success
-            ? ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value))
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
+    public static ValueTask<Try<T>> Or<T>(this Task<Try<T>> tryTask, Try<T> other, CancellationToken cancellation = default)
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<T>>(tryTask.Result.Or(other))
+            : FromFunctionAsync(async () =>
+            {
+                Try<T> @try;
+                try
+                {
+                    @try = await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    @try = Try.Error<T>(ex);
+                }
+                return @try.Or(other);
+            });
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, ValueTask<Try<TResult>>> selector)
-        => @try.Success
-            ? ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value))
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
+    public static ValueTask<Try<T>> Or<T>(this ValueTask<Try<T>> tryValueTask, Try<T> other, CancellationToken cancellation = default)
+        => tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(tryValueTask.Result.Or(other))
+            : FromFunctionAsync(async () =>
+            {
+                Try<T> @try;
+                try
+                {
+                    @try = await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    @try = Try.Error<T>(ex);
+                }
+                return @try.Or(other);
+            });
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, CancellationToken, Task<Try<TResult>>> selector,
+    public static ValueTask<Try<T>> Unwrap<T>(this Task<Try<Try<T>>> tryTask, CancellationToken cancellation = default)
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<T>>(tryTask.Result.Unwrap())
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Unwrap();
+                }
+                catch (Exception ex)
+                {
+                    return Try.Error<T>(ex);
+                }
+            });
+
+    public static ValueTask<Try<T>> Unwrap<T>(this ValueTask<Try<Try<T>>> tryValueTask, CancellationToken cancellation = default)
+        => tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(tryValueTask.Result.Unwrap())
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Unwrap();
+                }
+                catch (Exception ex)
+                {
+                    return Try.Error<T>(ex);
+                }
+            });
+
+    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            // ReSharper disable once ConstantConditionalAccessQualifier
+            if (@try?.Success ?? false)
+                yield return @try.Value;
+    }
+
+    public static async IAsyncEnumerable<Exception> Errors<T>(this IAsyncEnumerable<Try<T>> collection,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            // ReSharper disable once ConstantConditionalAccessQualifier
+            if (!(@try?.Success ?? true))
+                yield return @try.Error!;
+    }
+
+#endregion
+
+#region Do
+
+    public static ValueTask Do<T>(this Task<Try<T>> tryTask, Action<T> valueAction, Action<Exception> errorAction,
         CancellationToken cancellation = default)
-        => @try.Success
-            ? ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value, cancel), cancellation)
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
+    {
+        if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is not TaskStatus.RanToCompletion)
+            return FromFunctionAsync(async () => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, errorAction));
+        tryTask.Result.Do(valueAction, errorAction);
+        return default;
+    }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try, Func<T, CancellationToken, ValueTask<Try<TResult>>> selector,
+    public static ValueTask Do<T>(this Task<Try<T>> tryTask, Action<T> valueAction, bool throwIfError = false,
         CancellationToken cancellation = default)
-        => @try.Success
-            ? ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(@try.Value, cancel), cancellation)
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
-
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> @try, Func<T, Task<Try<TResult>>> selector)
     {
-        var result = (await @try.AsTryAsync().ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value))
-                .ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is not TaskStatus.RanToCompletion)
+            return FromFunctionAsync(async () => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, throwIfError));
+        tryTask.Result.Do(valueAction, throwIfError);
+        return default;
     }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> @try, Func<T, ValueTask<Try<TResult>>> selector)
+    public static ValueTask DoIfError<T>(this Task<Try<T>> tryTask, Action<Exception> errorAction, CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync().ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(_ => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value))
-                .ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is not TaskStatus.RanToCompletion)
+            return FromFunctionAsync(async () => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).DoIfError(errorAction));
+        tryTask.Result.DoIfError(errorAction);
+        return default;
     }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> @try,
-        Func<T, CancellationToken, Task<Try<TResult>>> selector, CancellationToken cancellation = default)
+    public static ValueTask Do<T>(this ValueTask<Try<T>> tryValueTask, Action<T> valueAction, Action<Exception> errorAction,
+        CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync(cancellation).ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value, cancel), cancellation)
-                .ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if (tryValueTask.IsCompletedSuccessfully)
+            return FromFunctionAsync(async ()
+                => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, errorAction));
+        tryValueTask.Result.Do(valueAction, errorAction);
+        return default;
     }
 
-    /// <inheritdoc cref="SelectAsync{T,TResult}(Try{T},Func{T,CancellationToken,Task{TResult}},CancellationToken)" />
-    public static async ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> @try,
-        Func<T, CancellationToken, ValueTask<Try<TResult>>> selector, CancellationToken cancellation = default)
+    public static ValueTask Do<T>(this ValueTask<Try<T>> tryValueTask, Action<T> valueAction, bool throwIfError = false,
+        CancellationToken cancellation = default)
     {
-        var result = (await @try.AsTryAsync(cancellation).ConfigureAwait(false)).Unwrap();
-        return result.Success
-            ? await ResultAsync(cancel => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(result.Value, cancel), cancellation)
-                .ConfigureAwait(false)
-            : Try.Error<TResult>(result.Error!);
+        if (tryValueTask.IsCompletedSuccessfully)
+            return FromFunctionAsync(async ()
+                => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, throwIfError));
+        tryValueTask.Result.Do(valueAction, throwIfError);
+        return default;
+    }
+
+    public static ValueTask DoIfError<T>(this ValueTask<Try<T>> tryValueTask, Action<Exception> errorAction, CancellationToken cancellation = default)
+    {
+        if (tryValueTask.IsCompletedSuccessfully)
+            return FromFunctionAsync(async () => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).DoIfError(errorAction));
+        tryValueTask.Result.DoIfError(errorAction);
+        return default;
+    }
+
+#endregion
+
+#region DoAsync
+
+    public static async Task DoAsync<T>(this Try<T> @try, Func<T, CancellationToken, Task> valueAction,
+        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+    {
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
+        else await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
+    }
+
+    public static async Task DoAsync<T>(this Try<T> @try, Func<T, CancellationToken, Task> valueAction, bool throwIfError = false,
+        CancellationToken cancellation = default)
+    {
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
+        else if (throwIfError) throw @try.Error!;
+    }
+
+    public static async Task DoIfErrorAsync<T>(this Try<T> @try, Func<Exception, CancellationToken, Task> errorAction,
+        CancellationToken cancellation = default)
+    {
+        if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
+    }
+
+    public static async Task DoAsync<T>(this Task<Try<T>> tryTask, Func<T, CancellationToken, Task> valueAction,
+        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+    {
+        var @try = (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? tryTask.Result
+            : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
+        if (@try.Success)
+            await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
+        else await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
+    }
+
+    public static async Task DoAsync<T>(this Task<Try<T>> tryTask, Func<T, CancellationToken, Task> valueAction, bool throwIfError = false,
+        CancellationToken cancellation = default)
+    {
+        var @try = (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? tryTask.Result
+            : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
+        if (@try.Success)
+            await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
+        else if (throwIfError) throw @try.Error!;
+    }
+
+    public static async Task DoIfErrorAsync<T>(this Task<Try<T>> tryTask, Func<Exception, CancellationToken, Task> errorAction,
+        CancellationToken cancellation = default)
+    {
+        var @try = (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? tryTask.Result
+            : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
+        if (!@try.Success)
+            await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
+    }
+
+    public static async Task DoAsync<T>(this ValueTask<Try<T>> tryValueTask, Func<T, CancellationToken, Task> valueAction,
+        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+    {
+        var @try = tryValueTask.IsCompletedSuccessfully
+            ? tryValueTask.Result
+            : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+        if (@try.Success)
+            await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
+        else await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
+    }
+
+    public static async Task DoAsync<T>(this ValueTask<Try<T>> tryValueTask, Func<T, CancellationToken, Task> valueAction, bool throwIfError = false,
+        CancellationToken cancellation = default)
+    {
+        var @try = tryValueTask.IsCompletedSuccessfully
+            ? tryValueTask.Result
+            : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+        if (@try.Success)
+            await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
+        else if (throwIfError) throw @try.Error!;
+    }
+
+    public static async Task DoIfErrorAsync<T>(this ValueTask<Try<T>> tryValueTask, Func<Exception, CancellationToken, Task> errorAction,
+        CancellationToken cancellation = default)
+    {
+        var @try = tryValueTask.IsCompletedSuccessfully
+            ? tryValueTask.Result
+            : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+        if (!@try.Success)
+            await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
     }
 
 #endregion
