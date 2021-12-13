@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Maybe monad </summary>
+/// <summary> Value-or-none type </summary>
 /// <typeparam name="T"> Value type </typeparam>
 public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 {

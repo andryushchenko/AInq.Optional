@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Either monad </summary>
+/// <summary> Value-either-value type </summary>
 /// <typeparam name="TLeft"> Left value type </typeparam>
 /// <typeparam name="TRight"> Right value type </typeparam>
 public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>

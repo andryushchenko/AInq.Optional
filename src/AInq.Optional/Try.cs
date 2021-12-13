@@ -45,7 +45,7 @@ public static class Try
         {
             return Value(generator.Invoke());
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return Error<T>(ex);
         }
@@ -69,7 +69,7 @@ public static class Try
         {
             return Value(selector.Invoke(@try.Value));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return Error<TResult>(ex);
         }
@@ -85,7 +85,7 @@ public static class Try
         {
             return selector.Invoke(@try.Value);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return Error<TResult>(ex);
         }

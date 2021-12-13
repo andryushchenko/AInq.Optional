@@ -14,7 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> Try monad </summary>
+/// <summary> Value-or-error type </summary>
 /// <typeparam name="T"> Value type </typeparam>
 public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 {
