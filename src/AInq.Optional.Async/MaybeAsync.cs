@@ -177,6 +177,197 @@ public static class MaybeAsync
 
 #endregion
 
+#region SelectOrDefault
+
+    public static ValueTask<TResult?> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask, Func<T, TResult> selector,
+        CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<TResult?>(maybeTask.Result.SelectOrDefault(selector))
+            : FromFunctionAsync(async () => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector));
+
+    public static ValueTask<TResult?> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask, Func<T, TResult> selector,
+        CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? new ValueTask<TResult?>(maybeValueTask.Result.SelectOrDefault(selector))
+            : FromFunctionAsync(async () => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector));
+
+    public static ValueTask<TResult> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask, Func<T, TResult> selector, TResult defaultValue,
+        CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<TResult>(maybeTask.Result.SelectOrDefault(selector, defaultValue))
+            : FromFunctionAsync(async () => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultValue));
+
+    public static ValueTask<TResult> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask, Func<T, TResult> selector,
+        TResult defaultValue, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? new ValueTask<TResult>(maybeValueTask.Result.SelectOrDefault(selector, defaultValue))
+            : FromFunctionAsync(async ()
+                => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultValue));
+
+    public static ValueTask<TResult> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask, Func<T, TResult> selector,
+        Func<TResult> defaultGenerator, CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<TResult>(maybeTask.Result.SelectOrDefault(selector, defaultGenerator))
+            : FromFunctionAsync(async ()
+                => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultGenerator));
+
+    public static ValueTask<TResult> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask, Func<T, TResult> selector,
+        Func<TResult> defaultGenerator, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? new ValueTask<TResult>(maybeValueTask.Result.SelectOrDefault(selector, defaultGenerator))
+            : FromFunctionAsync(async ()
+                => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultGenerator));
+
+#endregion
+
+#region SelectOrDefaultAsync
+
+    public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
+    {
+        if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            return new ValueTask<TResult?>(default(TResult));
+        var selected = (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation);
+        return selected.IsCompletedSuccessfully
+            ? new ValueTask<TResult?>(selected.Result)
+            : FromFunctionAsync(async () => (TResult?) await selected.ConfigureAwait(false));
+    }
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, TResult defaultValue, CancellationToken cancellation = default)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+            : new ValueTask<TResult>(defaultValue);
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Func<TResult> defaultGenerator, CancellationToken cancellation = default)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+            : new ValueTask<TResult>((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke());
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Task<TResult> defaultTask, CancellationToken cancellation = default)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+            : (defaultTask ?? throw new ArgumentNullException(nameof(defaultTask))).Status is TaskStatus.RanToCompletion
+                ? new ValueTask<TResult>(defaultTask.Result)
+                : new ValueTask<TResult>(defaultTask.WaitAsync(cancellation));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, ValueTask<TResult> defaultValueTask, CancellationToken cancellation = default)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+            : defaultValueTask.IsCompletedSuccessfully
+                ? defaultValueTask
+                : new ValueTask<TResult>(defaultValueTask.AsTask().WaitAsync(cancellation));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Func<CancellationToken, ValueTask<TResult>> asyncDefaultGenerator,
+        CancellationToken cancellation = default)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+            : (asyncDefaultGenerator ?? throw new ArgumentNullException(nameof(asyncDefaultGenerator))).Invoke(cancellation);
+
+    public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, TResult defaultValue, CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Func<TResult> defaultGenerator, CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, defaultGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Task<TResult> defaultTask, CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, defaultTask, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultTask, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, ValueTask<TResult> defaultValueTask, CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, defaultValueTask, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultValueTask, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Func<CancellationToken, ValueTask<TResult>> asyncDefaultGenerator,
+        CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, asyncDefaultGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, asyncDefaultGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, TResult defaultValue, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Func<TResult> defaultGenerator, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, defaultGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Task<TResult> defaultTask, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, defaultTask, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultTask, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, ValueTask<TResult> defaultValueTask, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, defaultValueTask, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, defaultValueTask, cancellation)
+                                                  .ConfigureAwait(false));
+
+    public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
+        Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, Func<CancellationToken, ValueTask<TResult>> asyncDefaultGenerator,
+        CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, asyncDefaultGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .SelectOrDefaultAsync(asyncSelector, asyncDefaultGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+#endregion
+
 #region ValueOrDefault
 
     public static ValueTask<T?> ValueOrDefault<T>(this Task<Maybe<T>> maybeTask, CancellationToken cancellation = default)
