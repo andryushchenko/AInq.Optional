@@ -4,38 +4,38 @@
         <name>AInq.Optional</name>
     </assembly>
     <members>
-        <member name="T:AInq.Optional.ConvertExtension">
-            <summary> Monad convert utils </summary>
+        <member name="T:AInq.Optional.Converter">
+            <summary> Converter utils </summary>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.MaybeLeft``2(AInq.Optional.Either{``0,``1})">
+        <member name="M:AInq.Optional.Converter.MaybeLeft``2(AInq.Optional.Either{``0,``1})">
             <summary> Get left value or none </summary>
             <param name="either"> Either source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Maybe with left value </returns>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.MaybeRight``2(AInq.Optional.Either{``0,``1})">
+        <member name="M:AInq.Optional.Converter.MaybeRight``2(AInq.Optional.Either{``0,``1})">
             <summary> Get right value or none </summary>
             <param name="either"> Either source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Maybe with right value </returns>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.TryLeft``2(AInq.Optional.Either{``0,``1})">
+        <member name="M:AInq.Optional.Converter.TryLeft``2(AInq.Optional.Either{``0,``1})">
             <summary> Try get left value </summary>
             <param name="either"> Either source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Try with left value </returns>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.TryRight``2(AInq.Optional.Either{``0,``1})">
+        <member name="M:AInq.Optional.Converter.TryRight``2(AInq.Optional.Either{``0,``1})">
             <summary> Try get right value </summary>
             <param name="either"> Either source </param>
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Try with right value </returns>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.Or``2(AInq.Optional.Maybe{``0},``1)">
+        <member name="M:AInq.Optional.Converter.Or``2(AInq.Optional.Maybe{``0},``1)">
             <summary> Get source value or other if empty </summary>
             <param name="maybe"> Maybe source </param>
             <param name="other"> Other value </param>
@@ -43,7 +43,7 @@
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Either </returns>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.Or``2(AInq.Optional.Try{``0},``1)">
+        <member name="M:AInq.Optional.Converter.Or``2(AInq.Optional.Try{``0},``1)">
             <summary> Get source value or other if exception </summary>
             <param name="try"> Try source </param>
             <param name="other"> Other value </param>
@@ -51,57 +51,42 @@
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Either </returns>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.Or``1(AInq.Optional.Maybe{``0},AInq.Optional.Try{``0})">
+        <member name="M:AInq.Optional.Converter.Or``1(AInq.Optional.Maybe{``0},AInq.Optional.Try{``0})">
             <summary> Get value form this item or other </summary>
             <param name="maybe"> Maybe item </param>
             <param name="try"> Try item </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.Or``1(AInq.Optional.Try{``0},AInq.Optional.Maybe{``0})">
+        <member name="M:AInq.Optional.Converter.Or``1(AInq.Optional.Try{``0},AInq.Optional.Maybe{``0})">
             <summary> Get value form this item or other </summary>
             <param name="try"> Try item </param>
             <param name="maybe"> Maybe item </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.AsTry``1(AInq.Optional.Maybe{``0})">
+        <member name="M:AInq.Optional.Converter.AsTry``1(AInq.Optional.Maybe{``0})">
             <summary> Convert <see cref="T:AInq.Optional.Maybe`1" /> to <see cref="T:AInq.Optional.Try`1" /> </summary>
             <param name="maybe"> Maybe item </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.ConvertExtension.AsMaybe``1(AInq.Optional.Try{``0})">
+        <member name="M:AInq.Optional.Converter.AsMaybe``1(AInq.Optional.Try{``0})">
             <summary> Convert <see cref="T:AInq.Optional.Try`1" /> to <see cref="T:AInq.Optional.Maybe`1" /> </summary>
             <param name="try"> Try item </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="T:AInq.Optional.Either">
-            <summary> Either monad utils </summary>
+            <summary> Either utils </summary>
         </member>
         <member name="M:AInq.Optional.Either.Left``2(``0)">
-            <summary> Create Either from left value </summary>
-            <param name="left"> Left value </param>
-            <typeparam name="TLeft"> Left value type </typeparam>
-            <typeparam name="TRight"> Right value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.Either`2.FromLeft(`0)" />
         </member>
         <member name="M:AInq.Optional.Either.Right``2(``1)">
-            <summary> Create Either from right value </summary>
-            <param name="right"> Right value </param>
-            <typeparam name="TLeft"> Left value type </typeparam>
-            <typeparam name="TRight"> Right value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.Either`2.FromRight(`1)" />
         </member>
         <member name="M:AInq.Optional.Either.AsEither``2(``0)">
-            <summary> Convert left value to Either </summary>
-            <param name="left"> Left value </param>
-            <typeparam name="TLeft"> Left value type </typeparam>
-            <typeparam name="TRight"> Right value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.Either`2.FromLeft(`0)" />
         </member>
         <member name="M:AInq.Optional.Either.AsEither``2(``1)">
-            <summary> Convert right value to Either </summary>
-            <param name="right"> Right value </param>
-            <typeparam name="TLeft"> Left value type </typeparam>
-            <typeparam name="TRight"> Right value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Either.Invert``2(AInq.Optional.Either{``0,``1})">
-            <summary> Swap left and right values </summary>
+            <inheritdoc cref="M:AInq.Optional.Either`2.FromRight(`1)" />
         </member>
         <member name="M:AInq.Optional.Either.SelectLeft``3(AInq.Optional.Either{``0,``1},System.Func{``0,``2})">
             <summary> Convert to other left value type </summary>
@@ -207,6 +192,9 @@
             <typeparam name="TRight"> Right source type </typeparam>
             <typeparam name="TResult"> Left result type </typeparam>
         </member>
+        <member name="M:AInq.Optional.Either.Invert``2(AInq.Optional.Either{``0,``1})">
+            <summary> Swap left and right values </summary>
+        </member>
         <member name="M:AInq.Optional.Either.LeftValues``2(System.Collections.Generic.IEnumerable{AInq.Optional.Either{``0,``1}})">
             <summary> Select existing left values </summary>
             <param name="collection"> Either collection </param>
@@ -220,6 +208,14 @@
             <typeparam name="TLeft"> Left source type </typeparam>
             <typeparam name="TRight"> Right source type </typeparam>
             <returns> Right values collection </returns>
+        </member>
+        <member name="M:AInq.Optional.Either.Do``2(AInq.Optional.Either{``0,``1},System.Action{``0},System.Action{``1})">
+            <summary> Do action with left or right value </summary>
+            <param name="either"> Either item </param>
+            <param name="leftAction"> Left value action </param>
+            <param name="rightAction"> Right value action </param>
+            <typeparam name="TLeft"> Left value type </typeparam>
+            <typeparam name="TRight"> Right value type </typeparam>
         </member>
         <member name="M:AInq.Optional.Either.DoLeft``2(AInq.Optional.Either{``0,``1},System.Action{``0})">
             <summary> Do action with left value (if exists) </summary>
@@ -235,16 +231,8 @@
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Either.Do``2(AInq.Optional.Either{``0,``1},System.Action{``0},System.Action{``1})">
-            <summary> Do action with left or right value </summary>
-            <param name="either"> Either item </param>
-            <param name="leftAction"> Left value action </param>
-            <param name="rightAction"> Right value action </param>
-            <typeparam name="TLeft"> Left value type </typeparam>
-            <typeparam name="TRight"> Right value type </typeparam>
-        </member>
         <member name="T:AInq.Optional.Either`2">
-            <summary> Either monad </summary>
+            <summary> Value-either-value type </summary>
             <typeparam name="TLeft"> Left value type </typeparam>
             <typeparam name="TRight"> Right value type </typeparam>
         </member>
@@ -262,6 +250,14 @@
         </member>
         <member name="M:AInq.Optional.Either`2.Equals(AInq.Optional.Either{`0,`1})">
             <inheritdoc />
+        </member>
+        <member name="M:AInq.Optional.Either`2.FromLeft(`0)">
+            <summary> Create Either from left value </summary>
+            <param name="left"> Left value </param>
+        </member>
+        <member name="M:AInq.Optional.Either`2.FromRight(`1)">
+            <summary> Create Either from right value </summary>
+            <param name="right"> Right value </param>
         </member>
         <member name="M:AInq.Optional.Either`2.ToString">
             <inheritdoc />
@@ -342,29 +338,26 @@
             <param name="b"> Second element </param>
         </member>
         <member name="T:AInq.Optional.Maybe">
-            <summary> Maybe monad utils </summary>
+            <summary> Maybe utils </summary>
         </member>
         <member name="M:AInq.Optional.Maybe.None``1">
-            <summary> Create empty Maybe </summary>
-            <typeparam name="T"> Value type </typeparam>
+            <inheritdoc cref="P:AInq.Optional.Maybe`1.None" />
         </member>
         <member name="M:AInq.Optional.Maybe.Value``1(``0)">
-            <summary> Create Maybe from value </summary>
-            <param name="value"> Value </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Maybe.AsMaybe``1(``0)">
-            <inheritdoc cref="M:AInq.Optional.Maybe.Value``1(``0)" />
+            <inheritdoc cref="M:AInq.Optional.Maybe`1.FromValue(`0)" />
         </member>
         <member name="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)">
             <summary> Create Maybe from value if not null </summary>
             <param name="value"> Value </param>
             <typeparam name="T"> Value type </typeparam>
         </member>
-        <member name="M:AInq.Optional.Maybe.AsMaybeIfNotNull``1(``0)">
+        <member name="M:AInq.Optional.Maybe.ValueIfNotNull``1(System.Nullable{``0})">
             <inheritdoc cref="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)" />
         </member>
-        <member name="M:AInq.Optional.Maybe.ValueIfNotNull``1(System.Nullable{``0})">
+        <member name="M:AInq.Optional.Maybe.AsMaybe``1(``0)">
+            <inheritdoc cref="M:AInq.Optional.Maybe`1.FromValue(`0)" />
+        </member>
+        <member name="M:AInq.Optional.Maybe.AsMaybeIfNotNull``1(``0)">
             <inheritdoc cref="M:AInq.Optional.Maybe.ValueIfNotNull``1(``0)" />
         </member>
         <member name="M:AInq.Optional.Maybe.AsMaybeIfNotNull``1(System.Nullable{``0})">
@@ -452,17 +445,17 @@
             <typeparam name="T"> Value type </typeparam>
             <returns> Values collection </returns>
         </member>
-        <member name="M:AInq.Optional.Maybe.Do``1(AInq.Optional.Maybe{``0},System.Action{``0})">
-            <summary> Do action with value (if exists) </summary>
-            <param name="maybe"> Maybe item </param>
-            <param name="valueAction"> Action if value exists </param>
-            <typeparam name="T"> Source value type </typeparam>
-        </member>
         <member name="M:AInq.Optional.Maybe.Do``1(AInq.Optional.Maybe{``0},System.Action{``0},System.Action)">
             <summary> Do action </summary>
             <param name="maybe"> Maybe item </param>
             <param name="valueAction"> Action if value exists </param>
             <param name="emptyAction"> Action if empty </param>
+            <typeparam name="T"> Source value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Maybe.Do``1(AInq.Optional.Maybe{``0},System.Action{``0})">
+            <summary> Do action with value (if exists) </summary>
+            <param name="maybe"> Maybe item </param>
+            <param name="valueAction"> Action if value exists </param>
             <typeparam name="T"> Source value type </typeparam>
         </member>
         <member name="M:AInq.Optional.Maybe.DoIfEmpty``1(AInq.Optional.Maybe{``0},System.Action)">
@@ -472,8 +465,11 @@
             <typeparam name="T"> Source value type </typeparam>
         </member>
         <member name="T:AInq.Optional.Maybe`1">
-            <summary> Maybe monad </summary>
+            <summary> Value-or-none type </summary>
             <typeparam name="T"> Value type </typeparam>
+        </member>
+        <member name="P:AInq.Optional.Maybe`1.None">
+            <summary> Get empty Maybe </summary>
         </member>
         <member name="P:AInq.Optional.Maybe`1.HasValue">
             <summary> Check if item contains value </summary>
@@ -486,6 +482,10 @@
         </member>
         <member name="M:AInq.Optional.Maybe`1.Equals(`0)">
             <inheritdoc />
+        </member>
+        <member name="M:AInq.Optional.Maybe`1.FromValue(`0)">
+            <summary> Create Maybe from value </summary>
+            <param name="value"> Value </param>
         </member>
         <member name="M:AInq.Optional.Maybe`1.ToString">
             <inheritdoc />
@@ -527,56 +527,24 @@
             <param name="b"> Second element </param>
         </member>
         <member name="T:AInq.Optional.Try">
-            <summary> Try monad utils </summary>
+            <summary> Try utils </summary>
         </member>
         <member name="M:AInq.Optional.Try.Value``1(``0)">
-            <summary> Create Try from value </summary>
-            <param name="value"> Value </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.AsTry``1(``0)">
-            <summary> Convert value to Try </summary>
-            <param name="value"> Value </param>
-            <typeparam name="T"> Value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.Try`1.FromValue(`0)" />
         </member>
         <member name="M:AInq.Optional.Try.Error``1(System.Exception)">
-            <summary> Create Try from exception </summary>
-            <param name="exception"> Exception </param>
-            <typeparam name="T"> Value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.Try`1.FromError(System.Exception)" />
+        </member>
+        <member name="M:AInq.Optional.Try.AsTry``1(``0)">
+            <inheritdoc cref="M:AInq.Optional.Try`1.FromValue(`0)" />
         </member>
         <member name="M:AInq.Optional.Try.AsTry``1(System.Exception)">
-            <summary> Convert exception to Try </summary>
-            <param name="exception"> Exception </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ValueIfNotNull``1(``0)">
-            <summary> Create Try from value if not null </summary>
-            <param name="value"> Value </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.AsTryIfNotNull``1(``0)">
-            <summary> Convert value to Try if not null </summary>
-            <param name="value"> Value </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ValueIfNotNull``1(System.Nullable{``0})">
-            <inheritdoc cref="M:AInq.Optional.Try.ValueIfNotNull``1(``0)" />
-        </member>
-        <member name="M:AInq.Optional.Try.AsTryIfNotNull``1(System.Nullable{``0})">
-            <inheritdoc cref="M:AInq.Optional.Try.AsTryIfNotNull``1(``0)" />
+            <inheritdoc cref="M:AInq.Optional.Try`1.FromError(System.Exception)" />
         </member>
         <member name="M:AInq.Optional.Try.Result``1(System.Func{``0})">
             <summary> Create Try from value generator </summary>
             <param name="generator"> Value generator </param>
             <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ResultIfNotNull``1(System.Func{``0})">
-            <summary> Create Try from value generator if not null </summary>
-            <param name="generator"> Value generator </param>
-            <typeparam name="T"> Value type </typeparam>
-        </member>
-        <member name="M:AInq.Optional.Try.ResultIfNotNull``1(System.Func{System.Nullable{``0}})">
-            <inheritdoc cref="M:AInq.Optional.Try.ResultIfNotNull``1(System.Func{System.Nullable{``0}})" />
         </member>
         <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,``1})">
             <summary> Convert to other value type </summary>
@@ -586,11 +554,7 @@
             <typeparam name="TResult"> Result value type </typeparam>
         </member>
         <member name="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,AInq.Optional.Try{``1}})">
-            <summary> Convert to other value type </summary>
-            <param name="try"> Try item </param>
-            <param name="selector"> Converter </param>
-            <typeparam name="T"> Source value type </typeparam>
-            <typeparam name="TResult"> Result value type </typeparam>
+            <inheritdoc cref="M:AInq.Optional.Try.Select``2(AInq.Optional.Try{``0},System.Func{``0,``1})" />
         </member>
         <member name="M:AInq.Optional.Try.Or``1(AInq.Optional.Try{``0},AInq.Optional.Try{``0})">
             <summary> Get value form this item or other </summary>
@@ -615,18 +579,18 @@
             <typeparam name="T"> Value type </typeparam>
             <returns> Exceptions collection </returns>
         </member>
-        <member name="M:AInq.Optional.Try.Do``1(AInq.Optional.Try{``0},System.Action{``0},System.Boolean)">
-            <summary> Try do action with value </summary>
-            <param name="try"> Try item </param>
-            <param name="valueAction"> Action if value exists </param>
-            <param name="throwIfError"> Throw exception if item contains error </param>
-            <typeparam name="T"> Source value type </typeparam>
-        </member>
         <member name="M:AInq.Optional.Try.Do``1(AInq.Optional.Try{``0},System.Action{``0},System.Action{System.Exception})">
             <summary> Try do action </summary>
             <param name="try"> Try item </param>
             <param name="valueAction"> Action if value exists </param>
             <param name="errorAction"> Action if error </param>
+            <typeparam name="T"> Source value type </typeparam>
+        </member>
+        <member name="M:AInq.Optional.Try.Do``1(AInq.Optional.Try{``0},System.Action{``0},System.Boolean)">
+            <summary> Try do action with value </summary>
+            <param name="try"> Try item </param>
+            <param name="valueAction"> Action if value exists </param>
+            <param name="throwIfError"> Throw exception if item contains error </param>
             <typeparam name="T"> Source value type </typeparam>
         </member>
         <member name="M:AInq.Optional.Try.DoIfError``1(AInq.Optional.Try{``0},System.Action{System.Exception})">
@@ -636,7 +600,7 @@
             <typeparam name="T"> Source value type </typeparam>
         </member>
         <member name="T:AInq.Optional.Try`1">
-            <summary> Try monad </summary>
+            <summary> Value-or-error type </summary>
             <typeparam name="T"> Value type </typeparam>
         </member>
         <member name="P:AInq.Optional.Try`1.Success">
@@ -653,6 +617,12 @@
         </member>
         <member name="M:AInq.Optional.Try`1.Equals(AInq.Optional.Try{`0})">
             <inheritdoc />
+        </member>
+        <member name="M:AInq.Optional.Try`1.Throw">
+            <summary> Throw if contains exception </summary>
+        </member>
+        <member name="M:AInq.Optional.Try`1.Throw(System.Type)">
+            <param name="exceptionType"> Target exception type </param>
         </member>
         <member name="M:AInq.Optional.Try`1.Throw``1">
             <summary> Throw if contains exception of target type </summary>
@@ -696,6 +666,13 @@
             <summary> Inequality comparison </summary>
             <param name="a"> First element </param>
             <param name="b"> Second element </param>
+        </member>
+        <member name="M:AInq.Optional.Try`1.FromValue(`0)">
+            <param name="value"> Value </param>
+        </member>
+        <member name="M:AInq.Optional.Try`1.FromError(System.Exception)">
+            <summary> Create Try from exception </summary>
+            <param name="exception"> Exception </param>
         </member>
     </members>
 </doc>

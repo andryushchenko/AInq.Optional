@@ -19,30 +19,35 @@ namespace AInq.Optional;
 /// <summary> Converter async utils </summary>
 public static class ConverterAsync
 {
+    /// <inheritdoc cref="Converter.MaybeLeft{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Maybe<TLeft>> MaybeLeft<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Maybe<TLeft>>(eitherTask.Result.MaybeLeft())
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).MaybeLeft());
 
+    /// <inheritdoc cref="Converter.MaybeLeft{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Maybe<TLeft>> MaybeLeft<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
             ? new ValueTask<Maybe<TLeft>>(eitherValueTask.Result.MaybeLeft())
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).MaybeLeft());
 
+    /// <inheritdoc cref="Converter.MaybeRight{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Maybe<TRight>> MaybeRight<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Maybe<TRight>>(eitherTask.Result.MaybeRight())
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).MaybeRight());
 
+    /// <inheritdoc cref="Converter.MaybeRight{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Maybe<TRight>> MaybeRight<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
             ? new ValueTask<Maybe<TRight>>(eitherValueTask.Result.MaybeRight())
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).MaybeRight());
 
+    /// <inheritdoc cref="Converter.TryLeft{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Try<TLeft>> TryLeft<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<TLeft>>(eitherTask.Result.TryLeft())
@@ -58,6 +63,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.TryLeft{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Try<TLeft>> TryLeft<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -74,6 +80,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.TryRight{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Try<TRight>> TryRight<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -90,6 +97,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.TryRight{TLeft,TRight}(Either{TLeft,TRight})" />
     public static ValueTask<Try<TRight>> TryRight<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -106,18 +114,21 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Maybe{TLeft},TRight)" />
     public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Maybe<TLeft>> maybeTask, TRight other,
         CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(maybeTask.Result.Or(other))
             : FromFunctionAsync(async () => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(other));
 
+    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Maybe{TLeft},TRight)" />
     public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Maybe<TLeft>> maybeValueTask, TRight other,
         CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
             ? new ValueTask<Either<TLeft, TRight>>(maybeValueTask.Result.Or(other))
             : FromFunctionAsync(async () => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Or(other));
 
+    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},TRight)" />
     public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Try<TLeft>> tryTask, TRight other,
         CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
@@ -134,6 +145,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},TRight)" />
     public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask, TRight other,
         CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
@@ -150,16 +162,19 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.Or{T}(Maybe{T},Try{T})" />
     public static ValueTask<Try<T>> Or<T>(this Task<Maybe<T>> maybeTask, Try<T> @try, CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(maybeTask.Result.Or(@try))
             : FromFunctionAsync(async () => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(@try));
 
+    /// <inheritdoc cref="Converter.Or{T}(Maybe{T},Try{T})" />
     public static ValueTask<Try<T>> Or<T>(this ValueTask<Maybe<T>> maybeValueTask, Try<T> @try, CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(maybeValueTask.Result.Or(@try))
             : FromFunctionAsync(async () => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Or(@try));
 
+    /// <inheritdoc cref="Converter.Or{T}(Try{T},Maybe{T})" />
     public static ValueTask<Maybe<T>> Or<T>(this Task<Try<T>> tryTask, Maybe<T> maybe, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Maybe<T>>(tryTask.Result.Or(maybe))
@@ -175,6 +190,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.Or{T}(Try{T},Maybe{T})" />
     public static ValueTask<Maybe<T>> Or<T>(this ValueTask<Try<T>> tryValueTask, Maybe<T> maybe, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Maybe<T>>(tryValueTask.Result.Or(maybe))
@@ -190,6 +206,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.AsTry{T}(Maybe{T})" />
     public static ValueTask<Try<T>> AsTry<T>(this Task<Maybe<T>> maybeTask, CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(maybeTask.Result.AsTry())
@@ -205,6 +222,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.AsTry{T}(Maybe{T})" />
     public static ValueTask<Try<T>> AsTry<T>(this ValueTask<Maybe<T>> maybeValueTask, CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(maybeValueTask.Result.AsTry())
@@ -220,6 +238,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.AsMaybe{T}(Try{T})" />
     public static ValueTask<Maybe<T>> AsMaybe<T>(this Task<Try<T>> tryTask, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Maybe<T>>(tryTask.Result.AsMaybe())
@@ -235,6 +254,7 @@ public static class ConverterAsync
                 }
             });
 
+    /// <inheritdoc cref="Converter.AsMaybe{T}(Try{T})" />
     public static ValueTask<Maybe<T>> AsMaybe<T>(this ValueTask<Try<T>> tryValueTask, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Maybe<T>>(tryValueTask.Result.AsMaybe())
