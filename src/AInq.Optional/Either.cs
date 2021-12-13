@@ -19,27 +19,21 @@ public static class Either
 {
 #region Value
 
-    /// <summary> Create Either from left value </summary>
-    /// <param name="left"> Left value </param>
-    /// <typeparam name="TLeft"> Left value type </typeparam>
-    /// <typeparam name="TRight"> Right value type </typeparam>
+    /// <inheritdoc cref="Either{TLeft,TRight}.FromLeft(TLeft)" />
     public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft left)
-        => new EitherLeft<TLeft, TRight>(left);
+        => Either<TLeft, TRight>.FromLeft(left);
 
-    /// <summary> Create Either from right value </summary>
-    /// <param name="right"> Right value </param>
-    /// <typeparam name="TLeft"> Left value type </typeparam>
-    /// <typeparam name="TRight"> Right value type </typeparam>
+    /// <inheritdoc cref="Either{TLeft,TRight}.FromRight(TRight)" />
     public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight right)
-        => new EitherRight<TLeft, TRight>(right);
+        => Either<TLeft, TRight>.FromRight(right);
 
-    /// <inheritdoc cref="Left{TLeft,TRight}(TLeft)" />
+    /// <inheritdoc cref="Either{TLeft,TRight}.FromLeft(TLeft)" />
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TLeft left)
-        => new EitherLeft<TLeft, TRight>(left);
+        => Either<TLeft, TRight>.FromLeft(left);
 
-    /// <inheritdoc cref="Right{TLeft,TRight}(TRight)" />
+    /// <inheritdoc cref="Either{TLeft,TRight}.FromRight(TRight)" />
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TRight right)
-        => new EitherRight<TLeft, TRight>(right);
+        => Either<TLeft, TRight>.FromRight(right);
 
 #endregion
 

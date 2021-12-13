@@ -316,6 +316,78 @@ public static class TryAsync
                 yield return @try.Error!;
     }
 
+    public static ValueTask<Try<T>> Throw<T>(this Task<Try<T>> tryTask, CancellationToken cancellation = default)
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<T>>(tryTask.Result.Throw())
+            : FromFunctionAsync(async () => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Throw());
+
+    public static ValueTask<Try<T>> Throw<T>(this ValueTask<Try<T>> tryValueTask, CancellationToken cancellation = default)
+        => tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(tryValueTask.Result.Throw())
+            : FromFunctionAsync(async () => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Throw());
+
+    public static ValueTask<Try<T>> Throw<T, TException>(this Task<Try<T>> tryTask, CancellationToken cancellation = default)
+        where TException : Exception
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<T>>(tryTask.Result.Throw<TException>())
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Throw<TException>();
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException && ex is not TException)
+                {
+                    return Try.Error<T>(ex);
+                }
+            });
+
+    public static ValueTask<Try<T>> Throw<T, TException>(this ValueTask<Try<T>> tryValueTask, CancellationToken cancellation = default)
+        where TException : Exception
+        => tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(tryValueTask.Result.Throw<TException>())
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Throw<TException>();
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException && ex is not TException)
+                {
+                    return Try.Error<T>(ex);
+                }
+            });
+
+    public static ValueTask<Try<T>> Throw<T>(this Task<Try<T>> tryTask, Type exceptionType, CancellationToken cancellation = default)
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<T>>(tryTask.Result.Throw(exceptionType))
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Throw(exceptionType);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException && ex.GetType() != exceptionType)
+                {
+                    return Try.Error<T>(ex);
+                }
+            });
+
+    public static ValueTask<Try<T>> Throw<T>(this ValueTask<Try<T>> tryValueTask, Type exceptionType, CancellationToken cancellation = default)
+        => tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(tryValueTask.Result.Throw(exceptionType))
+            : FromFunctionAsync(async () =>
+            {
+                try
+                {
+                    return (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Throw(exceptionType);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException && ex.GetType() != exceptionType)
+                {
+                    return Try.Error<T>(ex);
+                }
+            });
+
 #endregion
 
 #region Do
@@ -391,7 +463,7 @@ public static class TryAsync
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     public static async Task DoIfErrorAsync<T>(this Try<T> @try, Func<Exception, CancellationToken, Task> errorAction,
@@ -420,7 +492,7 @@ public static class TryAsync
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     public static async Task DoIfErrorAsync<T>(this Task<Try<T>> tryTask, Func<Exception, CancellationToken, Task> errorAction,
@@ -452,7 +524,7 @@ public static class TryAsync
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     public static async Task DoIfErrorAsync<T>(this ValueTask<Try<T>> tryValueTask, Func<Exception, CancellationToken, Task> errorAction,

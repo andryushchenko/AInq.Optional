@@ -19,42 +19,39 @@ public static class Maybe
 {
 #region Value
 
-    /// <summary> Create empty Maybe </summary>
-    /// <typeparam name="T"> Value type </typeparam>
+    /// <inheritdoc cref="Maybe{T}.None" />
     public static Maybe<T> None<T>()
-        => MaybeEmpty<T>.Empty;
+        => Maybe<T>.None;
 
-    /// <summary> Create Maybe from value </summary>
-    /// <param name="value"> Value </param>
-    /// <typeparam name="T"> Value type </typeparam>
+    /// <inheritdoc cref="Maybe{T}.FromValue(T)" />
     public static Maybe<T> Value<T>(T value)
-        => new MaybeValue<T>(value);
+        => Maybe<T>.FromValue(value);
 
     /// <summary> Create Maybe from value if not null </summary>
     /// <param name="value"> Value </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : class
-        => value is not null ? new MaybeValue<T>(value) : MaybeEmpty<T>.Empty;
+        => value is not null ? Maybe<T>.FromValue(value) : Maybe<T>.None;
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> ValueIfNotNull<T>(T? value)
         where T : struct
-        => value.HasValue ? new MaybeValue<T>(value.Value) : MaybeEmpty<T>.Empty;
+        => value.HasValue ? Maybe<T>.FromValue(value.Value) : Maybe<T>.None;
 
-    /// <inheritdoc cref="Value{T}" />
+    /// <inheritdoc cref="Maybe{T}.FromValue(T)" />
     public static Maybe<T> AsMaybe<T>(this T value)
-        => new MaybeValue<T>(value);
+        => Maybe<T>.FromValue(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : class
-        => value is not null ? new MaybeValue<T>(value) : MaybeEmpty<T>.Empty;
+        => value is not null ? Maybe<T>.FromValue(value) : Maybe<T>.None;
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : struct
-        => value.HasValue ? new MaybeValue<T>(value.Value) : MaybeEmpty<T>.Empty;
+        => value.HasValue ? Maybe<T>.FromValue(value.Value) : Maybe<T>.None;
 
 #endregion
 

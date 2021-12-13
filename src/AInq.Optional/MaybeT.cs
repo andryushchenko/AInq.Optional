@@ -18,6 +18,9 @@ namespace AInq.Optional;
 /// <typeparam name="T"> Value type </typeparam>
 public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 {
+    /// <summary> Get empty Maybe </summary>
+    public static Maybe<T> None { get; } = new MaybeEmpty();
+
     /// <summary> Check if item contains value </summary>
     public bool HasValue => IsNotEmpty();
 
@@ -31,6 +34,11 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     /// <inheritdoc />
     public bool Equals(T? other)
         => HasValue && EqualityComparer<T?>.Default.Equals(Value, other);
+
+    /// <summary> Create Maybe from value </summary>
+    /// <param name="value"> Value </param>
+    public static Maybe<T> FromValue(T value)
+        => new MaybeValue(value);
 
     private protected abstract bool IsNotEmpty();
     private protected abstract T GetValue();
@@ -87,31 +95,27 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     /// <param name="b"> Second element </param>
     public static bool operator !=(T? a, Maybe<T>? b)
         => !(a == b);
-}
 
-internal sealed class MaybeEmpty<T> : Maybe<T>
-{
-    private static readonly Lazy<Maybe<T>> Instance = new(() => new MaybeEmpty<T>());
-    private MaybeEmpty() { }
-    internal static Maybe<T> Empty => Instance.Value;
+    private sealed class MaybeEmpty : Maybe<T>
+    {
+        private protected override bool IsNotEmpty()
+            => false;
 
-    private protected override bool IsNotEmpty()
-        => false;
+        private protected override T GetValue()
+            => throw new InvalidOperationException("No value");
+    }
 
-    private protected override T GetValue()
-        => throw new InvalidOperationException("No value");
-}
+    private sealed class MaybeValue : Maybe<T>
+    {
+        private readonly T _value;
 
-internal sealed class MaybeValue<T> : Maybe<T>
-{
-    private readonly T _value;
+        internal MaybeValue(T value)
+            => _value = value;
 
-    internal MaybeValue(T value)
-        => _value = value;
+        private protected override bool IsNotEmpty()
+            => true;
 
-    private protected override bool IsNotEmpty()
-        => true;
-
-    private protected override T GetValue()
-        => _value;
+        private protected override T GetValue()
+            => _value;
+    }
 }

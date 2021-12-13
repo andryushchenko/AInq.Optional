@@ -39,6 +39,23 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     private protected abstract T GetValue();
     private protected abstract Exception GetError();
 
+    /// <summary> Throw if contains exception </summary>
+    public Try<T> Throw()
+    {
+        if (!IsSuccess()) throw GetError();
+        return this;
+    }
+
+    // <summary> Throw if contains exception of target type </summary>
+    /// <param name="exceptionType"> Target exception type </param>
+    public Try<T> Throw(Type exceptionType)
+    {
+        if (IsSuccess()) return this;
+        var exception = GetError();
+        if (exception.GetType() == exceptionType) throw exception;
+        return this;
+    }
+
     /// <summary> Throw if contains exception of target type </summary>
     /// <typeparam name="TException"> Target exception type </typeparam>
     public Try<T> Throw<TException>()
@@ -100,38 +117,48 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     /// <param name="b"> Second element </param>
     public static bool operator !=(T? a, Try<T>? b)
         => !(a == b);
-}
 
-internal sealed class TryValue<T> : Try<T>
-{
-    private readonly T _value;
+    // <summary> Create Try from value </summary>
+    /// <param name="value"> Value </param>
+    public static Try<T> FromValue(T value)
+        => new TryValue(value);
 
-    internal TryValue(T value)
-        => _value = value;
+    /// <summary> Create Try from exception </summary>
+    /// <param name="exception"> Exception </param>
+    public static Try<T> FromError(Exception exception)
+        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
 
-    private protected override bool IsSuccess()
-        => true;
+    private sealed class TryValue : Try<T>
+    {
+        private readonly T _value;
 
-    private protected override T GetValue()
-        => _value;
+        internal TryValue(T value)
+            => _value = value;
 
-    private protected override Exception GetError()
-        => new();
-}
+        private protected override bool IsSuccess()
+            => true;
 
-internal sealed class TryError<T> : Try<T>
-{
-    private readonly Exception _error;
+        private protected override T GetValue()
+            => _value;
 
-    internal TryError(Exception error)
-        => _error = error;
+        private protected override Exception GetError()
+            => new();
+    }
 
-    private protected override bool IsSuccess()
-        => false;
+    private sealed class TryError : Try<T>
+    {
+        private readonly Exception _error;
 
-    private protected override T GetValue()
-        => throw _error;
+        internal TryError(Exception error)
+            => _error = error;
 
-    private protected override Exception GetError()
-        => _error;
+        private protected override bool IsSuccess()
+            => false;
+
+        private protected override T GetValue()
+            => throw _error;
+
+        private protected override Exception GetError()
+            => _error;
+    }
 }

@@ -41,6 +41,16 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
                _ => false
            };
 
+    /// <summary> Create Either from left value </summary>
+    /// <param name="left"> Left value </param>
+    public static Either<TLeft, TRight> FromLeft(TLeft left)
+        => new EitherLeft(left);
+
+    /// <summary> Create Either from right value </summary>
+    /// <param name="right"> Right value </param>
+    public static Either<TLeft, TRight> FromRight(TRight right)
+        => new EitherRight(right);
+
     private protected abstract bool IsLeft();
     private protected abstract TLeft GetLeft();
     private protected abstract TRight GetRight();
@@ -153,38 +163,38 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     /// <param name="b"> Second element </param>
     public static bool operator !=(TRight? a, Either<TLeft, TRight>? b)
         => !(a == b);
-}
 
-internal sealed class EitherLeft<TLeft, TRight> : Either<TLeft, TRight>
-{
-    private readonly TLeft _left;
+    private sealed class EitherLeft : Either<TLeft, TRight>
+    {
+        private readonly TLeft _left;
 
-    internal EitherLeft(TLeft left)
-        => _left = left;
+        internal EitherLeft(TLeft left)
+            => _left = left;
 
-    private protected override bool IsLeft()
-        => true;
+        private protected override bool IsLeft()
+            => true;
 
-    private protected override TLeft GetLeft()
-        => _left;
+        private protected override TLeft GetLeft()
+            => _left;
 
-    private protected override TRight GetRight()
-        => throw new InvalidOperationException("No right value");
-}
+        private protected override TRight GetRight()
+            => throw new InvalidOperationException("No right value");
+    }
 
-internal sealed class EitherRight<TLeft, TRight> : Either<TLeft, TRight>
-{
-    private readonly TRight _right;
+    private sealed class EitherRight : Either<TLeft, TRight>
+    {
+        private readonly TRight _right;
 
-    internal EitherRight(TRight right)
-        => _right = right;
+        internal EitherRight(TRight right)
+            => _right = right;
 
-    private protected override bool IsLeft()
-        => false;
+        private protected override bool IsLeft()
+            => false;
 
-    private protected override TLeft GetLeft()
-        => throw new InvalidOperationException("No left value");
+        private protected override TLeft GetLeft()
+            => throw new InvalidOperationException("No left value");
 
-    private protected override TRight GetRight()
-        => _right;
+        private protected override TRight GetRight()
+            => _right;
+    }
 }

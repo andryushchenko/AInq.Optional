@@ -19,25 +19,21 @@ public static class Try
 {
 #region Value
 
-    /// <summary> Create Try from value </summary>
-    /// <param name="value"> Value </param>
-    /// <typeparam name="T"> Value type </typeparam>
+    /// <inheritdoc cref="Try{T}.FromValue(T)" />
     public static Try<T> Value<T>(T value)
-        => new TryValue<T>(value);
+        => Try<T>.FromValue(value);
 
-    /// <summary> Create Try from exception </summary>
-    /// <param name="exception"> Exception </param>
-    /// <typeparam name="T"> Value type </typeparam>
+    /// <inheritdoc cref="Try{T}.FromError(Exception)" />
     public static Try<T> Error<T>(Exception exception)
-        => new TryError<T>(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
+        => Try<T>.FromError(exception);
 
-    /// <inheritdoc cref="Value{T}(T)" />
+    /// <inheritdoc cref="Try{T}.FromValue(T)" />
     public static Try<T> AsTry<T>(this T value)
-        => new TryValue<T>(value);
+        => Try<T>.FromValue(value);
 
-    /// <inheritdoc cref="Error{T}(Exception)" />
+    /// <inheritdoc cref="Try{T}.FromError(Exception)" />
     public static Try<T> AsTry<T>(this Exception exception)
-        => new TryError<T>(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
+        => Try<T>.FromError(exception);
 
     /// <summary> Create Try from value generator </summary>
     /// <param name="generator"> Value generator </param>
@@ -161,7 +157,7 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <summary> Try do action with error </summary>
