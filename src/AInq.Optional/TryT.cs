@@ -33,7 +33,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     /// <inheritdoc />
     public bool Equals(Try<T>? other)
-        => other is not null && !(Success ^ other.Success) && (!Success || EqualityComparer<T>.Default.Equals(Value, other.Value));
+        => other is not null && Success && other.Success && EqualityComparer<T>.Default.Equals(Value, other.Value);
 
     private protected abstract bool IsSuccess();
     private protected abstract T GetValue();

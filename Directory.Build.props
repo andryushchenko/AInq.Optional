@@ -19,8 +19,7 @@
         <DebugType>portable</DebugType>
         <RootNamespace>AInq.Optional</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>[ADD] ValueIfNotNull for Maybe and Try
-[IMP] Reproducible build</PackageReleaseNotes>
+        <PackageReleaseNotes>Complete rewrite. See README for details</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
