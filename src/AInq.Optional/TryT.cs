@@ -14,50 +14,64 @@
 
 namespace AInq.Optional;
 
-/// <summary> Try monad </summary>
+/// <summary> Value-or-error type </summary>
 /// <typeparam name="T"> Value type </typeparam>
-public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<Try<T>>, IComparable<T>
+public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 {
-    private readonly T _value;
-
-    /// <summary> Create <see cref="Try{T}" /> with default error </summary>
-    /// <remarks> DO NOT use this </remarks>
-    public Try()
-    {
-        _value = default!;
-        Error = new Exception();
-    }
-
-    /// <summary> Create <see cref="Try{T}" /> with value </summary>
-    public Try(T value)
-    {
-        _value = value;
-        Error = null;
-    }
-
-    /// <summary> Create <see cref="Try{T}" /> with error </summary>
-    public Try(Exception exception)
-    {
-        _value = default!;
-        Error = exception ?? throw new ArgumentNullException(nameof(exception));
-    }
-
     /// <summary> Check if item is success </summary>
-    public bool Success => Error == null;
+    public bool Success => IsSuccess();
 
     /// <summary> Item value (if success) </summary>
-    public T Value => Error == null ? _value : throw Error;
+    public T Value => IsSuccess() ? GetValue() : throw GetError();
 
     /// <summary> Exception or null if success </summary>
-    public Exception? Error { get; }
+    public Exception? Error => IsSuccess() ? null : GetError();
+
+    /// <inheritdoc />
+    public bool Equals(T? other)
+        => Success && EqualityComparer<T?>.Default.Equals(Value, other);
+
+    /// <inheritdoc />
+    public bool Equals(Try<T>? other)
+        => other is not null && Success && other.Success && EqualityComparer<T>.Default.Equals(Value, other.Value);
+
+    private protected abstract bool IsSuccess();
+    private protected abstract T GetValue();
+    private protected abstract Exception GetError();
+
+    /// <summary> Throw if contains exception </summary>
+    public Try<T> Throw()
+    {
+        if (!IsSuccess()) throw GetError();
+        return this;
+    }
+
+    // <summary> Throw if contains exception of target type </summary>
+    /// <param name="exceptionType"> Target exception type </param>
+    public Try<T> Throw(Type exceptionType)
+    {
+        if (IsSuccess()) return this;
+        var exception = GetError();
+        if (exception.GetType() == exceptionType) throw exception;
+        return this;
+    }
+
+    /// <summary> Throw if contains exception of target type </summary>
+    /// <typeparam name="TException"> Target exception type </typeparam>
+    public Try<T> Throw<TException>()
+        where TException : Exception
+    {
+        if (!IsSuccess() && GetError() is TException exception) throw exception;
+        return this;
+    }
 
     /// <inheritdoc />
     public override string ToString()
-        => Error == null ? _value?.ToString() ?? "Null" : Error.ToString();
+        => Success ? Value?.ToString() ?? "Null" : Error!.ToString();
 
     /// <inheritdoc />
     public override int GetHashCode()
-        => Error == null ? _value?.GetHashCode() ?? 0 : 1;
+        => Success ? Value?.GetHashCode() ?? 0 : 1;
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
@@ -68,148 +82,83 @@ public readonly struct Try<T> : IEquatable<Try<T>>, IEquatable<T>, IComparable<T
             _ => false
         };
 
-    /// <inheritdoc />
-    public bool Equals(Try<T> other)
-        => !(Success ^ other.Success) && (!Success || EqualityComparer<T>.Default.Equals(_value, other._value));
+    /// <summary> Equality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
+    public static bool operator ==(Try<T>? a, Try<T>? b)
+        => a?.Equals(b) ?? b is null;
 
-    /// <inheritdoc />
-    public bool Equals(T? other)
-        => Success && EqualityComparer<T?>.Default.Equals(_value, other);
+    /// <summary> Inequality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
+    public static bool operator !=(Try<T>? a, Try<T>? b)
+        => !(a == b);
 
-    /// <inheritdoc />
-    public int CompareTo(Try<T> other)
-        => (Error, other.Error) switch
-        {
-            (not null, not null) => 0,
-            (not null, null) => -1,
-            (null, not null) => 1,
-            _ => Comparer<T>.Default.Compare(_value, other._value)
-        };
+    /// <summary> Equality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
+    public static bool operator ==(Try<T>? a, T? b)
+        => a?.Equals(b) ?? false;
 
-    /// <inheritdoc />
-    public int CompareTo(T? other)
-        => Error == null ? Comparer<T?>.Default.Compare(_value, other) : -1;
+    /// <summary> Inequality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
+    public static bool operator !=(Try<T>? a, T? b)
+        => !(a == b);
 
-    /// <summary> Explicit cast to Try </summary>
-    /// <param name="item"> Value </param>
-    public static explicit operator Try<T>(T item)
-        => new(item);
+    /// <summary> Equality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
+    public static bool operator ==(T? a, Try<T>? b)
+        => b?.Equals(a) ?? false;
 
-    /// <summary> Explicit cast to Try </summary>
+    /// <summary> Inequality comparison </summary>
+    /// <param name="a"> First element </param>
+    /// <param name="b"> Second element </param>
+    public static bool operator !=(T? a, Try<T>? b)
+        => !(a == b);
+
+    // <summary> Create Try from value </summary>
+    /// <param name="value"> Value </param>
+    public static Try<T> FromValue(T value)
+        => new TryValue(value);
+
+    /// <summary> Create Try from exception </summary>
     /// <param name="exception"> Exception </param>
-    public static explicit operator Try<T>(Exception exception)
-        => new(exception);
+    public static Try<T> FromError(Exception exception)
+        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
 
-    /// <summary> Explicit cast to value type </summary>
-    /// <param name="item"> Try item </param>
-    public static explicit operator T(Try<T> item)
-        => item.Value;
+    private sealed class TryValue : Try<T>
+    {
+        private readonly T _value;
 
-    /// <summary> Equality comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator ==(Try<T> a, Try<T> b)
-        => a.Equals(b);
+        internal TryValue(T value)
+            => _value = value;
 
-    /// <summary> Inequality comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator !=(Try<T> a, Try<T> b)
-        => !a.Equals(b);
+        private protected override bool IsSuccess()
+            => true;
 
-    /// <summary> Less comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator <(Try<T> a, Try<T> b)
-        => a.CompareTo(b) < 0;
+        private protected override T GetValue()
+            => _value;
 
-    /// <summary> Greater comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator >(Try<T> a, Try<T> b)
-        => a.CompareTo(b) > 0;
+        private protected override Exception GetError()
+            => new();
+    }
 
-    /// <summary> Less or equal comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator <=(Try<T> a, Try<T> b)
-        => a.CompareTo(b) <= 0;
+    private sealed class TryError : Try<T>
+    {
+        private readonly Exception _error;
 
-    /// <summary> Greater or equal comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator >=(Try<T> a, Try<T> b)
-        => a.CompareTo(b) >= 0;
+        internal TryError(Exception error)
+            => _error = error;
 
-    /// <summary> Equality comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator ==(Try<T> a, T? b)
-        => a.Equals(b);
+        private protected override bool IsSuccess()
+            => false;
 
-    /// <summary> Inequality comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator !=(Try<T> a, T? b)
-        => !a.Equals(b);
+        private protected override T GetValue()
+            => throw _error;
 
-    /// <summary> Less comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator <(Try<T> a, T? b)
-        => a.CompareTo(b) < 0;
-
-    /// <summary> Greater comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator >(Try<T> a, T? b)
-        => a.CompareTo(b) > 0;
-
-    /// <summary> Less or equal comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator <=(Try<T> a, T? b)
-        => a.CompareTo(b) <= 0;
-
-    /// <summary> Greater or equal comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator >=(Try<T> a, T? b)
-        => a.CompareTo(b) >= 0;
-
-    /// <summary> Equality comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator ==(T? a, Try<T> b)
-        => b.Equals(a);
-
-    /// <summary> Inequality comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator !=(T? a, Try<T> b)
-        => !b.Equals(a);
-
-    /// <summary> Less comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator <(T? a, Try<T> b)
-        => b.CompareTo(a) >= 0;
-
-    /// <summary> Greater comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator >(T? a, Try<T> b)
-        => b.CompareTo(a) <= 0;
-
-    /// <summary> Less or equal comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator <=(T? a, Try<T> b)
-        => b.CompareTo(a) > 0;
-
-    /// <summary> Greater or equal comparison </summary>
-    /// <param name="a"> First element </param>
-    /// <param name="b"> Second element </param>
-    public static bool operator >=(T? a, Try<T> b)
-        => b.CompareTo(a) < 0;
+        private protected override Exception GetError()
+            => _error;
+    }
 }

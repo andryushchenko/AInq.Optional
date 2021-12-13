@@ -14,156 +14,161 @@
 
 namespace AInq.Optional;
 
-/// <summary> Try monad utils </summary>
+/// <summary> Try utils </summary>
 public static class Try
 {
-    /// <summary> Create Try from value </summary>
-    /// <param name="value"> Value </param>
-    /// <typeparam name="T"> Value type </typeparam>
+#region Value
+
+    /// <inheritdoc cref="Try{T}.FromValue(T)" />
     public static Try<T> Value<T>(T value)
-        => new(value);
+        => Try<T>.FromValue(value);
 
-    /// <summary> Create Try from exception </summary>
-    /// <param name="exception"> Exception </param>
-    /// <typeparam name="T"> Value type </typeparam>
+    /// <inheritdoc cref="Try{T}.FromError(Exception)" />
     public static Try<T> Error<T>(Exception exception)
-        => new(exception is AggregateException aggregate && aggregate.InnerExceptions.Count == 1 ? aggregate.InnerExceptions[0] : exception);
+        => Try<T>.FromError(exception);
 
-    /// <summary> Create Try from value if not null </summary>
-    /// <param name="value"> Value </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static Try<T> ValueIfNotNull<T>(T? value)
-        where T : class
-        => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value);
+    /// <inheritdoc cref="Try{T}.FromValue(T)" />
+    public static Try<T> AsTry<T>(this T value)
+        => Try<T>.FromValue(value);
 
-    /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
-    public static Try<T> ValueIfNotNull<T>(T? value)
-        where T : struct
-        => value == null ? new Try<T>(new ArgumentNullException(nameof(value))) : new Try<T>(value.Value);
+    /// <inheritdoc cref="Try{T}.FromError(Exception)" />
+    public static Try<T> AsTry<T>(this Exception exception)
+        => Try<T>.FromError(exception);
 
     /// <summary> Create Try from value generator </summary>
     /// <param name="generator"> Value generator </param>
     /// <typeparam name="T"> Value type </typeparam>
     public static Try<T> Result<T>(Func<T> generator)
     {
+        _ = generator ?? throw new ArgumentNullException(nameof(generator));
         try
         {
             return Value(generator.Invoke());
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return Error<T>(ex);
         }
     }
 
-    /// <summary> Convert to other value type </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Try<TResult> Select<T, TResult>(this Try<T> item, Func<T, TResult> selector)
-        => item.Success
-            ? Result(() => selector.Invoke(item.Value))
-            : Error<TResult>(item.Error!);
+#endregion
 
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Try<T> item, Func<T, TResult> selector)
-        => item.Select(selector).ValueOrDefault();
-
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, TResult> selector, TResult defaultValue)
-        => item.Select(selector).ValueOrDefault(defaultValue);
-
-    /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, TResult> selector, Func<TResult> defaultGenerator)
-        => item.Success
-            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value)
-            : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+#region Select
 
     /// <summary> Convert to other value type </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="try"> Try item </param>
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Try<TResult> Select<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector)
-        => item.Success
-            ? Result(() => (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(item.Value)).Unwrap()
-            : Error<TResult>(item.Error!);
+    public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, TResult> selector)
+    {
+        if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            return Error<TResult>(@try.Error!);
+        _ = selector ?? throw new ArgumentNullException(nameof(selector));
+        try
+        {
+            return Value(selector.Invoke(@try.Value));
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            return Error<TResult>(ex);
+        }
+    }
 
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult? SelectOrDefault<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector)
-        => item.Select(selector).ValueOrDefault();
+    /// <inheritdoc cref="Select{T,TResult}(Try{T},Func{T,TResult})" />
+    public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector)
+    {
+        if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            return Error<TResult>(@try.Error!);
+        _ = selector ?? throw new ArgumentNullException(nameof(selector));
+        try
+        {
+            return selector.Invoke(@try.Value);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            return Error<TResult>(ex);
+        }
+    }
 
-    /// <summary> Convert to other value type or default </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector, TResult defaultValue)
-        => item.Select(selector).ValueOrDefault(defaultValue);
+#endregion
 
-    /// <summary> Convert to other value type or default from generator </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="selector"> Converter </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Source value type </typeparam>
-    /// <typeparam name="TResult"> Result value type </typeparam>
-    public static TResult SelectOrDefault<T, TResult>(this Try<T> item, Func<T, Try<TResult>> selector, Func<TResult> defaultGenerator)
-        => item.Success
-            ? (selector ?? throw new ArgumentNullException(nameof(selector)))
-              .Invoke(item.Value)
-              .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
-            : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
-
-    /// <summary> Get value or default </summary>
-    /// <param name="item"> Source </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static T? ValueOrDefault<T>(this Try<T> item)
-        => item.Success ? item.Value : default;
-
-    /// <summary> Get value or default </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="defaultValue"> Default value </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static T ValueOrDefault<T>(this Try<T> item, T defaultValue)
-        => item.Success ? item.Value : defaultValue;
-
-    /// <summary> Get value or default from generator </summary>
-    /// <param name="item"> Source </param>
-    /// <param name="defaultGenerator"> Default value generator </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    public static T ValueOrDefault<T>(this Try<T> item, Func<T> defaultGenerator)
-        => item.Success ? item.Value : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+#region Utils
 
     /// <summary> Get value form this item or other </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="try"> Try item </param>
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static Try<T> Or<T>(this Try<T> item, Try<T> other)
-        => item.Success ? item : other;
+    public static Try<T> Or<T>(this Try<T> @try, Try<T> other)
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
+            ? @try
+            : other ?? throw new ArgumentNullException(nameof(other));
 
     /// <summary> Unwrap nested Try </summary>
-    /// <param name="item"> Source </param>
+    /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static Try<T> Unwrap<T>(this Try<Try<T>> item)
-        => item.Success ? item.Value : Error<T>(item.Error!);
+    public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
+            ? @try.Value
+            : Error<T>(@try.Error!);
+
+    /// <summary> Select existing values </summary>
+    /// <param name="collection"> Try collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Values collection </returns>
+    public static IEnumerable<T> Values<T>(this IEnumerable<Try<T>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           // ReSharper disable once ConstantConditionalAccessQualifier
+           .Where(item => item?.Success ?? false)
+           .Select(item => item.Value);
+
+    /// <summary> Select exceptions </summary>
+    /// <param name="collection"> Try collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Exceptions collection </returns>
+    public static IEnumerable<Exception> Errors<T>(this IEnumerable<Try<T>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           // ReSharper disable once ConstantConditionalAccessQualifier
+           .Where(item => !(item?.Success ?? true))
+           .Select(item => item.Error!);
+
+#endregion
+
+#region Do
+
+    /// <summary> Try do action </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="errorAction"> Action if error </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void Do<T>(this Try<T> @try, Action<T> valueAction, Action<Exception> errorAction)
+    {
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
+        else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
+    }
+
+    /// <summary> Try do action with value </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="throwIfError"> Throw exception if item contains error </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void Do<T>(this Try<T> @try, Action<T> valueAction, bool throwIfError = false)
+    {
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
+        else if (throwIfError) @try.Throw();
+    }
+
+    /// <summary> Try do action with error </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="errorAction"> Action if error </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    public static void DoIfError<T>(this Try<T> @try, Action<Exception> errorAction)
+    {
+        if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
+    }
+
+#endregion
 }

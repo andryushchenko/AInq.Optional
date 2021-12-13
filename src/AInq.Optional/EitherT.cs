@@ -14,70 +14,54 @@
 
 namespace AInq.Optional;
 
-/// <summary> Either monad </summary>
+/// <summary> Value-either-value type </summary>
 /// <typeparam name="TLeft"> Left value type </typeparam>
 /// <typeparam name="TRight"> Right value type </typeparam>
-public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
-
+public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 {
-    private readonly TLeft _left;
-    private readonly TRight _right;
-
-    /// <summary> Create empty <see cref="Either{TLeft,TRight}" /> </summary>
-    /// <remarks> DO NOT use this </remarks>
-    public Either()
-    {
-        HasLeft = false;
-        HasRight = false;
-        _left = default!;
-        _right = default!;
-    }
-
-    /// <summary> Create <see cref="Either{TLeft,TRight}" /> with left value </summary>
-    public Either(TLeft left)
-    {
-        HasLeft = true;
-        HasRight = false;
-        _left = left;
-        _right = default!;
-    }
-
-    /// <summary> Create <see cref="Either{TLeft,TRight}" /> with left value </summary>
-    public Either(TRight right)
-    {
-        HasLeft = false;
-        HasRight = true;
-        _left = default!;
-        _right = right;
-    }
-
     /// <summary> Check if item contains left value </summary>
-    public bool HasLeft { get; }
+    public bool HasLeft => IsLeft();
 
     /// <summary> Check if item contains right value </summary>
-    public bool HasRight { get; }
+    public bool HasRight => !IsLeft();
 
     /// <summary> Left value (if exists) </summary>
-    public TLeft Left => HasLeft ? _left : throw new InvalidOperationException("No left value");
+    public TLeft Left => IsLeft() ? GetLeft() : throw new InvalidOperationException("No left value");
 
     /// <summary> Right value (if exists) </summary>
-    public TRight Right => HasRight ? _right : throw new InvalidOperationException("No right value");
+    public TRight Right => IsLeft() ? throw new InvalidOperationException("No right value") : GetRight();
 
-    /// <summary> Swap left and right values </summary>
-    public Either<TRight, TLeft> Invert()
-        => HasLeft ? new Either<TRight, TLeft>(_left) : new Either<TRight, TLeft>(_right);
+    /// <inheritdoc />
+    public bool Equals(Either<TLeft, TRight>? other)
+        => other is not null
+           && (HasLeft, other.HasLeft) switch
+           {
+               (true, true) => EqualityComparer<TLeft>.Default.Equals(Left, other.Left),
+               (false, false) => EqualityComparer<TRight>.Default.Equals(Right, other.Right),
+               _ => false
+           };
+
+    /// <summary> Create Either from left value </summary>
+    /// <param name="left"> Left value </param>
+    public static Either<TLeft, TRight> FromLeft(TLeft left)
+        => new EitherLeft(left);
+
+    /// <summary> Create Either from right value </summary>
+    /// <param name="right"> Right value </param>
+    public static Either<TLeft, TRight> FromRight(TRight right)
+        => new EitherRight(right);
+
+    private protected abstract bool IsLeft();
+    private protected abstract TLeft GetLeft();
+    private protected abstract TRight GetRight();
 
     /// <inheritdoc />
     public override string ToString()
-        => HasLeft
-            ? _left?.ToString() ?? "Null"
-            : HasRight
-                ? _right?.ToString() ?? "Null"
-                : "None";
+        => HasLeft ? Left?.ToString() ?? "Null" : Right?.ToString() ?? "Null";
 
     /// <inheritdoc />
     public override int GetHashCode()
-        => HasLeft ? _left?.GetHashCode() ?? 0 : _right?.GetHashCode() ?? 0;
+        => HasLeft ? Left?.GetHashCode() ?? 0 : Right?.GetHashCode() ?? 0;
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
@@ -90,121 +74,127 @@ public readonly struct Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
             _ => false
         };
 
-    /// <inheritdoc />
-    public bool Equals(Either<TLeft, TRight> other)
-        => (HasLeft, other.HasLeft) switch
-        {
-            (true, true) => EqualityComparer<TLeft>.Default.Equals(_left, other._left),
-            (false, false) => EqualityComparer<TRight>.Default.Equals(_right, other._right),
-            _ => false
-        };
-
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
-    public bool Equals(Either<TRight, TLeft> other)
-        => (HasLeft, other.HasRight) switch
-        {
-            (true, true) => EqualityComparer<TLeft>.Default.Equals(_left, other._right),
-            (false, false) => EqualityComparer<TRight>.Default.Equals(_right, other._left),
-            _ => false
-        };
+    public bool Equals(Either<TRight, TLeft>? other)
+        => other is not null
+           && (HasLeft, other.HasRight) switch
+           {
+               (true, true) => EqualityComparer<TLeft>.Default.Equals(Left, other.Right),
+               (false, false) => EqualityComparer<TRight>.Default.Equals(Right, other.Left),
+               _ => false
+           };
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
     public bool Equals(TRight? other)
-        => HasRight && EqualityComparer<TRight?>.Default.Equals(_right, other);
+        => HasRight && EqualityComparer<TRight?>.Default.Equals(Right, other);
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
     public bool Equals(TLeft? other)
-        => HasLeft && EqualityComparer<TLeft?>.Default.Equals(_left, other);
-
-    /// <summary> Explicit cast to Either </summary>
-    /// <param name="item"> Value </param>
-    public static explicit operator Either<TLeft, TRight>(TLeft item)
-        => new(item);
-
-    /// <summary> Explicit cast to Either </summary>
-    /// <param name="item"> Value </param>
-    public static explicit operator Either<TLeft, TRight>(TRight item)
-        => new(item);
-
-    /// <summary> Explicit cast to left value type </summary>
-    /// <param name="item"> Either item </param>
-    public static explicit operator TLeft(Either<TLeft, TRight> item)
-        => item.Left;
-
-    /// <summary> Explicit cast to right value type </summary>
-    /// <param name="item"> Either item </param>
-    public static explicit operator TRight(Either<TLeft, TRight> item)
-        => item.Right;
+        => HasLeft && EqualityComparer<TLeft?>.Default.Equals(Left, other);
 
     /// <summary> Equality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator ==(Either<TLeft, TRight> a, Either<TLeft, TRight> b)
-        => a.Equals(b);
+    public static bool operator ==(Either<TLeft, TRight>? a, Either<TLeft, TRight>? b)
+        => a?.Equals(b) ?? b is null;
 
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(Either<TLeft, TRight> a, Either<TLeft, TRight> b)
-        => !a.Equals(b);
+    public static bool operator !=(Either<TLeft, TRight>? a, Either<TLeft, TRight>? b)
+        => !(a == b);
 
     /// <summary> Equality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator ==(Either<TLeft, TRight> a, Either<TRight, TLeft> b)
-        => a.Equals(b);
+    public static bool operator ==(Either<TLeft, TRight>? a, Either<TRight, TLeft>? b)
+        => a?.Equals(b) ?? b is null;
 
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(Either<TLeft, TRight> a, Either<TRight, TLeft> b)
-        => !a.Equals(b);
+    public static bool operator !=(Either<TLeft, TRight>? a, Either<TRight, TLeft>? b)
+        => !(a == b);
 
     /// <summary> Equality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator ==(Either<TLeft, TRight> a, TLeft? b)
-        => a.Equals(b);
+    public static bool operator ==(Either<TLeft, TRight>? a, TLeft? b)
+        => a?.Equals(b) ?? false;
 
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(Either<TLeft, TRight> a, TLeft? b)
-        => !a.Equals(b);
+    public static bool operator !=(Either<TLeft, TRight>? a, TLeft? b)
+        => !(a == b);
 
     /// <summary> Equality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator ==(Either<TLeft, TRight> a, TRight? b)
-        => a.Equals(b);
+    public static bool operator ==(Either<TLeft, TRight>? a, TRight? b)
+        => a?.Equals(b) ?? false;
 
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(Either<TLeft, TRight> a, TRight? b)
-        => !a.Equals(b);
+    public static bool operator !=(Either<TLeft, TRight>? a, TRight? b)
+        => !(a == b);
 
     /// <summary> Equality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator ==(TLeft? a, Either<TLeft, TRight> b)
-        => b.Equals(a);
+    public static bool operator ==(TLeft? a, Either<TLeft, TRight>? b)
+        => b?.Equals(a) ?? false;
 
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(TLeft? a, Either<TLeft, TRight> b)
-        => !b.Equals(a);
+    public static bool operator !=(TLeft? a, Either<TLeft, TRight>? b)
+        => !(a == b);
 
     /// <summary> Equality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator ==(TRight? a, Either<TLeft, TRight> b)
-        => b.Equals(a);
+    public static bool operator ==(TRight? a, Either<TLeft, TRight>? b)
+        => b?.Equals(a) ?? false;
 
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(TRight? a, Either<TLeft, TRight> b)
-        => !b.Equals(a);
+    public static bool operator !=(TRight? a, Either<TLeft, TRight>? b)
+        => !(a == b);
+
+    private sealed class EitherLeft : Either<TLeft, TRight>
+    {
+        private readonly TLeft _left;
+
+        internal EitherLeft(TLeft left)
+            => _left = left;
+
+        private protected override bool IsLeft()
+            => true;
+
+        private protected override TLeft GetLeft()
+            => _left;
+
+        private protected override TRight GetRight()
+            => throw new InvalidOperationException("No right value");
+    }
+
+    private sealed class EitherRight : Either<TLeft, TRight>
+    {
+        private readonly TRight _right;
+
+        internal EitherRight(TRight right)
+            => _right = right;
+
+        private protected override bool IsLeft()
+            => false;
+
+        private protected override TLeft GetLeft()
+            => throw new InvalidOperationException("No left value");
+
+        private protected override TRight GetRight()
+            => _right;
+    }
 }

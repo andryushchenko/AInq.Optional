@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <PackageTags>AInq;Optional;Maybe;Try;Either</PackageTags>
-        <Description>Simple optional types for .NET with basic helpers</Description>
+        <Description>Simple optional types with basic helpers</Description>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
