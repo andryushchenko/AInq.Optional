@@ -69,7 +69,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     /// <summary> Inequality comparison </summary>
     /// <param name="a"> First element </param>
     /// <param name="b"> Second element </param>
-    public static bool operator !=(Maybe<T> a, Maybe<T> b)
+    public static bool operator !=(Maybe<T>? a, Maybe<T>? b)
         => !(a == b);
 
     /// <summary> Equality comparison </summary>
