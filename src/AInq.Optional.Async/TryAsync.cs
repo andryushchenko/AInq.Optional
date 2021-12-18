@@ -451,7 +451,7 @@ public static class TryAsync
     public static ValueTask Do<T>(this ValueTask<Try<T>> tryValueTask, Action<T> valueAction, Action<Exception> errorAction,
         CancellationToken cancellation = default)
     {
-        if (tryValueTask.IsCompletedSuccessfully)
+        if (!tryValueTask.IsCompletedSuccessfully)
             return FromFunctionAsync(async ()
                 => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, errorAction));
         tryValueTask.Result.Do(valueAction, errorAction);
@@ -462,7 +462,7 @@ public static class TryAsync
     public static ValueTask Do<T>(this ValueTask<Try<T>> tryValueTask, Action<T> valueAction, bool throwIfError = false,
         CancellationToken cancellation = default)
     {
-        if (tryValueTask.IsCompletedSuccessfully)
+        if (!tryValueTask.IsCompletedSuccessfully)
             return FromFunctionAsync(async ()
                 => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, throwIfError));
         tryValueTask.Result.Do(valueAction, throwIfError);
@@ -472,7 +472,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
     public static ValueTask DoIfError<T>(this ValueTask<Try<T>> tryValueTask, Action<Exception> errorAction, CancellationToken cancellation = default)
     {
-        if (tryValueTask.IsCompletedSuccessfully)
+        if (!tryValueTask.IsCompletedSuccessfully)
             return FromFunctionAsync(async () => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).DoIfError(errorAction));
         tryValueTask.Result.DoIfError(errorAction);
         return default;

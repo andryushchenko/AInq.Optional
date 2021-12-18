@@ -474,8 +474,8 @@ public static class EitherAsync
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
             ? new ValueTask<TLeft>(eitherValueTask.Result.LeftOrDefault(defaultValue))
-            : FromFunctionAsync(
-                async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault(defaultValue));
+            : FromFunctionAsync(async ()
+                => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault(defaultValue));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft})" />
     public static ValueTask<TLeft> LeftOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, Func<TLeft> defaultGenerator,
