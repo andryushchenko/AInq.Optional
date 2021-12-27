@@ -10,13 +10,12 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-        <Version>3.0.2</Version>
+        <Version>3.0.3</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <DebugType>portable</DebugType>
         <RootNamespace>AInq.Optional</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageReleaseNotes>Complete rewrite. See README for details</PackageReleaseNotes>
