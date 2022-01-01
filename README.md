@@ -35,4 +35,4 @@ For version 3.0 this lib was compketely rewriten with some **breaking changes**
 If you find a bug, have a question or something else - you are friendly welcome to open an issue.
 
 ## License
-Copyright © 2021 Anton Andryushchenko. AInq.Optional is licensed under Apache License 2.0
+Copyright © 2021-2022 Anton Andryushchenko. AInq.Optional is licensed under Apache License 2.0
