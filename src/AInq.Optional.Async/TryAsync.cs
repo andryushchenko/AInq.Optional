@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using JetBrains.Annotations;
 using System.Runtime.CompilerServices;
 using static AInq.Optional.TaskHelper;
 
