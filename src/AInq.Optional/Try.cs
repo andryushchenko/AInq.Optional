@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace AInq.Optional;
 
 /// <summary> Try utils </summary>
@@ -20,25 +22,30 @@ public static class Try
 #region Value
 
     /// <inheritdoc cref="Try{T}.FromValue(T)" />
+    [PublicAPI]
     public static Try<T> Value<T>(T value)
         => Try<T>.FromValue(value);
 
     /// <inheritdoc cref="Try{T}.FromError(Exception)" />
+    [PublicAPI]
     public static Try<T> Error<T>(Exception exception)
         => Try<T>.FromError(exception);
 
     /// <inheritdoc cref="Try{T}.FromValue(T)" />
+    [PublicAPI]
     public static Try<T> AsTry<T>(this T value)
         => Try<T>.FromValue(value);
 
     /// <inheritdoc cref="Try{T}.FromError(Exception)" />
+    [PublicAPI]
     public static Try<T> AsTry<T>(this Exception exception)
         => Try<T>.FromError(exception);
 
     /// <summary> Create Try from value generator </summary>
     /// <param name="generator"> Value generator </param>
     /// <typeparam name="T"> Value type </typeparam>
-    public static Try<T> Result<T>(Func<T> generator)
+    [PublicAPI]
+    public static Try<T> Result<T>([InstantHandle] Func<T> generator)
     {
         _ = generator ?? throw new ArgumentNullException(nameof(generator));
         try
@@ -60,7 +67,8 @@ public static class Try
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, TResult> selector)
+    [PublicAPI]
+    public static Try<TResult> Select<T, TResult>(this Try<T> @try, [InstantHandle] Func<T, TResult> selector)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             return Error<TResult>(@try.Error!);
@@ -76,7 +84,8 @@ public static class Try
     }
 
     /// <inheritdoc cref="Select{T,TResult}(Try{T},Func{T,TResult})" />
-    public static Try<TResult> Select<T, TResult>(this Try<T> @try, Func<T, Try<TResult>> selector)
+    [PublicAPI]
+    public static Try<TResult> Select<T, TResult>(this Try<T> @try, [InstantHandle] Func<T, Try<TResult>> selector)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             return Error<TResult>(@try.Error!);
@@ -99,6 +108,7 @@ public static class Try
     /// <param name="try"> Try item </param>
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
+    [PublicAPI]
     public static Try<T> Or<T>(this Try<T> @try, Try<T> other)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? @try
@@ -107,6 +117,7 @@ public static class Try
     /// <summary> Unwrap nested Try </summary>
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>
+    [PublicAPI]
     public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? @try.Value
@@ -116,20 +127,22 @@ public static class Try
     /// <param name="collection"> Try collection </param>
     /// <typeparam name="T"> Value type </typeparam>
     /// <returns> Values collection </returns>
+    [PublicAPI]
+    [LinqTunnel]
     public static IEnumerable<T> Values<T>(this IEnumerable<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           // ReSharper disable once ConstantConditionalAccessQualifier
-           .Where(item => item?.Success ?? false)
+           .Where(item => item is {Success: true})
            .Select(item => item.Value);
 
     /// <summary> Select exceptions </summary>
     /// <param name="collection"> Try collection </param>
     /// <typeparam name="T"> Value type </typeparam>
     /// <returns> Exceptions collection </returns>
+    [PublicAPI]
+    [LinqTunnel]
     public static IEnumerable<Exception> Errors<T>(this IEnumerable<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           // ReSharper disable once ConstantConditionalAccessQualifier
-           .Where(item => !(item?.Success ?? true))
+           .Where(item => item is {Success: false})
            .Select(item => item.Error!);
 
 #endregion
@@ -141,7 +154,8 @@ public static class Try
     /// <param name="valueAction"> Action if value exists </param>
     /// <param name="errorAction"> Action if error </param>
     /// <typeparam name="T"> Source value type </typeparam>
-    public static void Do<T>(this Try<T> @try, Action<T> valueAction, Action<Exception> errorAction)
+    [PublicAPI]
+    public static void Do<T>(this Try<T> @try, [InstantHandle] Action<T> valueAction, [InstantHandle] Action<Exception> errorAction)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
@@ -153,7 +167,8 @@ public static class Try
     /// <param name="valueAction"> Action if value exists </param>
     /// <param name="throwIfError"> Throw exception if item contains error </param>
     /// <typeparam name="T"> Source value type </typeparam>
-    public static void Do<T>(this Try<T> @try, Action<T> valueAction, bool throwIfError = false)
+    [PublicAPI]
+    public static void Do<T>(this Try<T> @try, [InstantHandle] Action<T> valueAction, bool throwIfError = false)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
@@ -164,7 +179,8 @@ public static class Try
     /// <param name="try"> Try item </param>
     /// <param name="errorAction"> Action if error </param>
     /// <typeparam name="T"> Source value type </typeparam>
-    public static void DoIfError<T>(this Try<T> @try, Action<Exception> errorAction)
+    [PublicAPI]
+    public static void DoIfError<T>(this Try<T> @try, [InstantHandle] Action<Exception> errorAction)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);

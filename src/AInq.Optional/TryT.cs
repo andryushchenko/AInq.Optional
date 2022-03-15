@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace AInq.Optional;
 
 /// <summary> Value-or-error type </summary>
@@ -19,12 +21,15 @@ namespace AInq.Optional;
 public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 {
     /// <summary> Check if item is success </summary>
+    [PublicAPI]
     public bool Success => IsSuccess();
 
     /// <summary> Item value (if success) </summary>
+    [PublicAPI]
     public T Value => IsSuccess() ? GetValue() : throw GetError();
 
     /// <summary> Exception or null if success </summary>
+    [PublicAPI]
     public Exception? Error => IsSuccess() ? null : GetError();
 
     /// <inheritdoc />
@@ -40,6 +45,8 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     private protected abstract Exception GetError();
 
     /// <summary> Throw if contains exception </summary>
+    [PublicAPI]
+    [AssertionMethod]
     public Try<T> Throw()
     {
         if (!IsSuccess()) throw GetError();
@@ -48,6 +55,8 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     // <summary> Throw if contains exception of target type </summary>
     /// <param name="exceptionType"> Target exception type </param>
+    [PublicAPI]
+    [AssertionMethod]
     public Try<T> Throw(Type exceptionType)
     {
         if (IsSuccess()) return this;
@@ -58,6 +67,8 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     /// <summary> Throw if contains exception of target type </summary>
     /// <typeparam name="TException"> Target exception type </typeparam>
+    [PublicAPI]
+    [AssertionMethod]
     public Try<T> Throw<TException>()
         where TException : Exception
     {
@@ -142,7 +153,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
             => _value;
 
         private protected override Exception GetError()
-            => new();
+            => null!;
     }
 
     private sealed class TryError : Try<T>

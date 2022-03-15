@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using JetBrains.Annotations;
+
 namespace AInq.Optional;
 
 /// <summary> Value-or-none type </summary>
@@ -19,12 +21,15 @@ namespace AInq.Optional;
 public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 {
     /// <summary> Get empty Maybe </summary>
+    [PublicAPI]
     public static Maybe<T> None { get; } = new MaybeEmpty();
 
     /// <summary> Check if item contains value </summary>
+    [PublicAPI]
     public bool HasValue => IsNotEmpty();
 
     /// <summary> Item value (if exists) </summary>
+    [PublicAPI]
     public T Value => IsNotEmpty() ? GetValue() : throw new InvalidOperationException("No value");
 
     /// <inheritdoc />
@@ -37,6 +42,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 
     /// <summary> Create Maybe from value </summary>
     /// <param name="value"> Value </param>
+    [PublicAPI]
     public static Maybe<T> FromValue(T value)
         => new MaybeValue(value);
 
