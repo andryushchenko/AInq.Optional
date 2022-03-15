@@ -455,8 +455,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
     [PublicAPI]
     public static ValueTask Do<T>(this Task<Try<T>> tryTask, [InstantHandle(RequireAwait = true)] Action<T> valueAction,
-        [InstantHandle(RequireAwait = true)]
-        Action<Exception> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Action<Exception> errorAction, CancellationToken cancellation = default)
     {
         if ((tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is not TaskStatus.RanToCompletion)
             return FromFunctionAsync(async () => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, errorAction));
@@ -489,8 +488,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
     [PublicAPI]
     public static ValueTask Do<T>(this ValueTask<Try<T>> tryValueTask, [InstantHandle(RequireAwait = true)] Action<T> valueAction,
-        [InstantHandle(RequireAwait = true)]
-        Action<Exception> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Action<Exception> errorAction, CancellationToken cancellation = default)
     {
         if (!tryValueTask.IsCompletedSuccessfully)
             return FromFunctionAsync(async ()
@@ -529,8 +527,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
     [PublicAPI]
     public static async Task DoAsync<T>(this Try<T> @try, [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> valueAction,
-        [InstantHandle(RequireAwait = true)]
-        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
@@ -550,8 +547,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
     [PublicAPI]
     public static async Task DoIfErrorAsync<T>(this Try<T> @try,
-        [InstantHandle(RequireAwait = true)]
-        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
@@ -560,8 +556,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
     [PublicAPI]
     public static async Task DoAsync<T>(this Task<Try<T>> tryTask, [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> valueAction,
-        [InstantHandle(RequireAwait = true)]
-        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
     {
         var @try = (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? tryTask.Result
@@ -587,8 +582,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
     [PublicAPI]
     public static async Task DoIfErrorAsync<T>(this Task<Try<T>> tryTask,
-        [InstantHandle(RequireAwait = true)]
-        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
     {
         var @try = (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? tryTask.Result
@@ -600,10 +594,8 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
     [PublicAPI]
     public static async Task DoAsync<T>(this ValueTask<Try<T>> tryValueTask,
-        [InstantHandle(RequireAwait = true)]
-        Func<T, CancellationToken, Task> valueAction,
-        [InstantHandle(RequireAwait = true)]
-        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> valueAction,
+        [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
     {
         var @try = tryValueTask.IsCompletedSuccessfully
             ? tryValueTask.Result
@@ -616,8 +608,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},bool)" />
     [PublicAPI]
     public static async Task DoAsync<T>(this ValueTask<Try<T>> tryValueTask,
-        [InstantHandle(RequireAwait = true)]
-        Func<T, CancellationToken, Task> valueAction, bool throwIfError = false,
+        [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> valueAction, bool throwIfError = false,
         CancellationToken cancellation = default)
     {
         var @try = tryValueTask.IsCompletedSuccessfully
@@ -631,8 +622,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
     [PublicAPI]
     public static async Task DoIfErrorAsync<T>(this ValueTask<Try<T>> tryValueTask,
-        [InstantHandle(RequireAwait = true)]
-        Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> errorAction, CancellationToken cancellation = default)
     {
         var @try = tryValueTask.IsCompletedSuccessfully
             ? tryValueTask.Result
