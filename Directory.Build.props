@@ -21,8 +21,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>[ADD] Do with additional argument
 [ADD] JetBrains.Annotations for ReSharper
-[FIX] Minor internal fix
-        </PackageReleaseNotes>
+[FIX] Minor internal fix</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
