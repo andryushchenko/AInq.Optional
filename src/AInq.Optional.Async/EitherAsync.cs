@@ -29,28 +29,28 @@ public static class EitherAsync
         => Either.Right<TLeft, TRight>(await rightTask.ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Left{TLeft,TRight}(TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> LeftAsync<TLeft, TRight>(Task<TLeft> leftTask, CancellationToken cancellation = default)
         => (leftTask ?? throw new ArgumentNullException(nameof(leftTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(Either.Left<TLeft, TRight>(leftTask.Result))
             : FromTaskAsync<TLeft, TRight>(leftTask.WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.Left{TLeft,TRight}(TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> LeftAsync<TLeft, TRight>(ValueTask<TLeft> leftValueTask, CancellationToken cancellation = default)
         => leftValueTask.IsCompletedSuccessfully
             ? new ValueTask<Either<TLeft, TRight>>(Either.Left<TLeft, TRight>(leftValueTask.Result))
             : FromTaskAsync<TLeft, TRight>(leftValueTask.AsTask().WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.Right{TLeft,TRight}(TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> RightAsync<TLeft, TRight>(Task<TRight> rightTask, CancellationToken cancellation = default)
         => (rightTask ?? throw new ArgumentNullException(nameof(rightTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(Either.Right<TLeft, TRight>(rightTask.Result))
             : FromTaskAsync<TLeft, TRight>(rightTask.WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.Right{TLeft,TRight}(TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> RightAsync<TLeft, TRight>(ValueTask<TRight> rightValueTask,
         CancellationToken cancellation = default)
         => rightValueTask.IsCompletedSuccessfully
@@ -58,23 +58,23 @@ public static class EitherAsync
             : FromTaskAsync<TLeft, TRight>(rightValueTask.AsTask().WaitAsync(cancellation));
 
     /// <inheritdoc cref="LeftAsync{TLeft,TRight}(Task{TLeft},CancellationToken)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> AsEitherAsync<TLeft, TRight>(this Task<TLeft> leftTask, CancellationToken cancellation = default)
         => LeftAsync<TLeft, TRight>(leftTask ?? throw new ArgumentNullException(nameof(leftTask)), cancellation);
 
     /// <inheritdoc cref="LeftAsync{TLeft,TRight}(ValueTask{TLeft},CancellationToken)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> AsEitherAsync<TLeft, TRight>(this ValueTask<TLeft> leftValueTask,
         CancellationToken cancellation = default)
         => LeftAsync<TLeft, TRight>(leftValueTask, cancellation);
 
     /// <inheritdoc cref="RightAsync{TLeft,TRight}(Task{TRight},CancellationToken)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> AsEitherAsync<TLeft, TRight>(this Task<TRight> rightTask, CancellationToken cancellation = default)
         => RightAsync<TLeft, TRight>(rightTask ?? throw new ArgumentNullException(nameof(rightTask)), cancellation);
 
     /// <inheritdoc cref="RightAsync{TLeft,TRight}(ValueTask{TRight},CancellationToken)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> AsEitherAsync<TLeft, TRight>(this ValueTask<TRight> rightValueTask,
         CancellationToken cancellation = default)
         => RightAsync<TLeft, TRight>(rightValueTask, cancellation);
@@ -84,7 +84,7 @@ public static class EitherAsync
 #region SelectLeft
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeft<TLeft, TRight, TLeftResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TLeftResult> leftSelector, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -92,7 +92,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectLeft(leftSelector));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeft<TLeft, TRight, TLeftResult>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TLeftResult> leftSelector, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -100,7 +100,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).SelectLeft(leftSelector));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRight}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeft<TLeft, TRight, TLeftResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, Either<TLeftResult, TRight>> leftSelector, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -108,7 +108,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectLeft(leftSelector));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRight}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeft<TLeft, TRight, TLeftResult>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, Either<TLeftResult, TRight>> leftSelector, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -120,7 +120,7 @@ public static class EitherAsync
 #region SelectRight
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRight<TLeft, TRight, TRightResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, TRightResult> rightSelector, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -128,7 +128,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectRight(rightSelector));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRight<TLeft, TRight, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask, [InstantHandle(RequireAwait = true)] Func<TRight, TRightResult> rightSelector,
         CancellationToken cancellation = default)
@@ -138,7 +138,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).SelectRight(rightSelector));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,Either{TLeft,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRight<TLeft, TRight, TRightResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, Either<TLeft, TRightResult>> rightSelector, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -146,7 +146,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectRight(rightSelector));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,Either{TLeft,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRight<TLeft, TRight, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, Either<TLeft, TRightResult>> rightSelector, CancellationToken cancellation = default)
@@ -160,7 +160,7 @@ public static class EitherAsync
 #region Select
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask, [InstantHandle(RequireAwait = true)] Func<TLeft, TLeftResult> leftSelector,
         [InstantHandle(RequireAwait = true)] Func<TRight, TRightResult> rightSelector, CancellationToken cancellation = default)
@@ -169,7 +169,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask, [InstantHandle(RequireAwait = true)] Func<TLeft, TLeftResult> leftSelector,
         [InstantHandle(RequireAwait = true)] Func<TRight, TRightResult> rightSelector, CancellationToken cancellation = default)
@@ -179,7 +179,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask, [InstantHandle(RequireAwait = true)] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector,
         [InstantHandle(RequireAwait = true)] Func<TRight, TRightResult> rightSelector, CancellationToken cancellation = default)
@@ -188,7 +188,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector,
@@ -199,7 +199,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask, [InstantHandle(RequireAwait = true)] Func<TLeft, TLeftResult> leftSelector,
         [InstantHandle(RequireAwait = true)] Func<TRight, Either<TLeftResult, TRightResult>> rightSelector, CancellationToken cancellation = default)
@@ -208,7 +208,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask, [InstantHandle(RequireAwait = true)] Func<TLeft, TLeftResult> leftSelector,
         [InstantHandle(RequireAwait = true)] Func<TRight, Either<TLeftResult, TRightResult>> rightSelector, CancellationToken cancellation = default)
@@ -218,7 +218,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask, [InstantHandle(RequireAwait = true)] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector,
         [InstantHandle(RequireAwait = true)] Func<TRight, Either<TLeftResult, TRightResult>> rightSelector, CancellationToken cancellation = default)
@@ -227,7 +227,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(leftSelector, rightSelector));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> Select<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector,
@@ -242,7 +242,7 @@ public static class EitherAsync
 #region SelectLeftAsync
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
         CancellationToken cancellation = default)
@@ -253,7 +253,7 @@ public static class EitherAsync
             : new ValueTask<Either<TLeftResult, TRight>>(Either.Right<TLeftResult, TRight>(either.Right));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRight}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRight>>> leftAsyncSelector,
         CancellationToken cancellation = default)
@@ -262,7 +262,7 @@ public static class EitherAsync
             : new ValueTask<Either<TLeftResult, TRight>>(Either.Right<TLeftResult, TRight>(either.Right));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
         CancellationToken cancellation = default)
@@ -273,7 +273,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRight}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRight>>> leftAsyncSelector,
         CancellationToken cancellation = default)
@@ -284,7 +284,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask, Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
         [InstantHandle(RequireAwait = true)] CancellationToken cancellation = default)
@@ -295,7 +295,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRight}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRight>> SelectLeftAsync<TLeft, TRight, TLeftResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRight>>> leftAsyncSelector,
@@ -311,7 +311,7 @@ public static class EitherAsync
 #region SelectRightAsync
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TRightResult>> rightAsyncSelector,
         CancellationToken cancellation = default)
@@ -322,7 +322,7 @@ public static class EitherAsync
             : new ValueTask<Either<TLeft, TRightResult>>(Either.Left<TLeft, TRightResult>(either.Left));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,Either{TLeft,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<Either<TLeft, TRightResult>>> rightAsyncSelector,
         CancellationToken cancellation = default)
@@ -331,7 +331,7 @@ public static class EitherAsync
             : new ValueTask<Either<TLeft, TRightResult>>(Either.Left<TLeft, TRightResult>(either.Left));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TRightResult>> rightAsyncSelector,
         CancellationToken cancellation = default)
@@ -342,7 +342,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,Either{TLeft,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<Either<TLeft, TRightResult>>> rightAsyncSelector,
         CancellationToken cancellation = default)
@@ -353,7 +353,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TRightResult>> rightAsyncSelector,
@@ -365,7 +365,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,Either{TLeft,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRightResult>> SelectRightAsync<TLeft, TRight, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<Either<TLeft, TRightResult>>> rightAsyncSelector,
@@ -381,7 +381,7 @@ public static class EitherAsync
 #region SelectAsync
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
@@ -396,7 +396,7 @@ public static class EitherAsync
               .AsEitherAsync<TLeftResult, TRightResult>(cancellation);
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRightResult>>> leftAsyncSelector,
@@ -409,7 +409,7 @@ public static class EitherAsync
               .AsEitherAsync<TLeftResult, TRightResult>(cancellation);
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
@@ -422,7 +422,7 @@ public static class EitherAsync
             : (rightAsyncSelector ?? throw new ArgumentNullException(nameof(rightAsyncSelector))).Invoke(either.Right, cancellation);
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRightResult>>> leftAsyncSelector,
@@ -433,7 +433,7 @@ public static class EitherAsync
             : (rightAsyncSelector ?? throw new ArgumentNullException(nameof(rightAsyncSelector))).Invoke(either.Right, cancellation);
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
@@ -446,7 +446,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRightResult>>> leftAsyncSelector,
@@ -459,7 +459,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
@@ -472,7 +472,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRightResult>>> leftAsyncSelector,
@@ -485,7 +485,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
@@ -498,7 +498,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRightResult>>> leftAsyncSelector,
@@ -511,7 +511,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TLeftResult>> leftAsyncSelector,
@@ -524,7 +524,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,Either{TLeftResult,TRightResult}},Func{TRight,Either{TLeftResult,TRightResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TLeftResult, TRightResult>> SelectAsync<TLeft, TRight, TLeftResult, TRightResult>(
         this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<Either<TLeftResult, TRightResult>>> leftAsyncSelector,
@@ -541,7 +541,7 @@ public static class EitherAsync
 #region ValueOrDefault
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft?> LeftOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -549,7 +549,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault());
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft?> LeftOrDefault<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -557,7 +557,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault());
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, TLeft defaultValue,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -565,7 +565,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault(defaultValue));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefault<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask, TLeft defaultValue,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -574,7 +574,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault(defaultValue));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft> defaultGenerator, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -582,7 +582,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault(defaultGenerator));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefault<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft> defaultGenerator, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -591,7 +591,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).LeftOrDefault(defaultGenerator));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight?> RightOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -599,7 +599,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).RightOrDefault());
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight?> RightOrDefault<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -607,7 +607,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).RightOrDefault());
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, TRight defaultValue,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -615,7 +615,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).RightOrDefault(defaultValue));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefault<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask, TRight defaultValue,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -624,7 +624,7 @@ public static class EitherAsync
                 => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).RightOrDefault(defaultValue));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefault<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight> defaultGenerator, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -632,7 +632,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).RightOrDefault(defaultGenerator));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefault<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight> defaultGenerator, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -645,7 +645,7 @@ public static class EitherAsync
 #region ValueOrDefaultAsync
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this Either<TLeft, TRight> either, Task<TLeft> defaultTask,
         CancellationToken cancellation = default)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -655,7 +655,7 @@ public static class EitherAsync
                 : new ValueTask<TLeft>(defaultTask.WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this Either<TLeft, TRight> either, ValueTask<TLeft> defaultValueTask,
         CancellationToken cancellation = default)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -665,7 +665,7 @@ public static class EitherAsync
                 : new ValueTask<TLeft>(defaultValueTask.AsTask().WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TLeft>> defaultAsyncGenerator,
         CancellationToken cancellation = default)
@@ -674,7 +674,7 @@ public static class EitherAsync
             : (defaultAsyncGenerator ?? throw new ArgumentNullException(nameof(defaultAsyncGenerator))).Invoke(cancellation);
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, Task<TLeft> defaultTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -684,7 +684,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, ValueTask<TLeft> defaultValueTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -694,7 +694,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TLeft>> defaultAsyncGenerator,
         CancellationToken cancellation = default)
@@ -705,7 +705,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask, Task<TLeft> defaultTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -715,7 +715,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         ValueTask<TLeft> defaultValueTask, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -725,7 +725,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.LeftOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> LeftOrDefaultAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TLeft>> defaultAsyncGenerator,
         CancellationToken cancellation = default)
@@ -736,7 +736,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this Either<TLeft, TRight> either, Task<TRight> defaultTask,
         CancellationToken cancellation = default)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
@@ -746,7 +746,7 @@ public static class EitherAsync
                 : new ValueTask<TRight>(defaultTask.WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this Either<TLeft, TRight> either, ValueTask<TRight> defaultValueTask,
         CancellationToken cancellation = default)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
@@ -756,7 +756,7 @@ public static class EitherAsync
                 : new ValueTask<TRight>(defaultValueTask.AsTask().WaitAsync(cancellation));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> defaultAsyncGenerator,
         CancellationToken cancellation = default)
@@ -765,7 +765,7 @@ public static class EitherAsync
             : (defaultAsyncGenerator ?? throw new ArgumentNullException(nameof(defaultAsyncGenerator))).Invoke(cancellation);
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask, Task<TRight> defaultTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -775,7 +775,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         ValueTask<TRight> defaultValueTask, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -785,7 +785,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> defaultAsyncGenerator,
         CancellationToken cancellation = default)
@@ -796,7 +796,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         Task<TRight> defaultTask, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -806,7 +806,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         ValueTask<TRight> defaultValueTask, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -816,7 +816,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.RightOrDefault{TLeft,TRight}(Either{TLeft,TRight},Func{TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> RightOrDefaultAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> defaultAsyncGenerator,
         CancellationToken cancellation = default)
@@ -831,7 +831,7 @@ public static class EitherAsync
 #region ToValue
 
     /// <inheritdoc cref="Either.ToLeft{TLeft,TRight}(Either{TLeft,TRight},Func{TRight,TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> ToLeft<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, TLeft> rightToLeft, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -839,7 +839,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).ToLeft(rightToLeft));
 
     /// <inheritdoc cref="Either.ToLeft{TLeft,TRight}(Either{TLeft,TRight},Func{TRight,TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> ToLeft<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, TLeft> rightToLeft, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -847,7 +847,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).ToLeft(rightToLeft));
 
     /// <inheritdoc cref="Either.ToRight{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> ToRight<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TRight> leftToRight, CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -855,7 +855,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).ToRight(leftToRight));
 
     /// <inheritdoc cref="Either.ToRight{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> ToRight<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TRight> leftToRight, CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully
@@ -863,7 +863,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).ToRight(leftToRight));
 
     /// <inheritdoc cref="Either.ToValue{TLeft,TRight,TResult}(Either{TLeft,TRight},Func{TLeft,TResult},Func{TRight,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TResult> ToValue<TLeft, TRight, TResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TResult> fromLeft, [InstantHandle(RequireAwait = true)] Func<TRight, TResult> fromRight,
         CancellationToken cancellation = default)
@@ -872,7 +872,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).ToValue(fromLeft, fromRight));
 
     /// <inheritdoc cref="Either.ToValue{TLeft,TRight,TResult}(Either{TLeft,TRight},Func{TLeft,TResult},Func{TRight,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TResult> ToValue<TLeft, TRight, TResult>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TResult> fromLeft, [InstantHandle(RequireAwait = true)] Func<TRight, TResult> fromRight,
         CancellationToken cancellation = default)
@@ -886,7 +886,7 @@ public static class EitherAsync
 #region ToValueAsync
 
     /// <inheritdoc cref="Either.ToLeft{TLeft,TRight}(Either{TLeft,TRight},Func{TRight,TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> ToLeftAsync<TLeft, TRight>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TLeft>> rightToLeftAsync,
         CancellationToken cancellation = default)
@@ -895,7 +895,7 @@ public static class EitherAsync
             : (rightToLeftAsync ?? throw new ArgumentNullException(nameof(rightToLeftAsync))).Invoke(either.Right, cancellation);
 
     /// <inheritdoc cref="Either.ToLeft{TLeft,TRight}(Either{TLeft,TRight},Func{TRight,TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> ToLeftAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TLeft>> rightToLeftAsync,
         CancellationToken cancellation = default)
@@ -906,7 +906,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.ToLeft{TLeft,TRight}(Either{TLeft,TRight},Func{TRight,TLeft})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TLeft> ToLeftAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TLeft>> rightToLeftAsync,
         CancellationToken cancellation = default)
@@ -917,7 +917,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.ToRight{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> ToRightAsync<TLeft, TRight>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TRight>> leftToRightAsync,
         CancellationToken cancellation = default)
@@ -926,7 +926,7 @@ public static class EitherAsync
             : (leftToRightAsync ?? throw new ArgumentNullException(nameof(leftToRightAsync))).Invoke(either.Left, cancellation);
 
     /// <inheritdoc cref="Either.ToRight{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> ToRightAsync<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TRight>> leftToRightAsync,
         CancellationToken cancellation = default)
@@ -937,7 +937,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.ToRight{TLeft,TRight}(Either{TLeft,TRight},Func{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TRight> ToRightAsync<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TRight>> leftToRightAsync,
         CancellationToken cancellation = default)
@@ -948,7 +948,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.ToValue{TLeft,TRight,TResult}(Either{TLeft,TRight},Func{TLeft,TResult},Func{TRight,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TResult> ToValueAsync<TLeft, TRight, TResult>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TResult>> fromLeftAsync,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TResult>> fromRightAsync,
@@ -958,7 +958,7 @@ public static class EitherAsync
             : (fromRightAsync ?? throw new ArgumentNullException(nameof(fromRightAsync))).Invoke(either.Right, cancellation);
 
     /// <inheritdoc cref="Either.ToValue{TLeft,TRight,TResult}(Either{TLeft,TRight},Func{TLeft,TResult},Func{TRight,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TResult> ToValueAsync<TLeft, TRight, TResult>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TResult>> fromLeftAsync,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TResult>> fromRightAsync,
@@ -970,7 +970,7 @@ public static class EitherAsync
                                                   .ConfigureAwait(false));
 
     /// <inheritdoc cref="Either.ToValue{TLeft,TRight,TResult}(Either{TLeft,TRight},Func{TLeft,TResult},Func{TRight,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<TResult> ToValueAsync<TLeft, TRight, TResult>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, CancellationToken, ValueTask<TResult>> fromLeftAsync,
         [InstantHandle(RequireAwait = true)] Func<TRight, CancellationToken, ValueTask<TResult>> fromRightAsync,
@@ -986,7 +986,7 @@ public static class EitherAsync
 #region Utils
 
     /// <inheritdoc cref="Either.Invert{TLeft,TRight}(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TRight, TLeft>> Invert<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
         => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
@@ -994,7 +994,7 @@ public static class EitherAsync
             : FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).Invert());
 
     /// <inheritdoc cref="Either.Invert{TLeft,TRight}(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Either<TRight, TLeft>> Invert<TLeft, TRight>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         CancellationToken cancellation = default)
         => eitherValueTask.IsCompletedSuccessfully

@@ -30,12 +30,12 @@ public static class Try
         => Try<T>.FromError(exception);
 
     /// <inheritdoc cref="Try{T}.FromValue(T)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Try<T> AsTry<T>(this T value)
         => Try<T>.FromValue(value);
 
     /// <inheritdoc cref="Try{T}.FromError(Exception)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Try<T> AsTry<T>(this Exception exception)
         => Try<T>.FromError(exception);
 
@@ -65,7 +65,7 @@ public static class Try
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Try<TResult> Select<T, TResult>(this Try<T> @try, [InstantHandle] Func<T, TResult> selector)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
@@ -82,7 +82,7 @@ public static class Try
     }
 
     /// <inheritdoc cref="Select{T,TResult}(Try{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Try<TResult> Select<T, TResult>(this Try<T> @try, [InstantHandle] Func<T, Try<TResult>> selector)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
@@ -106,7 +106,7 @@ public static class Try
     /// <param name="try"> Try item </param>
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Try<T> Or<T>(this Try<T> @try, Try<T> other)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? @try
@@ -115,7 +115,7 @@ public static class Try
     /// <summary> Unwrap nested Try </summary>
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? @try.Value
@@ -125,8 +125,7 @@ public static class Try
     /// <param name="collection"> Try collection </param>
     /// <typeparam name="T"> Value type </typeparam>
     /// <returns> Values collection </returns>
-    [PublicAPI]
-    [LinqTunnel]
+    [PublicAPI, LinqTunnel]
     public static IEnumerable<T> Values<T>(this IEnumerable<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {Success: true})
@@ -136,8 +135,7 @@ public static class Try
     /// <param name="collection"> Try collection </param>
     /// <typeparam name="T"> Value type </typeparam>
     /// <returns> Exceptions collection </returns>
-    [PublicAPI]
-    [LinqTunnel]
+    [PublicAPI, LinqTunnel]
     public static IEnumerable<Exception> Errors<T>(this IEnumerable<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {Success: false})
@@ -170,7 +168,7 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
-        else if (throwIfError) @try.Throw();
+        else if (throwIfError) throw @try.Error!;
     }
 
     /// <summary> Try do action with error </summary>

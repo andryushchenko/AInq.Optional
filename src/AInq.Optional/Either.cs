@@ -30,12 +30,12 @@ public static class Either
         => Either<TLeft, TRight>.FromRight(right);
 
     /// <inheritdoc cref="Either{TLeft,TRight}.FromLeft(TLeft)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TLeft left)
         => Either<TLeft, TRight>.FromLeft(left);
 
     /// <inheritdoc cref="Either{TLeft,TRight}.FromRight(TRight)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TRight right)
         => Either<TLeft, TRight>.FromRight(right);
 
@@ -49,7 +49,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right value type </typeparam>
     /// <typeparam name="TLeftResult"> Left result type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeftResult, TRight> SelectLeft<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TLeft, TLeftResult> leftSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -57,7 +57,7 @@ public static class Either
             : Right<TLeftResult, TRight>(either.Right);
 
     /// <inheritdoc cref="SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeftResult, TRight> SelectLeft<TLeft, TRight, TLeftResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TLeft, Either<TLeftResult, TRight>> leftSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -70,7 +70,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left value type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <typeparam name="TRightResult"> Right result type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeft, TRightResult> SelectRight<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TRight, TRightResult> rightSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
@@ -78,7 +78,7 @@ public static class Either
             : Left<TLeft, TRightResult>(either.Left);
 
     /// <inheritdoc cref="SelectRight{TLeft,TRight,TRightResult}(Either{TLeft,TRight},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeft, TRightResult> SelectRight<TLeft, TRight, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TRight, Either<TLeft, TRightResult>> rightSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
@@ -93,7 +93,7 @@ public static class Either
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <typeparam name="TLeftResult"> Left result type </typeparam>
     /// <typeparam name="TRightResult"> Right result type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TLeft, TLeftResult> leftSelector, [InstantHandle] Func<TRight, TRightResult> rightSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -101,7 +101,7 @@ public static class Either
             : Right<TLeftResult, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right));
 
     /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector, [InstantHandle] Func<TRight, TRightResult> rightSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -109,7 +109,7 @@ public static class Either
             : Right<TLeftResult, TRightResult>((rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right));
 
     /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TLeft, TLeftResult> leftSelector, [InstantHandle] Func<TRight, Either<TLeftResult, TRightResult>> rightSelector)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -117,7 +117,7 @@ public static class Either
             : (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right);
 
     /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult},Func{TRight,TRightResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TLeftResult, TRightResult> Select<TLeft, TRight, TLeftResult, TRightResult>(this Either<TLeft, TRight> either,
         [InstantHandle] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector,
         [InstantHandle] Func<TRight, Either<TLeftResult, TRightResult>> rightSelector)
@@ -133,7 +133,7 @@ public static class Either
     /// <param name="either"> Either item </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TLeft? LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft ? either.Left : default;
 
@@ -142,7 +142,7 @@ public static class Either
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TLeft LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, TLeft defaultValue)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft ? either.Left : defaultValue;
 
@@ -151,7 +151,7 @@ public static class Either
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TLeft LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, [InstantHandle] Func<TLeft> defaultGenerator)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
             ? either.Left
@@ -161,7 +161,7 @@ public static class Either
     /// <param name="either"> Either item </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TRight? RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight ? either.Right : default;
 
@@ -170,7 +170,7 @@ public static class Either
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, TRight defaultValue)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight ? either.Right : defaultValue;
 
@@ -179,7 +179,7 @@ public static class Either
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, [InstantHandle] Func<TRight> defaultGenerator)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
             ? either.Right
@@ -194,7 +194,7 @@ public static class Either
     /// <param name="rightToLeft"> Right to left converter </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TLeft ToLeft<TLeft, TRight>(this Either<TLeft, TRight> either, [InstantHandle] Func<TRight, TLeft> rightToLeft)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
             ? either.Left
@@ -205,7 +205,7 @@ public static class Either
     /// <param name="leftToRight"> Left to right converter </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TRight ToRight<TLeft, TRight>(this Either<TLeft, TRight> either, [InstantHandle] Func<TLeft, TRight> leftToRight)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
             ? either.Right
@@ -218,7 +218,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <typeparam name="TResult"> Left result type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult ToValue<TLeft, TRight, TResult>(this Either<TLeft, TRight> either, [InstantHandle] Func<TLeft, TResult> fromLeft,
         [InstantHandle] Func<TRight, TResult> fromRight)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -230,7 +230,7 @@ public static class Either
 #region Utils
 
     /// <summary> Swap left and right values </summary>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Either<TRight, TLeft> Invert<TLeft, TRight>(this Either<TLeft, TRight> either)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
             ? Right<TRight, TLeft>(either.Left)
@@ -241,8 +241,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <returns> Left values collection </returns>
-    [PublicAPI]
-    [LinqTunnel]
+    [PublicAPI, LinqTunnel]
     public static IEnumerable<TLeft> LeftValues<TLeft, TRight>(this IEnumerable<Either<TLeft, TRight>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasLeft: true})
@@ -253,8 +252,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <returns> Right values collection </returns>
-    [PublicAPI]
-    [LinqTunnel]
+    [PublicAPI, LinqTunnel]
     public static IEnumerable<TRight> RightValues<TLeft, TRight>(this IEnumerable<Either<TLeft, TRight>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasRight: true})

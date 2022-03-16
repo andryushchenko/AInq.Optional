@@ -44,18 +44,18 @@ public static class Maybe
         => value.HasValue ? Maybe<T>.FromValue(value.Value) : Maybe<T>.None;
 
     /// <inheritdoc cref="Maybe{T}.FromValue(T)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<T> AsMaybe<T>(this T value)
         => Maybe<T>.FromValue(value);
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : class
         => value is not null ? Maybe<T>.FromValue(value) : Maybe<T>.None;
 
     /// <inheritdoc cref="ValueIfNotNull{T}(T)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<T> AsMaybeIfNotNull<T>(this T? value)
         where T : struct
         => value.HasValue ? Maybe<T>.FromValue(value.Value) : Maybe<T>.None;
@@ -69,14 +69,14 @@ public static class Maybe
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, TResult> selector)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? Value((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value))
             : None<TResult>();
 
     /// <inheritdoc cref="Select{T,TResult}(Maybe{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, Maybe<TResult>> selector)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
@@ -91,14 +91,14 @@ public static class Maybe
     /// <param name="selector"> Converter </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, TResult> selector)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
             : default;
 
     /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult? SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, Maybe<TResult>> selector)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault()
@@ -110,14 +110,14 @@ public static class Maybe
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, TResult> selector, TResult defaultValue)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
             : defaultValue;
 
     /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult}, TResult)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, Maybe<TResult>> selector, TResult defaultValue)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault(defaultValue)
@@ -129,7 +129,7 @@ public static class Maybe
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TResult"> Result value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, TResult> selector,
         [InstantHandle] Func<TResult> defaultGenerator)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -137,7 +137,7 @@ public static class Maybe
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
     /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, Maybe<TResult>> selector,
         [InstantHandle] Func<TResult> defaultGenerator)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -153,7 +153,7 @@ public static class Maybe
     /// <summary> Get value or default </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static T? ValueOrDefault<T>(this Maybe<T> maybe)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : default;
 
@@ -161,7 +161,7 @@ public static class Maybe
     /// <param name="maybe"> Maybe item </param>
     /// <param name="defaultValue"> Default value </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static T ValueOrDefault<T>(this Maybe<T> maybe, T defaultValue)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : defaultValue;
 
@@ -169,7 +169,7 @@ public static class Maybe
     /// <param name="maybe"> Maybe item </param>
     /// <param name="defaultGenerator"> Default value generator </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static T ValueOrDefault<T>(this Maybe<T> maybe, [InstantHandle] Func<T> defaultGenerator)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? maybe.Value
@@ -183,7 +183,7 @@ public static class Maybe
     /// <param name="maybe"> Maybe item </param>
     /// <param name="other"> Other </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<T> Or<T>(this Maybe<T> maybe, Maybe<T> other)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe : other;
 
@@ -191,7 +191,7 @@ public static class Maybe
     /// <param name="maybe"> Maybe item </param>
     /// <param name="filter"> Filter </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<T> Filter<T>(this Maybe<T> maybe, [InstantHandle] Func<T, bool> filter)
         => !(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
            || (maybe.HasValue && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value))
@@ -201,7 +201,7 @@ public static class Maybe
     /// <summary> Unwrap nested Maybe </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <typeparam name="T"> Value type </typeparam>
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> maybe)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : None<T>();
 
@@ -209,8 +209,7 @@ public static class Maybe
     /// <param name="collection"> Maybe collection </param>
     /// <typeparam name="T"> Value type </typeparam>
     /// <returns> Values collection </returns>
-    [PublicAPI]
-    [LinqTunnel]
+    [PublicAPI, LinqTunnel]
     public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasValue: true})

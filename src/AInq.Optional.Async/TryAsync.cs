@@ -23,7 +23,7 @@ public static class TryAsync
 #region ResultAsync
 
     /// <inheritdoc cref="Try.Result{T}(Func{T})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static async ValueTask<Try<T>> ResultAsync<T>(Task<T> task, CancellationToken cancellation = default)
     {
         _ = task ?? throw new ArgumentNullException(nameof(task));
@@ -38,19 +38,19 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Result{T}(Func{T})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> ResultAsync<T>(ValueTask<T> valueTask, CancellationToken cancellation = default)
         => valueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(Try.Value(valueTask.Result))
             : ResultAsync(valueTask.AsTask(), cancellation);
 
     /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> AsTryAsync<T>(this Task<T> task, CancellationToken cancellation = default)
         => ResultAsync(task ?? throw new ArgumentNullException(nameof(task)), cancellation);
 
     /// <inheritdoc cref="ResultAsync{T}(ValueTask{T},CancellationToken)" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> AsTryAsync<T>(this ValueTask<T> valueTask, CancellationToken cancellation = default)
         => ResultAsync(valueTask, cancellation);
 
@@ -59,7 +59,7 @@ public static class TryAsync
 #region Select
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> Select<T, TResult>(this Task<Try<T>> tryTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, CancellationToken cancellation = default)
     {
@@ -81,7 +81,7 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> Select<T, TResult>(this Task<Try<T>> tryTask,
         [InstantHandle(RequireAwait = true)] Func<T, Try<TResult>> selector, CancellationToken cancellation = default)
     {
@@ -103,7 +103,7 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> Select<T, TResult>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, CancellationToken cancellation = default)
     {
@@ -124,7 +124,7 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> Select<T, TResult>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, Try<TResult>> selector, CancellationToken cancellation = default)
     {
@@ -149,7 +149,7 @@ public static class TryAsync
 #region SelectAsync
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
@@ -157,7 +157,7 @@ public static class TryAsync
             : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> tryTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
     {
@@ -180,7 +180,7 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
     {
@@ -203,7 +203,7 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Try<T> @try,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector,
         CancellationToken cancellation = default)
@@ -212,7 +212,7 @@ public static class TryAsync
             : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this Task<Try<T>> tryTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector,
         CancellationToken cancellation = default)
@@ -236,7 +236,7 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<TResult>> SelectAsync<T, TResult>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector,
         CancellationToken cancellation = default)
@@ -264,7 +264,7 @@ public static class TryAsync
 #region Utils
 
     /// <inheritdoc cref="Try.Or{T}(Try{T},Try{T})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> Or<T>(this Task<Try<T>> tryTask, Try<T> other, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(tryTask.Result.Or(other))
@@ -283,7 +283,7 @@ public static class TryAsync
             });
 
     /// <inheritdoc cref="Try.Or{T}(Try{T},Try{T})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> Or<T>(this ValueTask<Try<T>> tryValueTask, Try<T> other, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(tryValueTask.Result.Or(other))
@@ -302,7 +302,7 @@ public static class TryAsync
             });
 
     /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> Unwrap<T>(this Task<Try<Try<T>>> tryTask, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(tryTask.Result.Unwrap())
@@ -319,7 +319,7 @@ public static class TryAsync
             });
 
     /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public static ValueTask<Try<T>> Unwrap<T>(this ValueTask<Try<Try<T>>> tryValueTask, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(tryValueTask.Result.Unwrap())
@@ -358,24 +358,21 @@ public static class TryAsync
     }
 
     /// <inheritdoc cref="Try{T}.Throw()" />
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public static ValueTask<Try<T>> Throw<T>(this Task<Try<T>> tryTask, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(tryTask.Result.Throw())
             : FromFunctionAsync(async () => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Throw());
 
     /// <inheritdoc cref="Try{T}.Throw()" />
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public static ValueTask<Try<T>> Throw<T>(this ValueTask<Try<T>> tryValueTask, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(tryValueTask.Result.Throw())
             : FromFunctionAsync(async () => (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Throw());
 
     /// <inheritdoc cref="Try{T}.Throw{TException}()" />
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public static ValueTask<Try<T>> Throw<T, TException>(this Task<Try<T>> tryTask, CancellationToken cancellation = default)
         where TException : Exception
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
@@ -393,8 +390,7 @@ public static class TryAsync
             });
 
     /// <inheritdoc cref="Try{T}.Throw{TException}()" />
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public static ValueTask<Try<T>> Throw<T, TException>(this ValueTask<Try<T>> tryValueTask, CancellationToken cancellation = default)
         where TException : Exception
         => tryValueTask.IsCompletedSuccessfully
@@ -412,8 +408,7 @@ public static class TryAsync
             });
 
     /// <inheritdoc cref="Try{T}.Throw(Type)" />
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public static ValueTask<Try<T>> Throw<T>(this Task<Try<T>> tryTask, Type exceptionType, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(tryTask.Result.Throw(exceptionType))
@@ -430,8 +425,7 @@ public static class TryAsync
             });
 
     /// <inheritdoc cref="Try{T}.Throw(Type)" />
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public static ValueTask<Try<T>> Throw<T>(this ValueTask<Try<T>> tryValueTask, Type exceptionType, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(tryValueTask.Result.Throw(exceptionType))
@@ -540,7 +534,7 @@ public static class TryAsync
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
-        else if (throwIfError) @try.Throw();
+        else if (throwIfError) throw @try.Error!;
     }
 
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
@@ -575,7 +569,7 @@ public static class TryAsync
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
-        else if (throwIfError) @try.Throw();
+        else if (throwIfError) throw @try.Error!;
     }
 
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
@@ -615,7 +609,7 @@ public static class TryAsync
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
             await (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, cancellation).ConfigureAwait(false);
-        else if (throwIfError) @try.Throw();
+        else if (throwIfError) throw @try.Error!;
     }
 
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />

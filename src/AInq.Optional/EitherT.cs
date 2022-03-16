@@ -81,7 +81,7 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
         };
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public bool Equals(Either<TRight, TLeft>? other)
         => other is not null
            && (HasLeft, other.HasRight) switch
@@ -92,12 +92,12 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
            };
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public bool Equals(TRight? other)
         => HasRight && EqualityComparer<TRight?>.Default.Equals(Right, other);
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
-    [PublicAPI]
+    [PublicAPI, Pure]
     public bool Equals(TLeft? other)
         => HasLeft && EqualityComparer<TLeft?>.Default.Equals(Left, other);
 

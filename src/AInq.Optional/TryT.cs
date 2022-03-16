@@ -43,8 +43,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     private protected abstract Exception GetError();
 
     /// <summary> Throw if contains exception </summary>
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public Try<T> Throw()
     {
         if (!IsSuccess()) throw GetError();
@@ -53,8 +52,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     // <summary> Throw if contains exception of target type </summary>
     /// <param name="exceptionType"> Target exception type </param>
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public Try<T> Throw(Type exceptionType)
     {
         if (IsSuccess()) return this;
@@ -65,8 +63,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     /// <summary> Throw if contains exception of target type </summary>
     /// <typeparam name="TException"> Target exception type </typeparam>
-    [PublicAPI]
-    [AssertionMethod]
+    [PublicAPI, AssertionMethod]
     public Try<T> Throw<TException>()
         where TException : Exception
     {
