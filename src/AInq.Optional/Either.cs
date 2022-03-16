@@ -277,6 +277,23 @@ public static class Either
         else if (either.HasRight) (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right);
     }
 
+    /// <summary> Do action with left or right value with additional argument </summary>
+    /// <param name="either"> Either item </param>
+    /// <param name="leftAction"> Left value action </param>
+    /// <param name="rightAction"> Right value action </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void Do<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either, [InstantHandle] Action<TLeft, TArgument> leftAction,
+        [InstantHandle] Action<TRight, TArgument> rightAction, TArgument argument)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasLeft)
+            (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(either.Left, argument);
+        else if (either.HasRight) (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right, argument);
+    }
+
     /// <summary> Do action with left value (if exists) </summary>
     /// <param name="either"> Either item </param>
     /// <param name="leftAction"> Left value action </param>
@@ -289,6 +306,21 @@ public static class Either
             (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(either.Left);
     }
 
+    /// <summary> Do action with left value (if exists) with additional argument </summary>
+    /// <param name="either"> Either item </param>
+    /// <param name="leftAction"> Left value action </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void DoLeft<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either, [InstantHandle] Action<TLeft, TArgument> leftAction,
+        TArgument argument)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasLeft)
+            (leftAction ?? throw new ArgumentNullException(nameof(leftAction))).Invoke(either.Left, argument);
+    }
+
     /// <summary> Do action with right value (if exists) </summary>
     /// <param name="either"> Either item </param>
     /// <param name="rightAction"> Right value action </param>
@@ -299,6 +331,21 @@ public static class Either
     {
         if ((either ?? throw new ArgumentNullException(nameof(either))).HasRight)
             (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right);
+    }
+
+    /// <summary> Do action with right value (if exists) with additional argument </summary>
+    /// <param name="either"> Either item </param>
+    /// <param name="rightAction"> Right value action </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void DoRight<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either, [InstantHandle] Action<TRight, TArgument> rightAction,
+        TArgument argument)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasRight)
+            (rightAction ?? throw new ArgumentNullException(nameof(rightAction))).Invoke(either.Right, argument);
     }
 
 #endregion

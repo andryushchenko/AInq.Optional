@@ -158,6 +158,21 @@ public static class Try
         else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
     }
 
+    /// <summary> Try do action with additional argument </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="errorAction"> Action if error </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void Do<T, TArgument>(this Try<T> @try, [InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action<Exception> errorAction, TArgument argument)
+    {
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
+        else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
+    }
+
     /// <summary> Try do action with value </summary>
     /// <param name="try"> Try item </param>
     /// <param name="valueAction"> Action if value exists </param>
@@ -168,6 +183,21 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
+        else if (throwIfError) throw @try.Error!;
+    }
+
+    /// <summary> Try do action with value </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <param name="throwIfError"> Throw exception if item contains error </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void Do<T, TArgument>(this Try<T> @try, [InstantHandle] Action<T, TArgument> valueAction, TArgument argument, bool throwIfError = false)
+    {
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
         else if (throwIfError) throw @try.Error!;
     }
 

@@ -232,6 +232,22 @@ public static class Maybe
         else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
     }
 
+    /// <summary> Do action with additional argument </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="emptyAction"> Action if empty </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void Do<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action emptyAction,
+        TArgument argument)
+    {
+        if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value, argument);
+        else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+    }
+
     /// <summary> Do action with value (if exists) </summary>
     /// <param name="maybe"> Maybe item </param>
     /// <param name="valueAction"> Action if value exists </param>
@@ -241,6 +257,19 @@ public static class Maybe
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
+    }
+
+    /// <summary> Do action with value (if exists) with additional argument </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="valueAction"> Action if value exists </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void Do<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<T, TArgument> valueAction, TArgument argument)
+    {
+        if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value, argument);
     }
 
     /// <summary> Do action if empty </summary>
