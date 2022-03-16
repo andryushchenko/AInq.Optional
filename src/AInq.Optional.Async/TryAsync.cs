@@ -261,7 +261,7 @@ public static class TryAsync
 
 #endregion
 
-#region Utils
+#region Or
 
     /// <inheritdoc cref="Try.Or{T}(Try{T},Try{T})" />
     [PublicAPI, Pure]
@@ -282,6 +282,26 @@ public static class TryAsync
                 return @try.Or(other);
             });
 
+    /// <inheritdoc cref="Try.Or{T}(Try{T},Func{Try{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Try<T>> Or<T>(this Task<Try<T>> tryTask, [InstantHandle(RequireAwait = true)] Func<Try<T>> otherGenerator,
+        CancellationToken cancellation = default)
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Try<T>>(tryTask.Result.Or(otherGenerator))
+            : FromFunctionAsync(async () =>
+            {
+                Try<T> @try;
+                try
+                {
+                    @try = await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    @try = Try.Error<T>(ex);
+                }
+                return @try.Or(otherGenerator);
+            });
+
     /// <inheritdoc cref="Try.Or{T}(Try{T},Try{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Try<T>> Or<T>(this ValueTask<Try<T>> tryValueTask, Try<T> other, CancellationToken cancellation = default)
@@ -300,6 +320,64 @@ public static class TryAsync
                 }
                 return @try.Or(other);
             });
+
+    /// <inheritdoc cref="Try.Or{T}(Try{T},Func{Try{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Try<T>> Or<T>(this ValueTask<Try<T>> tryValueTask, [InstantHandle(RequireAwait = true)] Func<Try<T>> otherGenerator,
+        CancellationToken cancellation = default)
+        => tryValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Try<T>>(tryValueTask.Result.Or(otherGenerator))
+            : FromFunctionAsync(async () =>
+            {
+                Try<T> @try;
+                try
+                {
+                    @try = await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    @try = Try.Error<T>(ex);
+                }
+                return @try.Or(otherGenerator);
+            });
+
+#endregion
+
+#region OrAsync
+
+    /// <inheritdoc cref="Try.Or{T}(Try{T},Func{Try{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Try<T>> OrAsync<T>(this Try<T> @try,
+        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Try<T>>> asyncOtherGenerator, CancellationToken cancellation = default)
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
+            ? new ValueTask<Try<T>>(@try)
+            : (asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator))).Invoke(cancellation)
+                                                                                                   .AsTryAsync(cancellation)
+                                                                                                   .Unwrap(cancellation);
+
+    /// <inheritdoc cref="Try.Or{T}(Try{T},Func{Try{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Try<T>> OrAsync<T>(this Task<Try<T>> tryTask,
+        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Try<T>>> asyncOtherGenerator, CancellationToken cancellation = default)
+        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+            ? tryTask.Result.OrAsync(asyncOtherGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await tryTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .OrAsync(asyncOtherGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+    /// <inheritdoc cref="Try.Or{T}(Try{T},Func{Try{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Try<T>> OrAsync<T>(this ValueTask<Try<T>> tryValueTask,
+        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Try<T>>> asyncOtherGenerator, CancellationToken cancellation = default)
+        => tryValueTask.IsCompletedSuccessfully
+            ? tryValueTask.Result.OrAsync(asyncOtherGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .OrAsync(asyncOtherGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+#endregion
+
+#region Utils
 
     /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
     [PublicAPI, Pure]

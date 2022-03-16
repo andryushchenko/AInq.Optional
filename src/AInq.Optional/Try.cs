@@ -112,6 +112,16 @@ public static class Try
             ? @try
             : other ?? throw new ArgumentNullException(nameof(other));
 
+    /// <summary> Get value form this item or other </summary>
+    /// <param name="try"> Try item </param>
+    /// <param name="otherGenerator"> Other generator </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    [PublicAPI, Pure]
+    public static Try<T> Or<T>(this Try<T> @try, [InstantHandle] Func<Try<T>> otherGenerator)
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
+            ? @try
+            : (otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke();
+
     /// <summary> Unwrap nested Try </summary>
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>

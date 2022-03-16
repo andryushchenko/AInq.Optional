@@ -185,7 +185,19 @@ public static class Maybe
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Maybe<T> Or<T>(this Maybe<T> maybe, Maybe<T> other)
-        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe : other;
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? maybe
+            : other ?? throw new ArgumentNullException(nameof(other));
+
+    /// <summary> Get value form this item or other </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="otherGenerator"> Other generator </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    [PublicAPI, Pure]
+    public static Maybe<T> Or<T>(this Maybe<T> maybe, [InstantHandle] Func<Maybe<T>> otherGenerator)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? maybe
+            : (otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke();
 
     /// <summary> Filter value </summary>
     /// <param name="maybe"> Maybe item </param>

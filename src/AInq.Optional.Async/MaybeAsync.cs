@@ -623,7 +623,7 @@ public static class MaybeAsync
 
 #endregion
 
-#region Utils
+#region Or
 
     /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
@@ -638,6 +638,61 @@ public static class MaybeAsync
         => maybeValueTask.IsCompletedSuccessfully
             ? new ValueTask<Maybe<T>>(maybeValueTask.Result.Or(other))
             : FromFunctionAsync(async () => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Or(other));
+
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Func{Maybe{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Maybe<T>> Or<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Func<Maybe<T>> otherGenerator,
+        CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? new ValueTask<Maybe<T>>(maybeTask.Result.Or(otherGenerator))
+            : FromFunctionAsync(async () => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(otherGenerator));
+
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Func{Maybe{T}})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Maybe<T>> Or<T>(this ValueTask<Maybe<T>> maybeValueTask,
+        [InstantHandle(RequireAwait = true)] Func<Maybe<T>> otherGenerator, CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? new ValueTask<Maybe<T>>(maybeValueTask.Result.Or(otherGenerator))
+            : FromFunctionAsync(async () => (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Or(otherGenerator));
+
+#endregion
+
+#region OrAsync
+
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Maybe<T>> OrAsync<T>(this Maybe<T> maybe,
+        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator,
+        CancellationToken cancellation = default)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+            ? new ValueTask<Maybe<T>>(maybe)
+            : (asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator))).Invoke(cancellation);
+
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Maybe<T>> OrAsync<T>(this Task<Maybe<T>> maybeTask,
+        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator,
+        CancellationToken cancellation = default)
+        => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
+            ? maybeTask.Result.OrAsync(asyncOtherGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .OrAsync(asyncOtherGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
+    [PublicAPI, Pure]
+    public static ValueTask<Maybe<T>> OrAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
+        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator,
+        CancellationToken cancellation = default)
+        => maybeValueTask.IsCompletedSuccessfully
+            ? maybeValueTask.Result.OrAsync(asyncOtherGenerator, cancellation)
+            : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
+                                                  .OrAsync(asyncOtherGenerator, cancellation)
+                                                  .ConfigureAwait(false));
+
+#endregion
+
+#region Utils
 
     /// <inheritdoc cref="Maybe.Filter{T}(Maybe{T},Func{T,bool})" />
     [PublicAPI, Pure]
