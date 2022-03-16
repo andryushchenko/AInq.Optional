@@ -166,7 +166,8 @@ public static class Try
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TArgument"> Additional action argument type </typeparam>
     [PublicAPI]
-    public static void Do<T, TArgument>(this Try<T> @try, [InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action<Exception> errorAction, TArgument argument)
+    public static void Do<T, TArgument>(this Try<T> @try, [InstantHandle] Action<T, TArgument> valueAction,
+        [InstantHandle] Action<Exception> errorAction, TArgument argument)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
@@ -194,7 +195,8 @@ public static class Try
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TArgument"> Additional action argument type </typeparam>
     [PublicAPI]
-    public static void Do<T, TArgument>(this Try<T> @try, [InstantHandle] Action<T, TArgument> valueAction, TArgument argument, bool throwIfError = false)
+    public static void Do<T, TArgument>(this Try<T> @try, [InstantHandle] Action<T, TArgument> valueAction, TArgument argument,
+        bool throwIfError = false)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);

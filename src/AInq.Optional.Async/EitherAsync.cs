@@ -1098,6 +1098,82 @@ public static class EitherAsync
 
 #endregion
 
+#region DoWithArgument
+
+    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static ValueTask Do<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
+        [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction,
+        [InstantHandle(RequireAwait = true)] Action<TRight, TArgument> rightAction, TArgument argument, CancellationToken cancellation = default)
+    {
+        if ((eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is not TaskStatus.RanToCompletion)
+            return FromFunctionAsync(async ()
+                => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(leftAction, rightAction, argument));
+        eitherTask.Result.Do(leftAction, rightAction, argument);
+        return default;
+    }
+
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static ValueTask DoLeft<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
+        [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction, TArgument argument, CancellationToken cancellation = default)
+    {
+        if ((eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is not TaskStatus.RanToCompletion)
+            return FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).DoLeft(leftAction, argument));
+        eitherTask.Result.DoLeft(leftAction, argument);
+        return default;
+    }
+
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static ValueTask DoRight<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
+        [InstantHandle(RequireAwait = true)] Action<TRight, TArgument> rightAction, TArgument argument, CancellationToken cancellation = default)
+    {
+        if ((eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is not TaskStatus.RanToCompletion)
+            return FromFunctionAsync(async () => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).DoRight(rightAction, argument));
+        eitherTask.Result.DoRight(rightAction, argument);
+        return default;
+    }
+
+    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static ValueTask Do<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
+        [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction,
+        [InstantHandle(RequireAwait = true)] Action<TRight, TArgument> rightAction, TArgument argument, CancellationToken cancellation = default)
+    {
+        if (!eitherValueTask.IsCompletedSuccessfully)
+            return FromFunctionAsync(async ()
+                => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).Do(leftAction, rightAction, argument));
+        eitherValueTask.Result.Do(leftAction, rightAction, argument);
+        return default;
+    }
+
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static ValueTask DoLeft<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
+        [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction, TArgument argument, CancellationToken cancellation = default)
+    {
+        if (!eitherValueTask.IsCompletedSuccessfully)
+            return FromFunctionAsync(async ()
+                => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).DoLeft(leftAction, argument));
+        eitherValueTask.Result.DoLeft(leftAction, argument);
+        return default;
+    }
+
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static ValueTask DoRight<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
+        [InstantHandle(RequireAwait = true)] Action<TRight, TArgument> rightAction, TArgument argument, CancellationToken cancellation = default)
+    {
+        if (!eitherValueTask.IsCompletedSuccessfully)
+            return FromFunctionAsync(async ()
+                => (await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false)).DoRight(rightAction, argument));
+        eitherValueTask.Result.DoRight(rightAction, argument);
+        return default;
+    }
+
+#endregion
+
 #region DoAsync
 
     /// <inheritdoc cref="Either.Do{TLeft,TRight}(Either{TLeft,TRight},Action{TLeft},Action{TRight})" />
@@ -1229,6 +1305,151 @@ public static class EitherAsync
         if (either.HasRight)
             await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
                   .Invoke(either.Right, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+#endregion
+
+#region DoAsyncWithArgument
+
+    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoAsync<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either,
+        [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction,
+        [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasLeft)
+            await (leftAsyncAction ?? throw new ArgumentNullException(nameof(leftAsyncAction)))
+                  .Invoke(either.Left, argument, cancellation)
+                  .ConfigureAwait(false);
+        else
+            await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
+                  .Invoke(either.Right, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoLeftAsync<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either,
+        [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasLeft)
+            await (leftAsyncAction ?? throw new ArgumentNullException(nameof(leftAsyncAction)))
+                  .Invoke(either.Left, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoRightAsync<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either,
+        [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        if ((either ?? throw new ArgumentNullException(nameof(either))).HasRight)
+            await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
+                  .Invoke(either.Right, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoAsync<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
+        [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction,
+        [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        var either = (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
+            ? eitherTask.Result
+            : await eitherTask.WaitAsync(cancellation).ConfigureAwait(false);
+        if (either.HasLeft)
+            await (leftAsyncAction ?? throw new ArgumentNullException(nameof(leftAsyncAction)))
+                  .Invoke(either.Left, argument, cancellation)
+                  .ConfigureAwait(false);
+        else
+            await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
+                  .Invoke(either.Right, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoLeftAsync<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
+        [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        var either = (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
+            ? eitherTask.Result
+            : await eitherTask.WaitAsync(cancellation).ConfigureAwait(false);
+        if (either.HasLeft)
+            await (leftAsyncAction ?? throw new ArgumentNullException(nameof(leftAsyncAction)))
+                  .Invoke(either.Left, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoRightAsync<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
+        [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        var either = (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
+            ? eitherTask.Result
+            : await eitherTask.WaitAsync(cancellation).ConfigureAwait(false);
+        if (either.HasRight)
+            await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
+                  .Invoke(either.Right, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoAsync<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
+        [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction,
+        [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        var either = eitherValueTask.IsCompletedSuccessfully
+            ? eitherValueTask.Result
+            : await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+        if (either.HasLeft)
+            await (leftAsyncAction ?? throw new ArgumentNullException(nameof(leftAsyncAction)))
+                  .Invoke(either.Left, argument, cancellation)
+                  .ConfigureAwait(false);
+        else
+            await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
+                  .Invoke(either.Right, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoLeftAsync<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
+        [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        var either = eitherValueTask.IsCompletedSuccessfully
+            ? eitherValueTask.Result
+            : await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+        if (either.HasLeft)
+            await (leftAsyncAction ?? throw new ArgumentNullException(nameof(leftAsyncAction)))
+                  .Invoke(either.Left, argument, cancellation)
+                  .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    [PublicAPI]
+    public static async Task DoRightAsync<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
+        [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
+        CancellationToken cancellation = default)
+    {
+        var either = eitherValueTask.IsCompletedSuccessfully
+            ? eitherValueTask.Result
+            : await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
+        if (either.HasRight)
+            await (rightAsyncAction ?? throw new ArgumentNullException(nameof(rightAsyncAction)))
+                  .Invoke(either.Right, argument, cancellation)
                   .ConfigureAwait(false);
     }
 

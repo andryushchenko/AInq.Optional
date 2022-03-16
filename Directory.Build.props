@@ -10,7 +10,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-        <Version>3.1.0-rc.1</Version>
+        <Version>3.1.0-rc.2</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -19,8 +19,10 @@
         <RootNamespace>AInq.Optional</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>[ADD] JetBrains.Annotations for ReSharper
-[FIX] Minor internal fix</PackageReleaseNotes>
+        <PackageReleaseNotes>[ADD] Do with additional argument
+[ADD] JetBrains.Annotations for ReSharper
+[FIX] Minor internal fix
+        </PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
