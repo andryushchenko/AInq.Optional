@@ -48,13 +48,13 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     /// <summary> Create Either from left value </summary>
     /// <param name="left"> Left value </param>
     [PublicAPI]
-    public static Either<TLeft, TRight> FromLeft(TLeft left)
+    public static Either<TLeft, TRight> FromLeft([NoEnumeration]TLeft left)
         => new EitherLeft(left);
 
     /// <summary> Create Either from right value </summary>
     /// <param name="right"> Right value </param>
     [PublicAPI]
-    public static Either<TLeft, TRight> FromRight(TRight right)
+    public static Either<TLeft, TRight> FromRight([NoEnumeration]TRight right)
         => new EitherRight(right);
 
     private protected abstract bool IsLeft();

@@ -21,22 +21,22 @@ public static class Either
 
     /// <inheritdoc cref="Either{TLeft,TRight}.FromLeft(TLeft)" />
     [PublicAPI]
-    public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft left)
+    public static Either<TLeft, TRight> Left<TLeft, TRight>([NoEnumeration]TLeft left)
         => Either<TLeft, TRight>.FromLeft(left);
 
     /// <inheritdoc cref="Either{TLeft,TRight}.FromRight(TRight)" />
     [PublicAPI]
-    public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight right)
+    public static Either<TLeft, TRight> Right<TLeft, TRight>([NoEnumeration]TRight right)
         => Either<TLeft, TRight>.FromRight(right);
 
     /// <inheritdoc cref="Either{TLeft,TRight}.FromLeft(TLeft)" />
     [PublicAPI, Pure]
-    public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TLeft left)
+    public static Either<TLeft, TRight> AsEither<TLeft, TRight>([NoEnumeration]this TLeft left)
         => Either<TLeft, TRight>.FromLeft(left);
 
     /// <inheritdoc cref="Either{TLeft,TRight}.FromRight(TRight)" />
     [PublicAPI, Pure]
-    public static Either<TLeft, TRight> AsEither<TLeft, TRight>(this TRight right)
+    public static Either<TLeft, TRight> AsEither<TLeft, TRight>([NoEnumeration]this TRight right)
         => Either<TLeft, TRight>.FromRight(right);
 
 #endregion
@@ -143,7 +143,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     [PublicAPI, Pure]
-    public static TLeft LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, TLeft defaultValue)
+    public static TLeft LeftOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, [NoEnumeration]TLeft defaultValue)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft ? either.Left : defaultValue;
 
     /// <summary> Get left value or default from generator </summary>
@@ -171,7 +171,7 @@ public static class Either
     /// <typeparam name="TLeft"> Left source type </typeparam>
     /// <typeparam name="TRight"> Right source type </typeparam>
     [PublicAPI, Pure]
-    public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, TRight defaultValue)
+    public static TRight RightOrDefault<TLeft, TRight>(this Either<TLeft, TRight> either, [NoEnumeration]TRight defaultValue)
         => (either ?? throw new ArgumentNullException(nameof(either))).HasRight ? either.Right : defaultValue;
 
     /// <summary> Get right value or default from generator </summary>

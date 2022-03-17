@@ -30,6 +30,16 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     [PublicAPI]
     public Exception? Error => IsSuccess() ? null : GetError();
 
+    /// <summary> Create Try from value </summary>
+    /// <param name="value"> Value </param>
+    public static Try<T> FromValue([NoEnumeration]T value)
+        => new TryValue(value);
+
+    /// <summary> Create Try from exception </summary>
+    /// <param name="exception"> Exception </param>
+    public static Try<T> FromError(Exception exception)
+        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
+
     /// <inheritdoc />
     public bool Equals(T? other)
         => Success && EqualityComparer<T?>.Default.Equals(Value, other);
@@ -123,16 +133,6 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     /// <param name="b"> Second element </param>
     public static bool operator !=(T? a, Try<T>? b)
         => !(a == b);
-
-    // <summary> Create Try from value </summary>
-    /// <param name="value"> Value </param>
-    public static Try<T> FromValue(T value)
-        => new TryValue(value);
-
-    /// <summary> Create Try from exception </summary>
-    /// <param name="exception"> Exception </param>
-    public static Try<T> FromError(Exception exception)
-        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
 
     private sealed class TryValue : Try<T>
     {
