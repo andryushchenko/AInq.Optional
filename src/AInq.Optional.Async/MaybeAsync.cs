@@ -499,8 +499,7 @@ public static class MaybeAsync
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
-        [NoEnumeration] TResult defaultValue,
-        CancellationToken cancellation = default)
+        [NoEnumeration] TResult defaultValue, CancellationToken cancellation = default)
     {
         if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
             return new ValueTask<TResult>(defaultValue);
@@ -564,8 +563,7 @@ public static class MaybeAsync
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
-        [NoEnumeration] TResult defaultValue,
-        CancellationToken cancellation = default)
+        [NoEnumeration] TResult defaultValue, CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
             : FromFunctionAsync(async () => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false))
@@ -610,8 +608,7 @@ public static class MaybeAsync
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
-        [NoEnumeration] TResult defaultValue,
-        CancellationToken cancellation = default)
+        [NoEnumeration] TResult defaultValue, CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
             ? maybeValueTask.Result.SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
             : FromFunctionAsync(async () => await (await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false))
