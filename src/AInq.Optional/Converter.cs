@@ -96,7 +96,7 @@ public static class Converter
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <returns> Either </returns>
     [PublicAPI, Pure]
-    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Maybe<TLeft> maybe, [NoEnumeration]TRight other)
+    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Maybe<TLeft> maybe, [NoEnumeration] TRight other)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? Either.Left<TLeft, TRight>(maybe.Value)
             : Either.Right<TLeft, TRight>(other);
@@ -120,7 +120,7 @@ public static class Converter
     /// <typeparam name="TRight"> Right source type </typeparam>
     /// <returns> Either </returns>
     [PublicAPI, Pure]
-    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Try<TLeft> @try, [NoEnumeration]TRight other)
+    public static Either<TLeft, TRight> Or<TLeft, TRight>(this Try<TLeft> @try, [NoEnumeration] TRight other)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? Either.Left<TLeft, TRight>(@try.Value)
             : Either.Right<TLeft, TRight>(other);

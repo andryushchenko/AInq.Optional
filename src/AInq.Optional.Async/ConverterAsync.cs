@@ -202,7 +202,7 @@ public static class ConverterAsync
 
     /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Maybe{TLeft},TRight)" />
     [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Maybe<TLeft>> maybeTask, [NoEnumeration]TRight other,
+    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Maybe<TLeft>> maybeTask, [NoEnumeration] TRight other,
         CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(maybeTask.Result.Or(other))
@@ -218,7 +218,7 @@ public static class ConverterAsync
 
     /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Maybe{TLeft},TRight)" />
     [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Maybe<TLeft>> maybeValueTask, [NoEnumeration]TRight other,
+    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Maybe<TLeft>> maybeValueTask, [NoEnumeration] TRight other,
         CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
             ? new ValueTask<Either<TLeft, TRight>>(maybeValueTask.Result.Or(other))
@@ -234,7 +234,7 @@ public static class ConverterAsync
 
     /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},TRight)" />
     [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Try<TLeft>> tryTask, [NoEnumeration]TRight other,
+    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Try<TLeft>> tryTask, [NoEnumeration] TRight other,
         CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(tryTask.Result.Or(other))
@@ -272,7 +272,7 @@ public static class ConverterAsync
 
     /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},TRight)" />
     [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask, [NoEnumeration]TRight other,
+    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask, [NoEnumeration] TRight other,
         CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Either<TLeft, TRight>>(tryValueTask.Result.Or(other))

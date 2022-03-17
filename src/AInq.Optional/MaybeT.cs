@@ -18,11 +18,11 @@ namespace AInq.Optional;
 /// <typeparam name="T"> Value type </typeparam>
 public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 {
-    private static readonly Lazy<MaybeEmpty> _none=new();
+    private static readonly Lazy<MaybeEmpty> Empty = new();
 
     /// <summary> Get empty Maybe </summary>
     [PublicAPI]
-    public static Maybe<T> None => _none.Value;
+    public static Maybe<T> None => Empty.Value;
 
     /// <summary> Check if item contains value </summary>
     [PublicAPI]
@@ -43,7 +43,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     /// <summary> Create Maybe from value </summary>
     /// <param name="value"> Value </param>
     [PublicAPI]
-    public static Maybe<T> FromValue([NoEnumeration]T value)
+    public static Maybe<T> FromValue([NoEnumeration] T value)
         => new MaybeValue(value);
 
     private protected abstract bool IsNotEmpty();

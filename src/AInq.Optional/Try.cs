@@ -21,7 +21,7 @@ public static class Try
 
     /// <inheritdoc cref="Try{T}.FromValue(T)" />
     [PublicAPI]
-    public static Try<T> Value<T>([NoEnumeration]T value)
+    public static Try<T> Value<T>([NoEnumeration] T value)
         => Try<T>.FromValue(value);
 
     /// <inheritdoc cref="Try{T}.FromError(Exception)" />
@@ -31,7 +31,7 @@ public static class Try
 
     /// <inheritdoc cref="Try{T}.FromValue(T)" />
     [PublicAPI, Pure]
-    public static Try<T> AsTry<T>([NoEnumeration]this T value)
+    public static Try<T> AsTry<T>([NoEnumeration] this T value)
         => Try<T>.FromValue(value);
 
     /// <inheritdoc cref="Try{T}.FromError(Exception)" />
