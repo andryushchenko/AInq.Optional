@@ -349,7 +349,7 @@ public static class ConverterAsync
     public static ValueTask<Either<TLeft, TRight>> OrAsync<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
-            ? tryValueTask.Result.OrAsync(asyncOtherGenerator, cancellation)
+            ? tryValueTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
             : AwaitOrAsync(tryValueTask.AsTask(), asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
 #endregion
