@@ -254,12 +254,12 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TArgument"> Additional action argument type </typeparam>
     [PublicAPI]
-    public static void Do<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action emptyAction,
+    public static void Do<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action<TArgument> emptyAction,
         TArgument argument)
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value, argument);
-        else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+        else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke(argument);
     }
 
     /// <summary> Do action with value (if exists) </summary>
@@ -295,6 +295,19 @@ public static class Maybe
     {
         if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
             (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+    }
+
+    /// <summary> Do action if empty with additional argument </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="emptyAction"> Action if empty </param>
+    /// <param name="argument"> Additional action argument </param>
+    /// <typeparam name="T"> Source value type </typeparam>
+    /// <typeparam name="TArgument"> Additional action argument type </typeparam>
+    [PublicAPI]
+    public static void DoIfEmpty<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<TArgument> emptyAction, TArgument argument)
+    {
+        if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
+            (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke(argument);
     }
 
 #endregion
