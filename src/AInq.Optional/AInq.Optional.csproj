@@ -5,8 +5,4 @@
         <Description>Simple optional types with basic helpers</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Optional.xml</DocumentationFile>
-    </PropertyGroup>
-
 </Project>

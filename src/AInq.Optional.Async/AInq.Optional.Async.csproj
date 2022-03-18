@@ -5,10 +5,6 @@
         <Description>Async extensions for optional types</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Optional.Async.xml</DocumentationFile>
-    </PropertyGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\AInq.Optional\AInq.Optional.csproj" />
     </ItemGroup>

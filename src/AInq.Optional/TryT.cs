@@ -19,12 +19,15 @@ namespace AInq.Optional;
 public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 {
     /// <summary> Check if item is success </summary>
+    [PublicAPI]
     public bool Success => IsSuccess();
 
     /// <summary> Item value (if success) </summary>
+    [PublicAPI]
     public T Value => IsSuccess() ? GetValue() : throw GetError();
 
     /// <summary> Exception or null if success </summary>
+    [PublicAPI]
     public Exception? Error => IsSuccess() ? null : GetError();
 
     /// <inheritdoc />
@@ -35,11 +38,22 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     public bool Equals(Try<T>? other)
         => other is not null && Success && other.Success && EqualityComparer<T>.Default.Equals(Value, other.Value);
 
+    /// <summary> Create Try from value </summary>
+    /// <param name="value"> Value </param>
+    public static Try<T> FromValue([NoEnumeration] T value)
+        => new TryValue(value);
+
+    /// <summary> Create Try from exception </summary>
+    /// <param name="exception"> Exception </param>
+    public static Try<T> FromError(Exception exception)
+        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
+
     private protected abstract bool IsSuccess();
     private protected abstract T GetValue();
     private protected abstract Exception GetError();
 
     /// <summary> Throw if contains exception </summary>
+    [PublicAPI, AssertionMethod]
     public Try<T> Throw()
     {
         if (!IsSuccess()) throw GetError();
@@ -48,6 +62,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     // <summary> Throw if contains exception of target type </summary>
     /// <param name="exceptionType"> Target exception type </param>
+    [PublicAPI, AssertionMethod]
     public Try<T> Throw(Type exceptionType)
     {
         if (IsSuccess()) return this;
@@ -58,6 +73,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     /// <summary> Throw if contains exception of target type </summary>
     /// <typeparam name="TException"> Target exception type </typeparam>
+    [PublicAPI, AssertionMethod]
     public Try<T> Throw<TException>()
         where TException : Exception
     {
@@ -118,16 +134,6 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     public static bool operator !=(T? a, Try<T>? b)
         => !(a == b);
 
-    // <summary> Create Try from value </summary>
-    /// <param name="value"> Value </param>
-    public static Try<T> FromValue(T value)
-        => new TryValue(value);
-
-    /// <summary> Create Try from exception </summary>
-    /// <param name="exception"> Exception </param>
-    public static Try<T> FromError(Exception exception)
-        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
-
     private sealed class TryValue : Try<T>
     {
         private readonly T _value;
@@ -142,7 +148,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
             => _value;
 
         private protected override Exception GetError()
-            => new();
+            => null!;
     }
 
     private sealed class TryError : Try<T>

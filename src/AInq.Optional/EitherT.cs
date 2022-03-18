@@ -20,15 +20,19 @@ namespace AInq.Optional;
 public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 {
     /// <summary> Check if item contains left value </summary>
+    [PublicAPI]
     public bool HasLeft => IsLeft();
 
     /// <summary> Check if item contains right value </summary>
+    [PublicAPI]
     public bool HasRight => !IsLeft();
 
     /// <summary> Left value (if exists) </summary>
+    [PublicAPI]
     public TLeft Left => IsLeft() ? GetLeft() : throw new InvalidOperationException("No left value");
 
     /// <summary> Right value (if exists) </summary>
+    [PublicAPI]
     public TRight Right => IsLeft() ? throw new InvalidOperationException("No right value") : GetRight();
 
     /// <inheritdoc />
@@ -43,12 +47,14 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
 
     /// <summary> Create Either from left value </summary>
     /// <param name="left"> Left value </param>
-    public static Either<TLeft, TRight> FromLeft(TLeft left)
+    [PublicAPI]
+    public static Either<TLeft, TRight> FromLeft([NoEnumeration] TLeft left)
         => new EitherLeft(left);
 
     /// <summary> Create Either from right value </summary>
     /// <param name="right"> Right value </param>
-    public static Either<TLeft, TRight> FromRight(TRight right)
+    [PublicAPI]
+    public static Either<TLeft, TRight> FromRight([NoEnumeration] TRight right)
         => new EitherRight(right);
 
     private protected abstract bool IsLeft();
@@ -75,6 +81,7 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
         };
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
+    [PublicAPI, Pure]
     public bool Equals(Either<TRight, TLeft>? other)
         => other is not null
            && (HasLeft, other.HasRight) switch
@@ -85,10 +92,12 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
            };
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
+    [PublicAPI, Pure]
     public bool Equals(TRight? other)
         => HasRight && EqualityComparer<TRight?>.Default.Equals(Right, other);
 
     /// <inheritdoc cref="Equals(Either{TLeft,TRight})" />
+    [PublicAPI, Pure]
     public bool Equals(TLeft? other)
         => HasLeft && EqualityComparer<TLeft?>.Default.Equals(Left, other);
 
