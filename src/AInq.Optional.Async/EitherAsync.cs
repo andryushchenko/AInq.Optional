@@ -980,7 +980,7 @@ public static class EitherAsync
 
 #region DoWithArgument
 
-    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.Do{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction,
@@ -993,7 +993,7 @@ public static class EitherAsync
         return default;
     }
 
-    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask DoLeft<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction, TArgument argument, CancellationToken cancellation = default)
@@ -1004,7 +1004,7 @@ public static class EitherAsync
         return default;
     }
 
-    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask DoRight<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Action<TRight, TArgument> rightAction, TArgument argument, CancellationToken cancellation = default)
@@ -1015,7 +1015,7 @@ public static class EitherAsync
         return default;
     }
 
-    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.Do{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction,
@@ -1028,7 +1028,7 @@ public static class EitherAsync
         return default;
     }
 
-    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask DoLeft<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Action<TLeft, TArgument> leftAction, TArgument argument, CancellationToken cancellation = default)
@@ -1040,7 +1040,7 @@ public static class EitherAsync
         return default;
     }
 
-    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask DoRight<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Action<TRight, TArgument> rightAction, TArgument argument, CancellationToken cancellation = default)
@@ -1192,7 +1192,7 @@ public static class EitherAsync
 
 #region DoAsyncWithArgument
 
-    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.Do{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction,
@@ -1209,7 +1209,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoLeftAsync<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction, TArgument argument,
@@ -1221,7 +1221,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoRightAsync<TLeft, TRight, TArgument>(this Either<TLeft, TRight> either,
         [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
@@ -1233,7 +1233,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.Do{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction,
@@ -1253,7 +1253,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoLeftAsync<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction, TArgument argument,
@@ -1268,7 +1268,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoRightAsync<TLeft, TRight, TArgument>(this Task<Either<TLeft, TRight>> eitherTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,
@@ -1283,7 +1283,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.Do{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.Do{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction,
@@ -1303,7 +1303,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TLeft, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TLeft,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoLeftAsync<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TLeft, TArgument, CancellationToken, Task> leftAsyncAction, TArgument argument,
@@ -1318,7 +1318,7 @@ public static class EitherAsync
                   .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Either.DoRight{TLeft,TRight, TArgument}(Either{TLeft,TRight},Action{TRight, TArgument}, TArgument)" />
+    /// <inheritdoc cref="Either.DoRight{TLeft,TRight,TArgument}(Either{TLeft,TRight},Action{TRight,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoRightAsync<TLeft, TRight, TArgument>(this ValueTask<Either<TLeft, TRight>> eitherValueTask,
         [InstantHandle(RequireAwait = true)] Func<TRight, TArgument, CancellationToken, Task> rightAsyncAction, TArgument argument,

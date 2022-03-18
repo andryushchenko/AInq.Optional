@@ -117,7 +117,7 @@ public static class Maybe
             ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
             : defaultValue;
 
-    /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult}, TResult)" />
+    /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
     [PublicAPI, Pure]
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, Maybe<TResult>> selector,
         [NoEnumeration] TResult defaultValue)
@@ -254,8 +254,8 @@ public static class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     /// <typeparam name="TArgument"> Additional action argument type </typeparam>
     [PublicAPI]
-    public static void Do<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action<TArgument> emptyAction,
-        TArgument argument)
+    public static void Do<T, TArgument>(this Maybe<T> maybe, [InstantHandle] Action<T, TArgument> valueAction,
+        [InstantHandle] Action<TArgument> emptyAction, TArgument argument)
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value, argument);

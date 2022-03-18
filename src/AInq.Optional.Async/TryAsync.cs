@@ -595,7 +595,7 @@ public static class TryAsync
 
 #region DoWithArgument
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument},Action{Exception}, TArgument)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this Task<Try<T>> tryTask, [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction,
         [InstantHandle(RequireAwait = true)] Action<Exception> errorAction, TArgument argument, CancellationToken cancellation = default)
@@ -607,7 +607,7 @@ public static class TryAsync
         return default;
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument}, TArgument,bool)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this Task<Try<T>> tryTask, [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction,
         TArgument argument, bool throwIfError = false, CancellationToken cancellation = default)
@@ -619,7 +619,7 @@ public static class TryAsync
         return default;
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument},Action{Exception}, TArgument)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction, [InstantHandle(RequireAwait = true)] Action<Exception> errorAction,
@@ -632,7 +632,7 @@ public static class TryAsync
         return default;
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument}, TArgument,bool)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction, TArgument argument, bool throwIfError = false,
@@ -760,7 +760,7 @@ public static class TryAsync
 
 #region DoAsyncWithArgument
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument},Action{Exception}, TArgument)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Try<T> @try,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> valueAction,
@@ -773,7 +773,7 @@ public static class TryAsync
         else await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument}, TArgument,bool)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Try<T> @try,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> valueAction, TArgument argument, bool throwIfError = false,
@@ -785,7 +785,7 @@ public static class TryAsync
         else if (throwIfError) throw @try.Error!;
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument},Action{Exception}, TArgument)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Task<Try<T>> tryTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> valueAction,
@@ -801,7 +801,7 @@ public static class TryAsync
         else await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument}, TArgument,bool)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Task<Try<T>> tryTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> valueAction, TArgument argument, bool throwIfError = false,
@@ -816,7 +816,7 @@ public static class TryAsync
         else if (throwIfError) throw @try.Error!;
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument},Action{Exception}, TArgument)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> valueAction,
@@ -832,7 +832,7 @@ public static class TryAsync
         else await (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!, cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="Try.Do{T, TArgument}(Try{T},Action{T, TArgument}, TArgument,bool)" />
+    /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this ValueTask<Try<T>> tryValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> valueAction, TArgument argument, bool throwIfError = false,
