@@ -207,8 +207,8 @@ public static class Maybe
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Maybe<T> Filter<T>(this Maybe<T> maybe, [InstantHandle] Func<T, bool> filter)
-        => !(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-           || maybe.HasValue && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value)
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+           && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value)
             ? maybe
             : None<T>();
 
