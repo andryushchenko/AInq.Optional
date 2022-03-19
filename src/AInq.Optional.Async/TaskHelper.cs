@@ -12,17 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !NET6_0_OR_GREATER
+
 namespace AInq.Optional;
 
 internal static class TaskHelper
 {
-    public static ValueTask FromFunctionAsync(Func<Task> function)
-        => new(function.Invoke());
-
-    public static ValueTask<T> FromFunctionAsync<T>(Func<Task<T>> function)
-        => new(function.Invoke());
-
-#if !NET6_0_OR_GREATER
     public static Task<T> WaitAsync<T>(this Task<T> task, CancellationToken cancellation)
         => cancellation.CanBeCanceled && !task.IsCompleted
             ? cancellation.IsCancellationRequested
@@ -40,5 +35,6 @@ internal static class TaskHelper
 #endif
         return await (await Task.WhenAny(task, completion.Task).ConfigureAwait(false)).ConfigureAwait(false);
     }
-#endif
 }
+
+#endif
