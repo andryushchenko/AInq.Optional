@@ -10,7 +10,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-        <Version>3.1.0</Version>
+        <Version>3.2.0-rc.1</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -19,11 +19,7 @@
         <RootNamespace>AInq.Optional</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>[ADD] Do with additional argument
-[ADD] Or with Generator and OrAsync
-[ADD] SelectOrDefaultAsync overloads
-[ADD] JetBrains.Annotations for ReSharper
-[FIX] Minor internal fix</PackageReleaseNotes>
+        <PackageReleaseNotes>[OPT] Async methods performance optimization</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
