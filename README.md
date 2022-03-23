@@ -2,6 +2,8 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Optional)](https://github.com/andryushchenko/AInq.Optional/releases) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Optional)](LICENSE)
 
+![](AInq.png)
+
 ## What is it?
 
 Simple optional types with basic helpers and converters
