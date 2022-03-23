@@ -2,7 +2,7 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Optional)](https://github.com/andryushchenko/AInq.Optional/releases) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Optional)](LICENSE)
 
-![AInq](AInq.png)
+![AInq](https://raw.githubusercontent.com/andryushchenko/AInq.Optional/main/AInq.png)
 
 ## What is it?
 
