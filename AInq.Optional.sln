@@ -10,7 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBEC2ABE-02E0-4901-8410-15FFC21AB0C1}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		AInq.eps = AInq.eps
 		AInq.Optional.sln.DotSettings = AInq.Optional.sln.DotSettings
+		AInq.png = AInq.png
 		.github\workflows\cleanup.yml = .github\workflows\cleanup.yml
 		Directory.Build.props = Directory.Build.props
 		src\Shared\JetBrains.Annotations.cs = src\Shared\JetBrains.Annotations.cs
