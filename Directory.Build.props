@@ -10,7 +10,7 @@
         <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-        <Version>3.2.0-rc.2</Version>
+        <Version>3.2.0</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
