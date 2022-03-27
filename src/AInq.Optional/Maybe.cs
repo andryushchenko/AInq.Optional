@@ -145,7 +145,7 @@ public static class Maybe
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? (selector ?? throw new ArgumentNullException(nameof(selector)))
               .Invoke(maybe.Value)
-              .ValueOrDefault((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke())
+              .ValueOrDefault(defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)))
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
 #endregion
