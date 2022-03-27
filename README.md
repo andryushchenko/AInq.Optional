@@ -14,7 +14,7 @@ Simple optional types with basic helpers and converters
 
 ## New in 3.0
 
-For version 3.0 this lib was compketely rewriten with some **breaking changes**
+For version 3.0 this lib was completely rewriten with some **breaking changes**
 
 - All types are now `class` instead of `struct`
 - Remove some logically obscure methods
