@@ -46,6 +46,12 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     public static Maybe<T> FromValue([NoEnumeration] T value)
         => new MaybeValue(value);
 
+    /// <summary> Cast value to Maybe </summary>
+    /// <param name="value"> Value </param>
+    [PublicAPI]
+    public static implicit operator Maybe<T>([NoEnumeration] T value)
+        => FromValue(value);
+
     private protected abstract bool IsNotEmpty();
     private protected abstract T GetValue();
 

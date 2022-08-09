@@ -57,6 +57,18 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     public static Either<TLeft, TRight> FromRight([NoEnumeration] TRight right)
         => new EitherRight(right);
 
+    /// <summary> Cast left value to Either </summary>
+    /// <param name="left"> Left value </param>
+    [PublicAPI]
+    public static implicit operator Either<TLeft, TRight>(TLeft left)
+        => FromLeft(left);
+
+    /// <summary> Cast right value to Either </summary>
+    /// <param name="right"> Right value </param>
+    [PublicAPI]
+    public static implicit operator Either<TLeft, TRight>(TRight right)
+        => FromRight(right);
+
     private protected abstract bool IsLeft();
     private protected abstract TLeft GetLeft();
     private protected abstract TRight GetRight();

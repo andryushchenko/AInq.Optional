@@ -48,6 +48,18 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     public static Try<T> FromError(Exception exception)
         => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
 
+    /// <summary> Cast value to Try </summary>
+    /// <param name="value"> Value </param>
+    [PublicAPI]
+    public static implicit operator Try<T>([NoEnumeration] T value)
+        => FromValue(value);
+
+    /// <summary> Cast exception to Try </summary>
+    /// <param name="error"> Exception </param>
+    [PublicAPI]
+    public static implicit operator Try<T>(Exception error)
+        => FromError(error);
+
     private protected abstract bool IsSuccess();
     private protected abstract T GetValue();
     private protected abstract Exception GetError();
