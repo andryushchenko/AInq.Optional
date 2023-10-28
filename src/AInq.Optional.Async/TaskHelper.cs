@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !NET6_0_OR_GREATER
+#if NETSTANDARD
 namespace AInq.Optional;
 
 internal static class TaskHelper
