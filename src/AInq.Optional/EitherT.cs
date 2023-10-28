@@ -74,8 +74,8 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     private protected abstract TRight GetRight();
 
     /// <inheritdoc />
-    public override string ToString()
-        => HasLeft ? Left?.ToString() ?? "Null" : Right?.ToString() ?? "Null";
+    public override string? ToString()
+        => HasLeft ? Left?.ToString() : Right?.ToString();
 
     /// <inheritdoc />
     public override int GetHashCode()

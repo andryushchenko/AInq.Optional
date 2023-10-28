@@ -94,8 +94,8 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     }
 
     /// <inheritdoc />
-    public override string ToString()
-        => Success ? Value?.ToString() ?? "Null" : Error!.ToString();
+    public override string? ToString()
+        => Success ? Value?.ToString() : Error?.ToString();
 
     /// <inheritdoc />
     public override int GetHashCode()

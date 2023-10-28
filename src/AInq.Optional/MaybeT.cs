@@ -56,12 +56,12 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     private protected abstract T GetValue();
 
     /// <inheritdoc />
-    public override string ToString()
-        => Value?.ToString() ?? "Null";
+    public override string? ToString()
+        => IsNotEmpty() ? Value?.ToString() : "No value";
 
     /// <inheritdoc />
     public override int GetHashCode()
-        => Value?.GetHashCode() ?? 0;
+        => IsNotEmpty() ? Value?.GetHashCode() ?? 0 : 0;
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
