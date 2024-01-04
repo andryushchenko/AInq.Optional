@@ -1,4 +1,4 @@
-﻿// Copyright 2021-2023 Anton Andryushchenko
+﻿// Copyright 2021-2024 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
         return this;
     }
 
-    // <summary> Throw if contains exception of target type </summary>
+    // <summary> Throw if contains target type exception </summary>
     /// <param name="exceptionType"> Target exception type </param>
     [PublicAPI, AssertionMethod]
     public Try<T> Throw(Type exceptionType)
@@ -83,7 +83,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
         return this;
     }
 
-    /// <summary> Throw if contains exception of target type </summary>
+    /// <summary> Throw if contains target type exception </summary>
     /// <typeparam name="TException"> Target exception type </typeparam>
     [PublicAPI, AssertionMethod]
     public Try<T> Throw<TException>()

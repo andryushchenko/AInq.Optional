@@ -1,4 +1,4 @@
-﻿// Copyright 2021-2023 Anton Andryushchenko
+﻿// Copyright 2021-2024 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -155,7 +155,7 @@ public static class Try
 
 #region Do
 
-    /// <summary> Try do action </summary>
+    /// <summary> Try to execute action </summary>
     /// <param name="try"> Try item </param>
     /// <param name="valueAction"> Action if value exists </param>
     /// <param name="errorAction"> Action if error </param>
@@ -168,7 +168,7 @@ public static class Try
         else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
     }
 
-    /// <summary> Try do action with additional argument </summary>
+    /// <summary> Try to execute action with additional argument </summary>
     /// <param name="try"> Try item </param>
     /// <param name="valueAction"> Action if value exists </param>
     /// <param name="errorAction"> Action if error </param>
@@ -184,7 +184,7 @@ public static class Try
         else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
     }
 
-    /// <summary> Try do action with value </summary>
+    /// <summary> Try to execute action with value </summary>
     /// <param name="try"> Try item </param>
     /// <param name="valueAction"> Action if value exists </param>
     /// <param name="throwIfError"> Throw exception if item contains error </param>
@@ -197,7 +197,7 @@ public static class Try
         else if (throwIfError) throw @try.Error!;
     }
 
-    /// <summary> Try do action with value </summary>
+    /// <summary> Try to execute action with value </summary>
     /// <param name="try"> Try item </param>
     /// <param name="valueAction"> Action if value exists </param>
     /// <param name="argument"> Additional action argument </param>
@@ -213,7 +213,7 @@ public static class Try
         else if (throwIfError) throw @try.Error!;
     }
 
-    /// <summary> Try do action with error </summary>
+    /// <summary> Try to execute action with error </summary>
     /// <param name="try"> Try item </param>
     /// <param name="errorAction"> Action if error </param>
     /// <typeparam name="T"> Source value type </typeparam>
