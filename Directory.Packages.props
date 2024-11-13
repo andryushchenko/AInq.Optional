@@ -7,18 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </GlobalPackageReference>
-        <GlobalPackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.2.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </GlobalPackageReference>
+        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25" PrivateAssets="All" />
+        <GlobalPackageReference Include="Microsoft.Build.CopyOnWrite" Version="1.0.334" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

@@ -219,6 +219,10 @@ public static class Maybe
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> maybe)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : None<T>();
 
+#endregion
+
+#region Linq
+
     /// <summary> Select existing values </summary>
     /// <param name="collection"> Maybe collection </param>
     /// <typeparam name="T"> Value type </typeparam>
@@ -228,6 +232,206 @@ public static class Maybe
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasValue: true})
            .Select(item => item.Value);
+
+    /// <summary> Get first value or none </summary>
+    /// <param name="collection"> Value collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Maybe </returns>
+    [PublicAPI]
+    public static Maybe<T> FirstOrNone<T>(this IEnumerable<T> collection)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        switch (collection)
+        {
+            case IList<T> list:
+                return list.Count == 0 ? None<T>() : list[0];
+            case IReadOnlyList<T> readOnlyList:
+                return readOnlyList.Count == 0 ? None<T>() : readOnlyList[0];
+        }
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count))
+            return count == 0 ? None<T>() : collection.ElementAt(0);
+#endif
+        using var enumerator = collection.GetEnumerator();
+        return enumerator.MoveNext() ? enumerator.Current : None<T>();
+    }
+
+    /// <summary> Get first matching value or none </summary>
+    /// <param name="collection"> Value collection </param>
+    /// <param name="filter"> Filter </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Maybe </returns>
+    [PublicAPI]
+    public static Maybe<T> FirstOrNone<T>(this IEnumerable<T> collection, [InstantHandle] Func<T, bool> filter)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return None<T>();
+#endif
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
+            if (filter.Invoke(enumerator.Current))
+                return enumerator.Current;
+        return None<T>();
+    }
+
+    /// <summary> Get first not null value or none </summary>
+    /// <param name="collection"> Value collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Maybe </returns>
+    [PublicAPI]
+    public static Maybe<T> FirstNotNullOrNone<T>(this IEnumerable<T?> collection)
+        where T : class
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return None<T>();
+#endif
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
+            if (enumerator.Current is not null)
+                return enumerator.Current;
+        return None<T>();
+    }
+
+    /// <inheritdoc cref="FirstNotNullOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static Maybe<T> FirstNotNullOrNone<T>(this IEnumerable<T?> collection)
+        where T : struct
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return None<T>();
+#endif
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
+            if (enumerator.Current.HasValue)
+                return enumerator.Current.Value;
+        return None<T>();
+    }
+
+    /// <summary> Get single value or none </summary>
+    /// <param name="collection"> Value collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Maybe </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if collection contains more than one element </exception>
+    [PublicAPI]
+    public static Maybe<T> SingleOrNone<T>(this IEnumerable<T> collection)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        switch (collection)
+        {
+            case IList<T> list:
+                return list.Count switch
+                {
+                    0 => None<T>(),
+                    1 => list[0],
+                    _ => throw new InvalidOperationException("Collection contains more than one element")
+                };
+            case IReadOnlyList<T> readOnlyList:
+                return readOnlyList.Count switch
+                {
+                    0 => None<T>(),
+                    1 => readOnlyList[0],
+                    _ => throw new InvalidOperationException("Collection contains more than one element")
+                };
+        }
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count))
+            return count switch
+            {
+                0 => None<T>(),
+                1 => collection.ElementAt(0),
+                _ => throw new InvalidOperationException("Collection contains more than one element")
+            };
+#endif
+        using var enumerator = collection.GetEnumerator();
+        if (!enumerator.MoveNext()) return None<T>();
+        var result = enumerator.Current;
+        return enumerator.MoveNext() ? throw new InvalidOperationException("Collection contains more than one element") : result;
+    }
+
+    /// <summary> Get single matching value or none </summary>
+    /// <param name="collection"> Value collection </param>
+    /// <param name="filter"> Filter </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Maybe </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if collection contains more than one matching element </exception>
+    [PublicAPI]
+    public static Maybe<T> SingleOrNone<T>(this IEnumerable<T> collection, [InstantHandle] Func<T, bool> filter)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return None<T>();
+#endif
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var result = enumerator.Current;
+            if (!filter.Invoke(result)) continue;
+            while (enumerator.MoveNext())
+                if (filter.Invoke(enumerator.Current))
+                    throw new InvalidOperationException("Collection contains more than one matching element");
+            return result;
+        }
+        return None<T>();
+    }
+
+    /// <summary> Get single not null value or none </summary>
+    /// <param name="collection"> Value collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Maybe </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if collection contains more than one not null element </exception>
+    [PublicAPI]
+    public static Maybe<T> SingleNotNullOrNone<T>(this IEnumerable<T?> collection)
+        where T : class
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return None<T>();
+#endif
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var result = enumerator.Current;
+            if (result is null) continue;
+            while (enumerator.MoveNext())
+                if (enumerator.Current is not null)
+                    throw new InvalidOperationException("Collection contains more than one not null element");
+            return result;
+        }
+        return None<T>();
+    }
+
+    /// <inheritdoc cref="SingleNotNullOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static Maybe<T> SingleNotNullOrNone<T>(this IEnumerable<T?> collection)
+        where T : struct
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if !NETSTANDARD2_0
+        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+            return None<T>();
+#endif
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var result = enumerator.Current;
+            if (!result.HasValue) continue;
+            while (enumerator.MoveNext())
+                if (enumerator.Current.HasValue)
+                    throw new InvalidOperationException("Collection contains more than one not null element");
+            return result.Value;
+        }
+        return None<T>();
+    }
 
 #endregion
 

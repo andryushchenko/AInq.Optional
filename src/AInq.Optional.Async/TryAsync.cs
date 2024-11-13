@@ -322,28 +322,6 @@ public static class TryAsync
             ? new ValueTask<Try<T>>(tryValueTask.Result.Unwrap())
             : AwaitUnwrap(tryValueTask.AsTask(), cancellation);
 
-    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
-    [PublicAPI]
-    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection,
-        [EnumeratorCancellation] CancellationToken cancellation = default)
-    {
-        _ = collection ?? throw new ArgumentNullException(nameof(collection));
-        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
-            if (@try is {Success: true})
-                yield return @try.Value;
-    }
-
-    /// <inheritdoc cref="Try.Errors{T}(IEnumerable{Try{T}})" />
-    [PublicAPI]
-    public static async IAsyncEnumerable<Exception> Errors<T>(this IAsyncEnumerable<Try<T>> collection,
-        [EnumeratorCancellation] CancellationToken cancellation = default)
-    {
-        _ = collection ?? throw new ArgumentNullException(nameof(collection));
-        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
-            if (@try is {Success: false})
-                yield return @try.Error!;
-    }
-
     private static async ValueTask<Try<T>> AwaitThrow<T>(Task<Try<T>> tryTask, CancellationToken cancellation)
         => (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Throw();
 
@@ -415,6 +393,32 @@ public static class TryAsync
         => tryValueTask.IsCompletedSuccessfully
             ? new ValueTask<Try<T>>(tryValueTask.Result.Throw(exceptionType))
             : AwaitThrow(tryValueTask.AsTask(), exceptionType, cancellation);
+
+#endregion
+
+#region Linq
+
+    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
+    [PublicAPI]
+    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            if (@try is {Success: true})
+                yield return @try.Value;
+    }
+
+    /// <inheritdoc cref="Try.Errors{T}(IEnumerable{Try{T}})" />
+    [PublicAPI]
+    public static async IAsyncEnumerable<Exception> Errors<T>(this IAsyncEnumerable<Try<T>> collection,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            if (@try is {Success: false})
+                yield return @try.Error!;
+    }
 
 #endregion
 

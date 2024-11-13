@@ -131,6 +131,10 @@ public static class Try
             ? @try.Value
             : Error<T>(@try.Error!);
 
+#endregion
+
+#region Linq
+
     /// <summary> Select existing values </summary>
     /// <param name="collection"> Try collection </param>
     /// <typeparam name="T"> Value type </typeparam>

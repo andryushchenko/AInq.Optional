@@ -236,6 +236,10 @@ public static class Either
             ? Right<TRight, TLeft>(either.Left)
             : Left<TRight, TLeft>(either.Right);
 
+#endregion
+    
+#region Linq
+
     /// <summary> Select existing left values </summary>
     /// <param name="collection"> Either collection </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>

@@ -1097,6 +1097,10 @@ public static class EitherAsync
             ? new ValueTask<Either<TRight, TLeft>>(eitherValueTask.Result.Invert())
             : AwaitInvert(eitherValueTask.AsTask(), cancellation);
 
+#endregion
+
+#region Linq
+
     /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
     [PublicAPI]
     public static async IAsyncEnumerable<TLeft> LeftValues<TLeft, TRight>(this IAsyncEnumerable<Either<TLeft, TRight>> collection,

@@ -994,6 +994,10 @@ public static class MaybeAsync
             ? new ValueTask<Maybe<T>>(maybeValueTask.Result.Unwrap())
             : AwaitUnwrap(maybeValueTask.AsTask(), cancellation);
 
+#endregion
+
+#region Linq
+
     /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})" />
     [PublicAPI]
     public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
@@ -1003,6 +1007,162 @@ public static class MaybeAsync
         await foreach (var maybe in collection.WithCancellation(cancellation).ConfigureAwait(false))
             if (maybe is {HasValue: true})
                 yield return maybe.Value;
+    }
+
+    /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        return await enumerator.MoveNextAsync().ConfigureAwait(false) ? enumerator.Current : Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
+        [InstantHandle(RequireAwait = true)] Func<T, bool> filter, CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+            if (filter.Invoke(enumerator.Current))
+                return enumerator.Current;
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
+        [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter, CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+            if (await filter.Invoke(enumerator.Current, cancellation).ConfigureAwait(false))
+                return enumerator.Current;
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> FirstNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection, CancellationToken cancellation = default)
+        where T : class
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+            if (enumerator.Current is not null)
+                return enumerator.Current;
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> FirstNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection, CancellationToken cancellation = default)
+        where T : struct
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+            if (enumerator.Current.HasValue)
+                return enumerator.Current.Value;
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        if (!await enumerator.MoveNextAsync().ConfigureAwait(false)) return Maybe.None<T>();
+        var result = enumerator.Current;
+        return await enumerator.MoveNextAsync().ConfigureAwait(false)
+            ? throw new InvalidOperationException("Collection contains more than one element")
+            : result;
+    }
+
+    /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
+        [InstantHandle(RequireAwait = true)] Func<T, bool> filter, CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+        {
+            var result = enumerator.Current;
+            if (!filter.Invoke(result)) continue;
+            while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                if (filter.Invoke(enumerator.Current))
+                    throw new InvalidOperationException("Collection contains more than one matching element");
+            return result;
+        }
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
+        [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter, CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+        {
+            var result = enumerator.Current;
+            if (!await filter.Invoke(result, cancellation).ConfigureAwait(false)) continue;
+            while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                if (await filter.Invoke(enumerator.Current, cancellation).ConfigureAwait(false))
+                    throw new InvalidOperationException("Collection contains more than one matching element");
+            return result;
+        }
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> SingleNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection,
+        CancellationToken cancellation = default)
+        where T : class
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+        {
+            var result = enumerator.Current;
+            if (result is null) continue;
+            while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                if (enumerator.Current is not null)
+                    throw new InvalidOperationException("Collection contains more than one not null element");
+            return result;
+        }
+        return Maybe.None<T>();
+    }
+
+    /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T})" />
+    [PublicAPI]
+    public static async ValueTask<Maybe<T>> SingleNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection,
+        CancellationToken cancellation = default)
+        where T : struct
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+        {
+            var result = enumerator.Current;
+            if (!result.HasValue) continue;
+            while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                if (enumerator.Current.HasValue)
+                    throw new InvalidOperationException("Collection contains more than one not null element");
+            return result.Value;
+        }
+        return Maybe.None<T>();
     }
 
 #endregion
