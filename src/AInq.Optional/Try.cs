@@ -144,6 +144,13 @@ public static class Try
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {Success: true})
            .Select(item => item.Value);
+    
+    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})"/>
+    [PublicAPI, LinqTunnel]
+    public static ParallelQuery<T> Values<T>(this ParallelQuery<Try<T>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           .Where(item => item is {Success: true})
+           .Select(item => item.Value);
 
     /// <summary> Select exceptions </summary>
     /// <param name="collection"> Try collection </param>
@@ -151,6 +158,13 @@ public static class Try
     /// <returns> Exceptions collection </returns>
     [PublicAPI, LinqTunnel]
     public static IEnumerable<Exception> Errors<T>(this IEnumerable<Try<T>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           .Where(item => item is {Success: false})
+           .Select(item => item.Error!);
+
+    /// <inheritdoc cref="Try.Errors{T}(IEnumerable{Try{T}})"/>
+    [PublicAPI, LinqTunnel]
+    public static ParallelQuery<Exception> Errors<T>(this ParallelQuery<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {Success: false})
            .Select(item => item.Error!);

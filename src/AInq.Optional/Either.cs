@@ -251,6 +251,13 @@ public static class Either
            .Where(item => item is {HasLeft: true})
            .Select(item => item.Left);
 
+    /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
+    [PublicAPI, LinqTunnel]
+    public static ParallelQuery<TLeft> LeftValues<TLeft, TRight>(this ParallelQuery<Either<TLeft, TRight>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           .Where(item => item is {HasLeft: true})
+           .Select(item => item.Left);
+
     /// <summary> Select existing right values </summary>
     /// <param name="collection"> Either collection </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
@@ -258,6 +265,13 @@ public static class Either
     /// <returns> Right values collection </returns>
     [PublicAPI, LinqTunnel]
     public static IEnumerable<TRight> RightValues<TLeft, TRight>(this IEnumerable<Either<TLeft, TRight>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           .Where(item => item is {HasRight: true})
+           .Select(item => item.Right);
+
+    /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
+    [PublicAPI, LinqTunnel]
+    public static ParallelQuery<TRight> RightValues<TLeft, TRight>(this ParallelQuery<Either<TLeft, TRight>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasRight: true})
            .Select(item => item.Right);

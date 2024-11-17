@@ -232,6 +232,13 @@ public static class Maybe
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasValue: true})
            .Select(item => item.Value);
+    
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})"/>
+    [PublicAPI, LinqTunnel]
+    public static ParallelQuery<T> Values<T>(this ParallelQuery<Maybe<T>> collection)
+        => (collection ?? throw new ArgumentNullException(nameof(collection)))
+           .Where(item => item is {HasValue: true})
+           .Select(item => item.Value);
 
     /// <summary> Get first value or none </summary>
     /// <param name="collection"> Value collection </param>
