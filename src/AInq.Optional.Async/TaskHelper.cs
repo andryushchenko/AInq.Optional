@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if NETSTANDARD2_0
+#if NETSTANDARD
 
 namespace AInq.Optional;
 
@@ -28,7 +28,11 @@ internal static class TaskHelper
     private static async Task<T> WaitWithCancellationAsync<T>(Task<T> task, CancellationToken cancellation)
     {
         var completion = new TaskCompletionSource<T>();
+#if NETSTANDARD2_1
+        await using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation));
+#else
         using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation));
+#endif
         return await (await Task.WhenAny(task, completion.Task).ConfigureAwait(false)).ConfigureAwait(false);
     }
 }

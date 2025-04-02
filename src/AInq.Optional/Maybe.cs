@@ -255,7 +255,7 @@ public static class Maybe
             case IReadOnlyList<T> readOnlyList:
                 return readOnlyList.Count == 0 ? None<T>() : readOnlyList[0];
         }
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count))
             return count == 0 ? None<T>() : collection.ElementAt(0);
 #endif
@@ -273,7 +273,7 @@ public static class Maybe
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         _ = filter ?? throw new ArgumentNullException(nameof(filter));
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
             return None<T>();
 #endif
@@ -293,7 +293,7 @@ public static class Maybe
         where T : class
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
             return None<T>();
 #endif
@@ -310,7 +310,7 @@ public static class Maybe
         where T : struct
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
             return None<T>();
 #endif
@@ -347,7 +347,7 @@ public static class Maybe
                     _ => throw new InvalidOperationException("Collection contains more than one element")
                 };
         }
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count))
             return count switch
             {
@@ -373,7 +373,7 @@ public static class Maybe
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         _ = filter ?? throw new ArgumentNullException(nameof(filter));
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
             return None<T>();
 #endif
@@ -400,7 +400,7 @@ public static class Maybe
         where T : class
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
             return None<T>();
 #endif
@@ -423,7 +423,7 @@ public static class Maybe
         where T : struct
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
         if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
             return None<T>();
 #endif
