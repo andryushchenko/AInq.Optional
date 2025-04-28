@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Packages/">
+    <Project Path="src/AInq.Optional.Async/AInq.Optional.Async.csproj" />
+    <Project Path="src/AInq.Optional/AInq.Optional.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="AInq.png" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+    <File Path="src/Shared/JetBrains.Annotations.cs" />
+  </Folder>
+</Solution>
