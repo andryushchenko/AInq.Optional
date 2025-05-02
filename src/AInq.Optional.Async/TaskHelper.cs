@@ -29,9 +29,9 @@ internal static class TaskHelper
     {
         var completion = new TaskCompletionSource<T>();
 #if NETSTANDARD2_1
-        await using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation));
+        await using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation), false);
 #else
-        using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation));
+        using var canceled = cancellation.Register(() => completion.TrySetCanceled(cancellation), false);
 #endif
         return await (await Task.WhenAny(task, completion.Task).ConfigureAwait(false)).ConfigureAwait(false);
     }
