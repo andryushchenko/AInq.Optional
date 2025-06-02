@@ -59,6 +59,18 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     [PublicAPI]
     public static implicit operator Try<T>(Exception error)
         => FromError(error);
+    
+    /// <summary> True if success </summary>
+    /// <param name="try"> Try item </param>
+    [PublicAPI]
+    public static implicit operator bool(Try<T> @try)
+        => @try.Success;
+
+    /// <summary> True if error </summary>
+    /// <param name="try"> Try item </param>
+    [PublicAPI]
+    public static bool operator !(Try<T> @try)
+        => !@try.Success;
 
     private protected abstract bool IsSuccess();
     private protected abstract T GetValue();
