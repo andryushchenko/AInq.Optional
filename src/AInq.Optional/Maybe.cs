@@ -239,6 +239,30 @@ public static class Maybe
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasValue: true})
            .Select(item => item.Value);
+    
+    /// <summary> Select existing matching values </summary>
+    /// <param name="collection"> Maybe collection </param>
+    /// <param name="filter"> Filter </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    /// <returns> Values collection </returns>
+    [PublicAPI, LinqTunnel]
+    public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> collection, [InstantHandle] Func<T, bool> filter)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        return collection.Where(item => item is {HasValue: true} && filter.Invoke(item.Value))
+                         .Select(item => item.Value);
+    }
+
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
+    [PublicAPI, LinqTunnel]
+    public static ParallelQuery<T> Values<T>(this ParallelQuery<Maybe<T>> collection, [InstantHandle] Func<T, bool> filter)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        return collection.Where(item => item is {HasValue: true} && filter.Invoke(item.Value))
+                         .Select(item => item.Value);
+    }
 
     /// <summary> Get first value or none </summary>
     /// <param name="collection"> Value collection </param>

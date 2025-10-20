@@ -1009,6 +1009,32 @@ public static class MaybeAsync
                 yield return maybe.Value;
     }
 
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
+    [PublicAPI]
+    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
+        [InstantHandle(RequireAwait = true)] Func<T, bool> filter,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        await foreach (var maybe in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            if (maybe is {HasValue: true} && filter.Invoke(maybe.Value))
+                yield return maybe.Value;
+    }
+
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
+    [PublicAPI]
+    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
+        [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        _ = filter ?? throw new ArgumentNullException(nameof(filter));
+        await foreach (var maybe in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            if (maybe is {HasValue: true} && await filter.Invoke(maybe.Value, cancellation).ConfigureAwait(false))
+                yield return maybe.Value;
+    }
+
     /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
