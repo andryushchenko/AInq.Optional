@@ -69,7 +69,7 @@ public static class Try
     public static Try<TResult> Select<T, TResult>(this Try<T> @try, [InstantHandle] Func<T, TResult> selector)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            return Error<TResult>(@try.Error!);
+            return Try<TResult>.ConvertError(@try);
         _ = selector ?? throw new ArgumentNullException(nameof(selector));
         try
         {
@@ -86,7 +86,7 @@ public static class Try
     public static Try<TResult> Select<T, TResult>(this Try<T> @try, [InstantHandle] Func<T, Try<TResult>> selector)
     {
         if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            return Error<TResult>(@try.Error!);
+            return Try<TResult>.ConvertError(@try);
         _ = selector ?? throw new ArgumentNullException(nameof(selector));
         try
         {
@@ -129,7 +129,7 @@ public static class Try
     public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? @try.Value
-            : Error<T>(@try.Error!);
+            : Try<T>.ConvertError(@try);
 
 #endregion
 
@@ -144,30 +144,13 @@ public static class Try
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {Success: true})
            .Select(item => item.Value);
-    
-    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})"/>
+
+    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
     [PublicAPI, LinqTunnel]
     public static ParallelQuery<T> Values<T>(this ParallelQuery<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {Success: true})
            .Select(item => item.Value);
-
-    /// <summary> Select exceptions </summary>
-    /// <param name="collection"> Try collection </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    /// <returns> Exceptions collection </returns>
-    [PublicAPI, LinqTunnel]
-    public static IEnumerable<Exception> Errors<T>(this IEnumerable<Try<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item is {Success: false})
-           .Select(item => item.Error!);
-
-    /// <inheritdoc cref="Try.Errors{T}(IEnumerable{Try{T}})"/>
-    [PublicAPI, LinqTunnel]
-    public static ParallelQuery<Exception> Errors<T>(this ParallelQuery<Try<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item is {Success: false})
-           .Select(item => item.Error!);
 
 #endregion
 
@@ -183,7 +166,15 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
-        else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
+        else
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
+            }
     }
 
     /// <summary> Try to execute action with additional argument </summary>
@@ -199,7 +190,15 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
-        else (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
+        else
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
+            }
     }
 
     /// <summary> Try to execute action with value </summary>
@@ -212,7 +211,7 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <summary> Try to execute action with value </summary>
@@ -228,7 +227,7 @@ public static class Try
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
             (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <summary> Try to execute action with error </summary>
@@ -238,8 +237,15 @@ public static class Try
     [PublicAPI]
     public static void DoIfError<T>(this Try<T> @try, [InstantHandle] Action<Exception> errorAction)
     {
-        if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(@try.Error!);
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success) return;
+        try
+        {
+            @try.Throw();
+        }
+        catch (Exception exception)
+        {
+            (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
+        }
     }
 
 #endregion

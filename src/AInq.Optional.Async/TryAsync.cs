@@ -19,6 +19,21 @@ namespace AInq.Optional;
 /// <summary> Try async extension </summary>
 public static class TryAsync
 {
+#region Linq
+
+    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
+    [PublicAPI]
+    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
+    {
+        _ = collection ?? throw new ArgumentNullException(nameof(collection));
+        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+            if (@try is {Success: true})
+                yield return @try.Value;
+    }
+
+#endregion
+
 #region ResultAsync
 
     /// <inheritdoc cref="Try.Result{T}(Func{T})" />
@@ -125,7 +140,7 @@ public static class TryAsync
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(@try.Value, cancellation).AsTryAsync(cancellation)
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
+            : new ValueTask<Try<TResult>>(Try<TResult>.ConvertError(@try));
 
     /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
     [PublicAPI, Pure]
@@ -134,7 +149,7 @@ public static class TryAsync
         CancellationToken cancellation = default)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
             ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(@try.Value, cancellation)
-            : new ValueTask<Try<TResult>>(Try.Error<TResult>(@try.Error!));
+            : new ValueTask<Try<TResult>>(Try<TResult>.ConvertError(@try));
 
     private static async ValueTask<Try<TResult>> AwaitSelectAsync<T, TResult>(Task<Try<T>> tryTask,
         Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation)
@@ -396,32 +411,6 @@ public static class TryAsync
 
 #endregion
 
-#region Linq
-
-    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
-    [PublicAPI]
-    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection,
-        [EnumeratorCancellation] CancellationToken cancellation = default)
-    {
-        _ = collection ?? throw new ArgumentNullException(nameof(collection));
-        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
-            if (@try is {Success: true})
-                yield return @try.Value;
-    }
-
-    /// <inheritdoc cref="Try.Errors{T}(IEnumerable{Try{T}})" />
-    [PublicAPI]
-    public static async IAsyncEnumerable<Exception> Errors<T>(this IAsyncEnumerable<Try<T>> collection,
-        [EnumeratorCancellation] CancellationToken cancellation = default)
-    {
-        _ = collection ?? throw new ArgumentNullException(nameof(collection));
-        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
-            if (@try is {Success: false})
-                yield return @try.Error!;
-    }
-
-#endregion
-
 #region Do
 
     private static async ValueTask AwaitDo<T>(Task<Try<T>> tryTask, Action<T> valueAction, Action<Exception> errorAction,
@@ -596,9 +585,16 @@ public static class TryAsync
                   .Invoke(@try.Value, cancellation)
                   .ConfigureAwait(false);
         else
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
-                  .ConfigureAwait(false);
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
+                      .Invoke(exception, cancellation)
+                      .ConfigureAwait(false);
+            }
     }
 
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},bool)" />
@@ -610,7 +606,7 @@ public static class TryAsync
             await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
                   .Invoke(@try.Value, cancellation)
                   .ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
@@ -618,10 +614,17 @@ public static class TryAsync
     public static async Task DoIfErrorAsync<T>(this Try<T> @try,
         [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> asyncErrorAction, CancellationToken cancellation = default)
     {
-        if (!(@try ?? throw new ArgumentNullException(nameof(@try))).Success)
+        if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success) return;
+        try
+        {
+            @try.Throw();
+        }
+        catch (Exception exception)
+        {
             await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
+                  .Invoke(exception, cancellation)
                   .ConfigureAwait(false);
+        }
     }
 
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
@@ -638,9 +641,16 @@ public static class TryAsync
                   .Invoke(@try.Value, cancellation)
                   .ConfigureAwait(false);
         else
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
-                  .ConfigureAwait(false);
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
+                      .Invoke(exception, cancellation)
+                      .ConfigureAwait(false);
+            }
     }
 
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},bool)" />
@@ -656,7 +666,7 @@ public static class TryAsync
             await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
                   .Invoke(@try.Value, cancellation)
                   .ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
@@ -667,10 +677,17 @@ public static class TryAsync
         var @try = (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? tryTask.Result
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
-        if (!@try.Success)
+        if (@try.Success) return;
+        try
+        {
+            @try.Throw();
+        }
+        catch (Exception exception)
+        {
             await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
+                  .Invoke(exception, cancellation)
                   .ConfigureAwait(false);
+        }
     }
 
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
@@ -687,9 +704,16 @@ public static class TryAsync
                   .Invoke(@try.Value, cancellation)
                   .ConfigureAwait(false);
         else
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
-                  .ConfigureAwait(false);
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
+                      .Invoke(exception, cancellation)
+                      .ConfigureAwait(false);
+            }
     }
 
     /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},bool)" />
@@ -705,7 +729,7 @@ public static class TryAsync
             await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
                   .Invoke(@try.Value, cancellation)
                   .ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <inheritdoc cref="Try.DoIfError{T}(Try{T},Action{Exception})" />
@@ -716,10 +740,17 @@ public static class TryAsync
         var @try = tryValueTask.IsCompletedSuccessfully
             ? tryValueTask.Result
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
-        if (!@try.Success)
+        if (@try.Success) return;
+        try
+        {
+            @try.Throw();
+        }
+        catch (Exception exception)
+        {
             await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
+                  .Invoke(exception, cancellation)
                   .ConfigureAwait(false);
+        }
     }
 
 #endregion
@@ -738,9 +769,16 @@ public static class TryAsync
                   .Invoke(@try.Value, argument, cancellation)
                   .ConfigureAwait(false);
         else
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
-                  .ConfigureAwait(false);
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
+                      .Invoke(exception, cancellation)
+                      .ConfigureAwait(false);
+            }
     }
 
     /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
@@ -753,7 +791,7 @@ public static class TryAsync
             await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
                   .Invoke(@try.Value, argument, cancellation)
                   .ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
@@ -771,9 +809,16 @@ public static class TryAsync
                   .Invoke(@try.Value, argument, cancellation)
                   .ConfigureAwait(false);
         else
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
-                  .ConfigureAwait(false);
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
+                      .Invoke(exception, cancellation)
+                      .ConfigureAwait(false);
+            }
     }
 
     /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
@@ -789,7 +834,7 @@ public static class TryAsync
             await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
                   .Invoke(@try.Value, argument, cancellation)
                   .ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
     /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
@@ -807,9 +852,16 @@ public static class TryAsync
                   .Invoke(@try.Value, argument, cancellation)
                   .ConfigureAwait(false);
         else
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(@try.Error!, cancellation)
-                  .ConfigureAwait(false);
+            try
+            {
+                @try.Throw();
+            }
+            catch (Exception exception)
+            {
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
+                      .Invoke(exception, cancellation)
+                      .ConfigureAwait(false);
+            }
     }
 
     /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
@@ -825,7 +877,7 @@ public static class TryAsync
             await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
                   .Invoke(@try.Value, argument, cancellation)
                   .ConfigureAwait(false);
-        else if (throwIfError) throw @try.Error!;
+        else if (throwIfError) @try.Throw();
     }
 
 #endregion

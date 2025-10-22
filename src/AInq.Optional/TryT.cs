@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.ExceptionServices;
+
 namespace AInq.Optional;
 
 /// <summary> Value-or-error type </summary>
@@ -24,11 +26,11 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     /// <summary> Item value (if success) </summary>
     [PublicAPI]
-    public T Value => IsSuccess() ? GetValue() : throw GetError();
-
+    public T Value => GetValue();
+    
     /// <summary> Exception or null if success </summary>
     [PublicAPI]
-    public Exception? Error => IsSuccess() ? null : GetError();
+    public Exception? Error => GetError()?.SourceException;
 
     /// <inheritdoc />
     public bool Equals(T? other)
@@ -46,7 +48,15 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     /// <summary> Create Try from exception </summary>
     /// <param name="exception"> Exception </param>
     public static Try<T> FromError(Exception exception)
-        => new TryError(exception is AggregateException {InnerExceptions.Count: 1} aggregate ? aggregate.InnerExceptions[0] : exception);
+        => new TryError(exception);
+
+    /// <summary> Create Try with error from other </summary>
+    /// <param name="source"> Source item </param>
+    /// <typeparam name="TSource"> Source value type </typeparam>
+    /// <exception cref="ArgumentException"> Thrown when source item is success </exception>
+    /// <remarks> <b>FOR INTERNAL USE ONLY</b> </remarks>
+    public static Try<T> ConvertError<TSource>(Try<TSource> source)
+        => new TryError(source.GetError() ?? throw new ArgumentException("Source item doesn't contain error", nameof(source)));
 
     /// <summary> Cast value to Try </summary>
     /// <param name="value"> Value </param>
@@ -74,40 +84,22 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
     private protected abstract bool IsSuccess();
     private protected abstract T GetValue();
-    private protected abstract Exception GetError();
+    private protected abstract ExceptionDispatchInfo? GetError();
 
     /// <summary> Throw if contains exception </summary>
-    [PublicAPI, AssertionMethod]
-    public Try<T> Throw()
-    {
-        if (!IsSuccess()) throw GetError();
-        return this;
-    }
+    [PublicAPI]
+    public abstract Try<T> Throw();
 
     // <summary> Throw if contains target type exception </summary>
     /// <param name="exceptionType"> Target exception type </param>
-    [PublicAPI, AssertionMethod]
-    public Try<T> Throw(Type exceptionType)
-    {
-        if (IsSuccess()) return this;
-        var exception = GetError();
-        if (exception.GetType() == exceptionType) throw exception;
-        return this;
-    }
+    [PublicAPI]
+    public abstract Try<T> Throw(Type exceptionType);
 
     /// <summary> Throw if contains target type exception </summary>
     /// <typeparam name="TException"> Target exception type </typeparam>
-    [PublicAPI, AssertionMethod]
-    public Try<T> Throw<TException>()
-        where TException : Exception
-    {
-        if (!IsSuccess() && GetError() is TException exception) throw exception;
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override string? ToString()
-        => Success ? Value?.ToString() : Error?.ToString();
+    [PublicAPI]
+    public abstract Try<T> Throw<TException>()
+        where TException : Exception;
 
     /// <inheritdoc />
     public override int GetHashCode()
@@ -171,24 +163,68 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
         private protected override T GetValue()
             => _value;
 
-        private protected override Exception GetError()
-            => null!;
+        private protected override ExceptionDispatchInfo? GetError()
+            => null;
+
+        public override Try<T> Throw()
+            => this;
+
+        public override Try<T> Throw(Type exceptionType)
+            => this;
+
+        public override Try<T> Throw<TException>()
+            => this;
+        
+        /// <inheritdoc />
+        public override string? ToString()
+            => Value?.ToString();
     }
 
     private sealed class TryError : Try<T>
     {
-        private readonly Exception _error;
+        private readonly ExceptionDispatchInfo _error;
 
         internal TryError(Exception error)
+            => _error = ExceptionDispatchInfo.Capture(error);
+        
+        internal TryError(ExceptionDispatchInfo error)
             => _error = error;
 
         private protected override bool IsSuccess()
             => false;
 
         private protected override T GetValue()
-            => throw _error;
+        {
+            _error.Throw();
+            return default!;
+        }
 
-        private protected override Exception GetError()
+        private protected override ExceptionDispatchInfo GetError()
             => _error;
+        
+        [AssertionMethod]
+        public override Try<T> Throw()
+        {
+            _error.Throw();
+            return this;
+        }
+
+        [AssertionMethod]
+        public override Try<T> Throw(Type exceptionType)
+        {
+            if (_error.SourceException.GetType() == exceptionType) _error.Throw();
+            return this;
+        }
+        
+        [AssertionMethod]
+        public override Try<T> Throw<TException>()
+        {
+            if (_error.SourceException is TException) _error.Throw();
+            return this;
+        }
+        
+        /// <inheritdoc />
+        public override string? ToString()
+            => _error.SourceException.ToString();
     }
 }
