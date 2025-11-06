@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.0-rc.2.25502.107" />
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
         <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
     </ItemGroup>
 
