@@ -108,9 +108,7 @@ public static class Try
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Try<T> Or<T>(this Try<T> @try, Try<T> other)
-        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-            ? @try
-            : other ?? throw new ArgumentNullException(nameof(other));
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? @try : other ?? throw new ArgumentNullException(nameof(other));
 
     /// <summary> Get value form this item or other </summary>
     /// <param name="try"> Try item </param>
@@ -127,9 +125,7 @@ public static class Try
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
-        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-            ? @try.Value
-            : Try<T>.ConvertError(@try);
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? @try.Value : Try<T>.ConvertError(@try);
 
 #endregion
 
@@ -141,16 +137,12 @@ public static class Try
     /// <returns> Values collection </returns>
     [PublicAPI, LinqTunnel]
     public static IEnumerable<T> Values<T>(this IEnumerable<Try<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item is {Success: true})
-           .Select(item => item.Value);
+        => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {Success: true}).Select(item => item.Value);
 
     /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
     [PublicAPI, LinqTunnel]
     public static ParallelQuery<T> Values<T>(this ParallelQuery<Try<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item is {Success: true})
-           .Select(item => item.Value);
+        => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {Success: true}).Select(item => item.Value);
 
 #endregion
 

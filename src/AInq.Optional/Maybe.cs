@@ -143,9 +143,10 @@ public static class Maybe
     public static TResult SelectOrDefault<T, TResult>(this Maybe<T> maybe, [InstantHandle] Func<T, Maybe<TResult>> selector,
         [InstantHandle] Func<TResult> defaultGenerator)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-            ? (selector ?? throw new ArgumentNullException(nameof(selector)))
-              .Invoke(maybe.Value)
-              .ValueOrDefault(defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)))
+            ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
+                                                                             .ValueOrDefault(defaultGenerator
+                                                                                             ?? throw new ArgumentNullException(
+                                                                                                 nameof(defaultGenerator)))
             : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
 #endregion
@@ -187,9 +188,7 @@ public static class Maybe
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Maybe<T> Or<T>(this Maybe<T> maybe, Maybe<T> other)
-        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-            ? maybe
-            : other ?? throw new ArgumentNullException(nameof(other));
+        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe : other ?? throw new ArgumentNullException(nameof(other));
 
     /// <summary> Get value form this item or other </summary>
     /// <param name="maybe"> Maybe item </param>
@@ -229,16 +228,12 @@ public static class Maybe
     /// <returns> Values collection </returns>
     [PublicAPI, LinqTunnel]
     public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item is {HasValue: true})
-           .Select(item => item.Value);
+        => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasValue: true}).Select(item => item.Value);
 
     /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})" />
     [PublicAPI, LinqTunnel]
     public static ParallelQuery<T> Values<T>(this ParallelQuery<Maybe<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection)))
-           .Where(item => item is {HasValue: true})
-           .Select(item => item.Value);
+        => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasValue: true}).Select(item => item.Value);
 
     /// <summary> Select existing matching values </summary>
     /// <param name="collection"> Maybe collection </param>
@@ -250,8 +245,7 @@ public static class Maybe
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         _ = filter ?? throw new ArgumentNullException(nameof(filter));
-        return collection.Where(item => item is {HasValue: true} && filter.Invoke(item.Value))
-                         .Select(item => item.Value);
+        return collection.Where(item => item is {HasValue: true} && filter.Invoke(item.Value)).Select(item => item.Value);
     }
 
     /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
@@ -260,8 +254,7 @@ public static class Maybe
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         _ = filter ?? throw new ArgumentNullException(nameof(filter));
-        return collection.Where(item => item is {HasValue: true} && filter.Invoke(item.Value))
-                         .Select(item => item.Value);
+        return collection.Where(item => item is {HasValue: true} && filter.Invoke(item.Value)).Select(item => item.Value);
     }
 
     /// <summary> Get first value or none </summary>

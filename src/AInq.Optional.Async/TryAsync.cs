@@ -54,9 +54,7 @@ public static class TryAsync
     /// <inheritdoc cref="Try.Result{T}(Func{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Try<T>> ResultAsync<T>(ValueTask<T> valueTask, CancellationToken cancellation = default)
-        => valueTask.IsCompletedSuccessfully
-            ? new ValueTask<Try<T>>(Try.Value(valueTask.Result))
-            : ResultAsync(valueTask.AsTask(), cancellation);
+        => valueTask.IsCompletedSuccessfully ? new ValueTask<Try<T>>(Try.Value(valueTask.Result)) : ResultAsync(valueTask.AsTask(), cancellation);
 
     /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken)" />
     [PublicAPI, Pure]
@@ -581,9 +579,8 @@ public static class TryAsync
         [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> asyncErrorAction, CancellationToken cancellation = default)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
             try
             {
@@ -591,9 +588,8 @@ public static class TryAsync
             }
             catch (Exception exception)
             {
-                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                      .Invoke(exception, cancellation)
-                      .ConfigureAwait(false);
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                    .ConfigureAwait(false);
             }
     }
 
@@ -603,9 +599,8 @@ public static class TryAsync
         bool throwIfError = false, CancellationToken cancellation = default)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else if (throwIfError) @try.Throw();
     }
 
@@ -621,9 +616,8 @@ public static class TryAsync
         }
         catch (Exception exception)
         {
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(exception, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                                                                                                 .ConfigureAwait(false);
         }
     }
 
@@ -637,9 +631,8 @@ public static class TryAsync
             ? tryTask.Result
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
             try
             {
@@ -647,9 +640,8 @@ public static class TryAsync
             }
             catch (Exception exception)
             {
-                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                      .Invoke(exception, cancellation)
-                      .ConfigureAwait(false);
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                    .ConfigureAwait(false);
             }
     }
 
@@ -663,9 +655,8 @@ public static class TryAsync
             ? tryTask.Result
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else if (throwIfError) @try.Throw();
     }
 
@@ -684,9 +675,8 @@ public static class TryAsync
         }
         catch (Exception exception)
         {
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(exception, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                                                                                                 .ConfigureAwait(false);
         }
     }
 
@@ -700,9 +690,8 @@ public static class TryAsync
             ? tryValueTask.Result
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
             try
             {
@@ -710,9 +699,8 @@ public static class TryAsync
             }
             catch (Exception exception)
             {
-                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                      .Invoke(exception, cancellation)
-                      .ConfigureAwait(false);
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                    .ConfigureAwait(false);
             }
     }
 
@@ -726,9 +714,8 @@ public static class TryAsync
             ? tryValueTask.Result
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else if (throwIfError) @try.Throw();
     }
 
@@ -747,9 +734,8 @@ public static class TryAsync
         }
         catch (Exception exception)
         {
-            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                  .Invoke(exception, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                                                                                                 .ConfigureAwait(false);
         }
     }
 
@@ -765,9 +751,8 @@ public static class TryAsync
         CancellationToken cancellation = default)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
             try
             {
@@ -775,9 +760,8 @@ public static class TryAsync
             }
             catch (Exception exception)
             {
-                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                      .Invoke(exception, cancellation)
-                      .ConfigureAwait(false);
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                    .ConfigureAwait(false);
             }
     }
 
@@ -788,9 +772,8 @@ public static class TryAsync
         bool throwIfError = false, CancellationToken cancellation = default)
     {
         if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else if (throwIfError) @try.Throw();
     }
 
@@ -805,9 +788,8 @@ public static class TryAsync
             ? tryTask.Result
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
             try
             {
@@ -815,9 +797,8 @@ public static class TryAsync
             }
             catch (Exception exception)
             {
-                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                      .Invoke(exception, cancellation)
-                      .ConfigureAwait(false);
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                    .ConfigureAwait(false);
             }
     }
 
@@ -831,9 +812,8 @@ public static class TryAsync
             ? tryTask.Result
             : await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else if (throwIfError) @try.Throw();
     }
 
@@ -848,9 +828,8 @@ public static class TryAsync
             ? tryValueTask.Result
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
             try
             {
@@ -858,9 +837,8 @@ public static class TryAsync
             }
             catch (Exception exception)
             {
-                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction)))
-                      .Invoke(exception, cancellation)
-                      .ConfigureAwait(false);
+                await (asyncErrorAction ?? throw new ArgumentNullException(nameof(asyncErrorAction))).Invoke(exception, cancellation)
+                    .ConfigureAwait(false);
             }
     }
 
@@ -874,9 +852,8 @@ public static class TryAsync
             ? tryValueTask.Result
             : await tryValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (@try.Success)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(@try.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(@try.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else if (throwIfError) @try.Throw();
     }
 

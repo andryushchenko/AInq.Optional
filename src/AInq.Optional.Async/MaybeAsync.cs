@@ -57,9 +57,7 @@ public static class MaybeAsync
     public static ValueTask<Maybe<T>> ValueIfNotNullAsync<T>(Task<T?> task, CancellationToken cancellation = default)
         where T : class
         => (task ?? throw new ArgumentNullException(nameof(task))).Status is TaskStatus.RanToCompletion
-            ? task.Result is not null
-                ? new ValueTask<Maybe<T>>(Maybe.Value(task.Result))
-                : new ValueTask<Maybe<T>>(Maybe.None<T>())
+            ? task.Result is not null ? new ValueTask<Maybe<T>>(Maybe.Value(task.Result)) : new ValueTask<Maybe<T>>(Maybe.None<T>())
             : FromTaskIfNotNull(task.WaitAsync(cancellation));
 
     /// <inheritdoc cref="Maybe.ValueIfNotNull{T}(T)" />
@@ -67,9 +65,7 @@ public static class MaybeAsync
     public static ValueTask<Maybe<T>> ValueIfNotNullAsync<T>(ValueTask<T?> valueTask, CancellationToken cancellation = default)
         where T : class
         => valueTask.IsCompletedSuccessfully
-            ? valueTask.Result is not null
-                ? new ValueTask<Maybe<T>>(Maybe.Value(valueTask.Result))
-                : new ValueTask<Maybe<T>>(Maybe.None<T>())
+            ? valueTask.Result is not null ? new ValueTask<Maybe<T>>(Maybe.Value(valueTask.Result)) : new ValueTask<Maybe<T>>(Maybe.None<T>())
             : FromTaskIfNotNull(valueTask.AsTask().WaitAsync(cancellation));
 
     /// <inheritdoc cref="Maybe.ValueIfNotNull{T}(T)" />
@@ -77,9 +73,7 @@ public static class MaybeAsync
     public static ValueTask<Maybe<T>> ValueIfNotNullAsync<T>(Task<T?> task, CancellationToken cancellation = default)
         where T : struct
         => (task ?? throw new ArgumentNullException(nameof(task))).Status is TaskStatus.RanToCompletion
-            ? task.Result.HasValue
-                ? new ValueTask<Maybe<T>>(Maybe.Value(task.Result.Value))
-                : new ValueTask<Maybe<T>>(Maybe.None<T>())
+            ? task.Result.HasValue ? new ValueTask<Maybe<T>>(Maybe.Value(task.Result.Value)) : new ValueTask<Maybe<T>>(Maybe.None<T>())
             : FromTaskIfNotNull(task.WaitAsync(cancellation));
 
     /// <inheritdoc cref="Maybe.ValueIfNotNull{T}(T)" />
@@ -87,9 +81,7 @@ public static class MaybeAsync
     public static ValueTask<Maybe<T>> ValueIfNotNullAsync<T>(ValueTask<T?> valueTask, CancellationToken cancellation = default)
         where T : struct
         => valueTask.IsCompletedSuccessfully
-            ? valueTask.Result.HasValue
-                ? new ValueTask<Maybe<T>>(Maybe.Value(valueTask.Result.Value))
-                : new ValueTask<Maybe<T>>(Maybe.None<T>())
+            ? valueTask.Result.HasValue ? new ValueTask<Maybe<T>>(Maybe.Value(valueTask.Result.Value)) : new ValueTask<Maybe<T>>(Maybe.None<T>())
             : FromTaskIfNotNull(valueTask.AsTask().WaitAsync(cancellation));
 
     /// <inheritdoc cref="ValueAsync{T}(Task{T},CancellationToken)" />
@@ -408,9 +400,7 @@ public static class MaybeAsync
         if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
             return new ValueTask<TResult?>(default(TResult));
         var selected = (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation);
-        return selected.IsCompletedSuccessfully
-            ? new ValueTask<TResult?>(selected.Result)
-            : AwaitNullable(selected);
+        return selected.IsCompletedSuccessfully ? new ValueTask<TResult?>(selected.Result) : AwaitNullable(selected);
     }
 
     private static async ValueTask<TResult?> AwaitSelectOrDefaultAsync<T, TResult>(Task<Maybe<T>> maybeTask,
@@ -654,9 +644,12 @@ public static class MaybeAsync
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
         [InstantHandle(RequireAwait = true)] Func<TResult> defaultGenerator, CancellationToken cancellation = default)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)))
-              .Invoke(maybe.Value, cancellation)
-              .ValueOrDefault(defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)), cancellation)
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+                                                                                       .ValueOrDefault(
+                                                                                           defaultGenerator
+                                                                                           ?? throw new ArgumentNullException(
+                                                                                               nameof(defaultGenerator)),
+                                                                                           cancellation)
             : new ValueTask<TResult>((defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke());
 
     private static async ValueTask<TResult> AwaitSelectOrDefaultAsync<T, TResult>(Task<Maybe<T>> maybeTask,
@@ -699,9 +692,12 @@ public static class MaybeAsync
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TResult>> asyncDefaultGenerator,
         CancellationToken cancellation = default)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)))
-              .Invoke(maybe.Value, cancellation)
-              .ValueOrDefaultAsync(asyncDefaultGenerator ?? throw new ArgumentNullException(nameof(asyncDefaultGenerator)), cancellation)
+            ? (asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector))).Invoke(maybe.Value, cancellation)
+                                                                                       .ValueOrDefaultAsync(
+                                                                                           asyncDefaultGenerator
+                                                                                           ?? throw new ArgumentNullException(
+                                                                                               nameof(asyncDefaultGenerator)),
+                                                                                           cancellation)
             : (asyncDefaultGenerator ?? throw new ArgumentNullException(nameof(asyncDefaultGenerator))).Invoke(cancellation);
 
     private static async ValueTask<TResult> AwaitSelectOrDefaultAsync<T, TResult>(Task<Maybe<T>> maybeTask,
@@ -896,8 +892,7 @@ public static class MaybeAsync
 
     private static async ValueTask<Maybe<T>> AwaitOrAsync<T>(Task<Maybe<T>> maybeTask,
         Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator, CancellationToken cancellation)
-        => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).OrAsync(asyncOtherGenerator, cancellation)
-                                                                                .ConfigureAwait(false);
+        => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).OrAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
 
     /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
@@ -952,9 +947,7 @@ public static class MaybeAsync
     {
         if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue) return new ValueTask<Maybe<T>>(Maybe.None<T>());
         var result = (asyncFilter ?? throw new ArgumentNullException(nameof(asyncFilter))).Invoke(maybe.Value, cancellation);
-        return result.IsCompletedSuccessfully
-            ? new ValueTask<Maybe<T>>(result.Result ? maybe : Maybe.None<T>())
-            : AwaitFiltered(maybe, result);
+        return result.IsCompletedSuccessfully ? new ValueTask<Maybe<T>>(result.Result ? maybe : Maybe.None<T>()) : AwaitFiltered(maybe, result);
     }
 
     private static async ValueTask<Maybe<T>> AwaitFilterAsync<T>(Task<Maybe<T>> maybeTask, Func<T, CancellationToken, ValueTask<bool>> asyncFilter,
@@ -1012,8 +1005,7 @@ public static class MaybeAsync
     /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
     [PublicAPI]
     public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
-        [InstantHandle(RequireAwait = true)] Func<T, bool> filter,
-        [EnumeratorCancellation] CancellationToken cancellation = default)
+        [InstantHandle(RequireAwait = true)] Func<T, bool> filter, [EnumeratorCancellation] CancellationToken cancellation = default)
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         _ = filter ?? throw new ArgumentNullException(nameof(filter));
@@ -1195,8 +1187,7 @@ public static class MaybeAsync
 
 #region Do
 
-    private static async ValueTask AwaitDo<T>(Task<Maybe<T>> maybeTask, Action<T> valueAction, Action emptyAction,
-        CancellationToken cancellation)
+    private static async ValueTask AwaitDo<T>(Task<Maybe<T>> maybeTask, Action<T> valueAction, Action emptyAction, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, emptyAction);
 
     /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
@@ -1274,9 +1265,7 @@ public static class MaybeAsync
         CancellationToken cancellation = default)
     {
         if (!maybeValueTask.IsCompletedSuccessfully)
-            return AwaitDoIfEmpty(maybeValueTask.AsTask(),
-                emptyAction ?? throw new ArgumentNullException(nameof(emptyAction)),
-                cancellation);
+            return AwaitDoIfEmpty(maybeValueTask.AsTask(), emptyAction ?? throw new ArgumentNullException(nameof(emptyAction)), cancellation);
         maybeValueTask.Result.DoIfEmpty(emptyAction ?? throw new ArgumentNullException(nameof(emptyAction)));
         return default;
     }
@@ -1285,8 +1274,7 @@ public static class MaybeAsync
 
 #region DoWithArgument
 
-    private static async ValueTask AwaitDo<T, TArgument>(Task<Maybe<T>> maybeTask, Action<T, TArgument> valueAction,
-        Action<TArgument> emptyAction,
+    private static async ValueTask AwaitDo<T, TArgument>(Task<Maybe<T>> maybeTask, Action<T, TArgument> valueAction, Action<TArgument> emptyAction,
         TArgument argument, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, emptyAction, argument);
 
@@ -1346,10 +1334,7 @@ public static class MaybeAsync
         [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction, TArgument argument, CancellationToken cancellation = default)
     {
         if (!maybeValueTask.IsCompletedSuccessfully)
-            return AwaitDo(maybeValueTask.AsTask(),
-                valueAction ?? throw new ArgumentNullException(nameof(valueAction)),
-                argument,
-                cancellation);
+            return AwaitDo(maybeValueTask.AsTask(), valueAction ?? throw new ArgumentNullException(nameof(valueAction)), argument, cancellation);
         maybeValueTask.Result.Do(valueAction ?? throw new ArgumentNullException(nameof(valueAction)), argument);
         return default;
     }
@@ -1393,9 +1378,8 @@ public static class MaybeAsync
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, Task> asyncEmptyAction, CancellationToken cancellation = default)
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
@@ -1405,9 +1389,8 @@ public static class MaybeAsync
         CancellationToken cancellation = default)
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
@@ -1429,9 +1412,8 @@ public static class MaybeAsync
             ? maybeTask.Result
             : await maybeTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
@@ -1444,9 +1426,8 @@ public static class MaybeAsync
             ? maybeTask.Result
             : await maybeTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
@@ -1471,9 +1452,8 @@ public static class MaybeAsync
             ? maybeValueTask.Result
             : await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
@@ -1486,9 +1466,8 @@ public static class MaybeAsync
             ? maybeValueTask.Result
             : await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
@@ -1515,13 +1494,11 @@ public static class MaybeAsync
         CancellationToken cancellation = default)
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
-            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction)))
-                  .Invoke(argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
@@ -1531,9 +1508,8 @@ public static class MaybeAsync
         CancellationToken cancellation = default)
     {
         if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
@@ -1543,9 +1519,8 @@ public static class MaybeAsync
         CancellationToken cancellation = default)
     {
         if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction)))
-                  .Invoke(argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
@@ -1559,13 +1534,11 @@ public static class MaybeAsync
             ? maybeTask.Result
             : await maybeTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
-            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction)))
-                  .Invoke(argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
@@ -1578,9 +1551,8 @@ public static class MaybeAsync
             ? maybeTask.Result
             : await maybeTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
@@ -1593,9 +1565,8 @@ public static class MaybeAsync
             ? maybeTask.Result
             : await maybeTask.WaitAsync(cancellation).ConfigureAwait(false);
         if (!maybe.HasValue)
-            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction)))
-                  .Invoke(argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
@@ -1609,13 +1580,11 @@ public static class MaybeAsync
             ? maybeValueTask.Result
             : await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
         else
-            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction)))
-                  .Invoke(argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
@@ -1628,9 +1597,8 @@ public static class MaybeAsync
             ? maybeValueTask.Result
             : await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (maybe.HasValue)
-            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction)))
-                  .Invoke(maybe.Value, argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncValueAction ?? throw new ArgumentNullException(nameof(asyncValueAction))).Invoke(maybe.Value, argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
@@ -1643,9 +1611,8 @@ public static class MaybeAsync
             ? maybeValueTask.Result
             : await maybeValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
         if (!maybe.HasValue)
-            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction)))
-                  .Invoke(argument, cancellation)
-                  .ConfigureAwait(false);
+            await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(argument, cancellation)
+                                                                                                 .ConfigureAwait(false);
     }
 
 #endregion

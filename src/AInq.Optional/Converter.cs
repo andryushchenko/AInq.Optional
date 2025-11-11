@@ -26,9 +26,7 @@ public static class Converter
     /// <returns> Maybe with left value </returns>
     [PublicAPI, Pure]
     public static Maybe<TLeft> MaybeLeft<TLeft, TRight>(this Either<TLeft, TRight> either)
-        => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
-            ? Maybe.Value(either.Left)
-            : Maybe.None<TLeft>();
+        => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft ? Maybe.Value(either.Left) : Maybe.None<TLeft>();
 
     /// <summary> Get right value or none </summary>
     /// <param name="either"> Either source </param>
@@ -37,18 +35,14 @@ public static class Converter
     /// <returns> Maybe with right value </returns>
     [PublicAPI, Pure]
     public static Maybe<TRight> MaybeRight<TLeft, TRight>(this Either<TLeft, TRight> either)
-        => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
-            ? Maybe.Value(either.Right)
-            : Maybe.None<TRight>();
+        => (either ?? throw new ArgumentNullException(nameof(either))).HasRight ? Maybe.Value(either.Right) : Maybe.None<TRight>();
 
     /// <summary> Convert <see cref="Try{T}" /> to <see cref="Maybe{T}" /> </summary>
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Maybe<T> AsMaybe<T>(this Try<T> @try)
-        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-            ? Maybe.Value(@try.Value)
-            : Maybe.None<T>();
+        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? Maybe.Value(@try.Value) : Maybe.None<T>();
 
 #endregion
 
