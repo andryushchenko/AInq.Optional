@@ -27,7 +27,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     /// <summary> Item value (if success) </summary>
     [PublicAPI]
     public T Value => GetValue();
-    
+
     /// <summary> Exception or null if success </summary>
     [PublicAPI]
     public Exception? Error => GetError()?.SourceException;
@@ -54,7 +54,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     /// <param name="source"> Source item </param>
     /// <typeparam name="TSource"> Source value type </typeparam>
     /// <exception cref="ArgumentException"> Thrown when source item is success </exception>
-    /// <remarks> <b>FOR INTERNAL USE ONLY</b> </remarks>
+    /// <remarks> <b> FOR INTERNAL USE ONLY </b> </remarks>
     public static Try<T> ConvertError<TSource>(Try<TSource> source)
         => new TryError(source.GetError() ?? throw new ArgumentException("Source item doesn't contain error", nameof(source)));
 
@@ -69,7 +69,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     [PublicAPI]
     public static implicit operator Try<T>(Exception error)
         => FromError(error);
-    
+
     /// <summary> True if success </summary>
     /// <param name="try"> Try item </param>
     [PublicAPI]
@@ -174,7 +174,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
         public override Try<T> Throw<TException>()
             => this;
-        
+
         /// <inheritdoc />
         public override string? ToString()
             => Value?.ToString();
@@ -186,7 +186,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
         internal TryError(Exception error)
             => _error = ExceptionDispatchInfo.Capture(error);
-        
+
         internal TryError(ExceptionDispatchInfo error)
             => _error = error;
 
@@ -201,7 +201,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
 
         private protected override ExceptionDispatchInfo GetError()
             => _error;
-        
+
         [AssertionMethod]
         public override Try<T> Throw()
         {
@@ -215,14 +215,14 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
             if (_error.SourceException.GetType() == exceptionType) _error.Throw();
             return this;
         }
-        
+
         [AssertionMethod]
         public override Try<T> Throw<TException>()
         {
             if (_error.SourceException is TException) _error.Throw();
             return this;
         }
-        
+
         /// <inheritdoc />
         public override string? ToString()
             => _error.SourceException.ToString();

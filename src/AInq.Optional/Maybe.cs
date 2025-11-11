@@ -232,14 +232,14 @@ public static class Maybe
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasValue: true})
            .Select(item => item.Value);
-    
-    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})"/>
+
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})" />
     [PublicAPI, LinqTunnel]
     public static ParallelQuery<T> Values<T>(this ParallelQuery<Maybe<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection)))
            .Where(item => item is {HasValue: true})
            .Select(item => item.Value);
-    
+
     /// <summary> Select existing matching values </summary>
     /// <param name="collection"> Maybe collection </param>
     /// <param name="filter"> Filter </param>
