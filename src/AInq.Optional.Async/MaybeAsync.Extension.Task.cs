@@ -358,7 +358,7 @@ public static partial class MaybeAsync
 
 #region Do
 
-        /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},)" />
+        /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
         [PublicAPI]
         public ValueTask Do([InstantHandle(RequireAwait = true)] Action<T> valueAction, [InstantHandle(RequireAwait = true)] Action emptyAction,
             CancellationToken cancellation = default)

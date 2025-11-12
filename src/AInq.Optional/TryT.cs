@@ -224,7 +224,7 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
         }
 
         /// <inheritdoc />
-        public override string? ToString()
+        public override string ToString()
             => _error.SourceException.ToString();
     }
 }

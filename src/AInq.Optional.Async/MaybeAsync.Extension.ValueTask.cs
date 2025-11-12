@@ -24,9 +24,9 @@ public static partial class MaybeAsync
 
         /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},TOther)" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOthet>> Or<TOthet>([NoEnumeration] TOthet other, CancellationToken cancellation = default)
+        public ValueTask<Either<T, TOther>> Or<TOther>([NoEnumeration] TOther other, CancellationToken cancellation = default)
             => maybeValueTask.IsCompletedSuccessfully
-                ? new ValueTask<Either<T, TOthet>>(maybeValueTask.Result.Or(other))
+                ? new ValueTask<Either<T, TOther>>(maybeValueTask.Result.Or(other))
                 : AwaitOr(maybeValueTask.AsTask(), other, cancellation);
 
         /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},Func{TOther})" />
