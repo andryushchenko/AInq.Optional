@@ -1037,7 +1037,7 @@ public static class MaybeAsync
 
     /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
-    public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
+    public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<T> collection, CancellationToken cancellation = default)
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         await using var enumerator = collection.GetAsyncEnumerator(cancellation);
@@ -1100,7 +1100,7 @@ public static class MaybeAsync
 
     /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
-    public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
+    public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<T> collection, CancellationToken cancellation = default)
     {
         _ = collection ?? throw new ArgumentNullException(nameof(collection));
         await using var enumerator = collection.GetAsyncEnumerator(cancellation);
