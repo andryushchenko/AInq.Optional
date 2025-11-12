@@ -55,8 +55,13 @@ public static partial class MaybeAsync
                 if (maybe is {HasValue: true} && await filter.Invoke(maybe.Value, cancellation).ConfigureAwait(false))
                     yield return maybe.Value;
         }
+    }
 
-        /// <inheritdoc cref="Maybe.FirstOrNone{T}(System.Collections.Generic.IEnumerable{T})" />
+    /// <param name="collection"> Value collection </param>
+    /// <typeparam name="T"> Value type </typeparam>
+    extension<T>(IAsyncEnumerable<T> collection)
+    {
+        /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> FirstOrNoneAsync(CancellationToken cancellation = default)
         {
@@ -65,24 +70,6 @@ public static partial class MaybeAsync
             return await enumerator.MoveNextAsync().ConfigureAwait(false) ? enumerator.Current : Maybe.None<T>();
         }
 
-        /// <inheritdoc cref="Maybe.SingleOrNone{T}(System.Collections.Generic.IEnumerable{T})" />
-        [PublicAPI]
-        public async ValueTask<Maybe<T>> SingleOrNoneAsync(CancellationToken cancellation = default)
-        {
-            _ = collection ?? throw new ArgumentNullException(nameof(collection));
-            await using var enumerator = collection.GetAsyncEnumerator(cancellation);
-            if (!await enumerator.MoveNextAsync().ConfigureAwait(false)) return Maybe.None<T>();
-            var result = enumerator.Current;
-            return await enumerator.MoveNextAsync().ConfigureAwait(false)
-                ? throw new InvalidOperationException("Collection contains more than one element")
-                : result;
-        }
-    }
-
-    /// <param name="collection"> Value collection </param>
-    /// <typeparam name="T"> Value type </typeparam>
-    extension<T>(IAsyncEnumerable<T> collection)
-    {
         /// <inheritdoc cref="Maybe.FirstOrNone{T}(System.Collections.Generic.IEnumerable{T},System.Func{T,bool})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> FirstOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, bool> filter,
@@ -111,6 +98,19 @@ public static partial class MaybeAsync
             return Maybe.None<T>();
         }
 
+        /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T})" />
+        [PublicAPI]
+        public async ValueTask<Maybe<T>> SingleOrNoneAsync(CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            await using var enumerator = collection.GetAsyncEnumerator(cancellation);
+            if (!await enumerator.MoveNextAsync().ConfigureAwait(false)) return Maybe.None<T>();
+            var result = enumerator.Current;
+            return await enumerator.MoveNextAsync().ConfigureAwait(false)
+                ? throw new InvalidOperationException("Collection contains more than one not null element")
+                : result;
+        }
+
         /// <inheritdoc cref="Maybe.SingleOrNone{T}(System.Collections.Generic.IEnumerable{T},System.Func{T,bool})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> SingleOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, bool> filter,
@@ -125,7 +125,7 @@ public static partial class MaybeAsync
                 if (!filter.Invoke(result)) continue;
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     if (filter.Invoke(enumerator.Current))
-                        throw new InvalidOperationException("Collection contains more than one matching element");
+                        throw new InvalidOperationException("Collection contains more than one not null element");
                 return result;
             }
             return Maybe.None<T>();
@@ -145,7 +145,7 @@ public static partial class MaybeAsync
                 if (!await filter.Invoke(result, cancellation).ConfigureAwait(false)) continue;
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     if (await filter.Invoke(enumerator.Current, cancellation).ConfigureAwait(false))
-                        throw new InvalidOperationException("Collection contains more than one matching element");
+                        throw new InvalidOperationException("Collection contains more than one not null element");
                 return result;
             }
             return Maybe.None<T>();

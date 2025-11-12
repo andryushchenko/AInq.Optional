@@ -24,7 +24,10 @@ public static partial class Maybe
         /// <returns> Values collection </returns>
         [PublicAPI, LinqTunnel]
         public IEnumerable<T> Values()
-            => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasValue: true}).Select(item => item.Value);
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(item => item is {HasValue: true}).Select(item => item.Value);
+        }
 
         /// <summary> Select existing matching values </summary>
         /// <param name="filter"> Filter </param>
@@ -45,7 +48,10 @@ public static partial class Maybe
         /// <inheritdoc cref="Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<T> Values()
-            => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasValue: true}).Select(item => item.Value);
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(item => item is {HasValue: true}).Select(item => item.Value);
+        }
 
         /// <inheritdoc cref="Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}},System.Func{T,bool})" />
         [PublicAPI, LinqTunnel]
@@ -67,19 +73,7 @@ public static partial class Maybe
         public Maybe<T> FirstOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
-            switch (collection)
-            {
-                case IList<T> list:
-                    return list.Count == 0 ? Maybe<T>.None : list[0];
-                case IReadOnlyList<T> readOnlyList:
-                    return readOnlyList.Count == 0 ? Maybe<T>.None : readOnlyList[0];
-            }
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count))
-                return count == 0 ? Maybe<T>.None : collection.ElementAt(0);
-#endif
-            using var enumerator = collection.GetEnumerator();
-            return enumerator.MoveNext() ? enumerator.Current : Maybe<T>.None;
+            return collection.Select(Maybe<T>.FromValue).FirstOrDefault() ?? Maybe<T>.None;
         }
 
         /// <summary> Get first matching value or none </summary>
@@ -90,15 +84,7 @@ public static partial class Maybe
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-                return Maybe<T>.None;
-#endif
-            using var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext())
-                if (filter.Invoke(enumerator.Current))
-                    return enumerator.Current;
-            return Maybe<T>.None;
+            return collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefault() ?? Maybe<T>.None;
         }
 
         /// <summary> Get single value or none </summary>
@@ -108,36 +94,7 @@ public static partial class Maybe
         public Maybe<T> SingleOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
-            switch (collection)
-            {
-                case IList<T> list:
-                    return list.Count switch
-                    {
-                        0 => Maybe<T>.None,
-                        1 => list[0],
-                        _ => throw new InvalidOperationException("Collection contains more than one element")
-                    };
-                case IReadOnlyList<T> readOnlyList:
-                    return readOnlyList.Count switch
-                    {
-                        0 => Maybe<T>.None,
-                        1 => readOnlyList[0],
-                        _ => throw new InvalidOperationException("Collection contains more than one element")
-                    };
-            }
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count))
-                return count switch
-                {
-                    0 => Maybe<T>.None,
-                    1 => collection.ElementAt(0),
-                    _ => throw new InvalidOperationException("Collection contains more than one element")
-                };
-#endif
-            using var enumerator = collection.GetEnumerator();
-            if (!enumerator.MoveNext()) return Maybe<T>.None;
-            var result = enumerator.Current;
-            return enumerator.MoveNext() ? throw new InvalidOperationException("Collection contains more than one element") : result;
+            return collection.Select(Maybe<T>.FromValue).SingleOrDefault() ?? Maybe<T>.None;
         }
 
         /// <summary> Get single matching value or none </summary>
@@ -149,21 +106,7 @@ public static partial class Maybe
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-                return Maybe<T>.None;
-#endif
-            using var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var result = enumerator.Current;
-                if (!filter.Invoke(result)) continue;
-                while (enumerator.MoveNext())
-                    if (filter.Invoke(enumerator.Current))
-                        throw new InvalidOperationException("Collection contains more than one matching element");
-                return result;
-            }
-            return Maybe<T>.None;
+            return collection.Where(filter).Select(Maybe<T>.FromValue).SingleOrDefault() ?? Maybe<T>.None;
         }
     }
 
@@ -178,15 +121,7 @@ public static partial class Maybe
         public Maybe<T> FirstNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-                return Maybe<T>.None;
-#endif
-            using var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext())
-                if (enumerator.Current is not null)
-                    return enumerator.Current;
-            return Maybe<T>.None;
+            return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
         }
 
         /// <summary> Get single not null value or none </summary>
@@ -196,21 +131,7 @@ public static partial class Maybe
         public Maybe<T> SingleNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-                return Maybe<T>.None;
-#endif
-            using var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var result = enumerator.Current;
-                if (result is null) continue;
-                while (enumerator.MoveNext())
-                    if (enumerator.Current is not null)
-                        throw new InvalidOperationException("Collection contains more than one not null element");
-                return result;
-            }
-            return Maybe<T>.None;
+            return collection.Select(ValueIfNotNull).SingleOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
         }
     }
 
@@ -224,15 +145,7 @@ public static partial class Maybe
         public Maybe<T> FirstNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-                return Maybe<T>.None;
-#endif
-            using var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext())
-                if (enumerator.Current.HasValue)
-                    return enumerator.Current.Value;
-            return Maybe<T>.None;
+            return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
         }
 
         /// <inheritdoc cref="SingleNotNullOrNone{T}(IEnumerable{T})" />
@@ -240,21 +153,7 @@ public static partial class Maybe
         public Maybe<T> SingleNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
-#if !NETSTANDARD
-            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-                return Maybe<T>.None;
-#endif
-            using var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var result = enumerator.Current;
-                if (!result.HasValue) continue;
-                while (enumerator.MoveNext())
-                    if (enumerator.Current.HasValue)
-                        throw new InvalidOperationException("Collection contains more than one not null element");
-                return result.Value;
-            }
-            return Maybe<T>.None;
+            return collection.Select(ValueIfNotNull).SingleOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
         }
     }
 }
