@@ -17,8 +17,6 @@ namespace AInq.Optional;
 /// <summary> <see cref="Try{T}" /> utils and extensions </summary>
 public static partial class Try
 {
-#region Value
-
     /// <inheritdoc cref="Try{T}.FromValue(T)" />
     [PublicAPI]
     public static Try<T> Value<T>([NoEnumeration] T value)
@@ -81,6 +79,4 @@ public static partial class Try
     [PublicAPI, Pure]
     public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
         => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? @try.Value : Try<T>.ConvertError(@try);
-
-#endregion
 }

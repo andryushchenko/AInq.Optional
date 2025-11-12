@@ -36,20 +36,6 @@ public static partial class Try
                 ? Try<TResult>.ConvertError(@try)
                 : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value).Unwrap();
 
-        /// <summary> Get value form this item or other </summary>
-        /// <param name="other"> Other </param>
-        [PublicAPI, Pure]
-        public Try<T> Or(Try<T> other)
-            => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? @try : other ?? throw new ArgumentNullException(nameof(other));
-
-        /// <summary> Get value form this item or other </summary>
-        /// <param name="otherGenerator"> Other generator </param>
-        [PublicAPI, Pure]
-        public Try<T> Or([InstantHandle] Func<Try<T>> otherGenerator)
-            => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-                ? @try
-                : (otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke();
-
         /// <summary> Try to execute action </summary>
         /// <param name="valueAction"> Action if value exists </param>
         /// <param name="errorAction"> Action if error </param>
