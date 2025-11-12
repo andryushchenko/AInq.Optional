@@ -321,14 +321,14 @@ public static class TryAsync
         }
     }
 
-    /// <inheritdoc cref="TryExtension.Unwrap{T}(Try{Try{T}})" />
+    /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
     [PublicAPI, Pure]
     public static ValueTask<Try<T>> Unwrap<T>(this Task<Try<Try<T>>> tryTask, CancellationToken cancellation = default)
         => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Try<T>>(tryTask.Result.Unwrap())
             : AwaitUnwrap(tryTask, cancellation);
 
-    /// <inheritdoc cref="TryExtension.Unwrap{T}(Try{Try{T}})" />
+    /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
     [PublicAPI, Pure]
     public static ValueTask<Try<T>> Unwrap<T>(this ValueTask<Try<Try<T>>> tryValueTask, CancellationToken cancellation = default)
         => tryValueTask.IsCompletedSuccessfully
