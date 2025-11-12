@@ -20,6 +20,37 @@ public static partial class Maybe
     /// <typeparam name="T"> Source value type </typeparam>
     extension<T>(Maybe<T> maybe)
     {
+#region Convert
+
+        /// <summary> Get source value or other if empty </summary>
+        /// <param name="other"> Other value </param>
+        /// <typeparam name="TOther"> Other source type </typeparam>
+        /// <returns> Either </returns>
+        [PublicAPI, Pure]
+        public Either<T, TOther> Or<TOther>([NoEnumeration] TOther other)
+            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+                ? Either<T, TOther>.FromLeft(maybe.Value)
+                : Either<T, TOther>.FromRight(other);
+
+        /// <summary> Get source value or other if empty </summary>
+        /// <param name="otherGenerator"> Other generator </param>
+        /// <typeparam name="TOther"> Other source type </typeparam>
+        /// <returns> Either </returns>
+        [PublicAPI, Pure]
+        public Either<T, TOther> Or<TOther>([InstantHandle] Func<TOther> otherGenerator)
+            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+                ? Either<T, TOther>.FromLeft(maybe.Value)
+                : Either<T, TOther>.FromRight((otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke());
+
+        /// <summary> Convert <see cref="Maybe{T}" /> to <see cref="Try{T}" /> </summary>
+        [PublicAPI, Pure]
+        public Try<T> AsTry()
+            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
+                ? Try<T>.FromValue(maybe.Value)
+                : Try<T>.FromError(new InvalidOperationException("No value"));
+
+#endregion
+        
 #region Select
 
         /// <summary> Convert to other value type </summary>
@@ -31,7 +62,7 @@ public static partial class Maybe
                 ? Maybe<TResult>.FromValue((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value))
                 : Maybe<TResult>.None;
 
-        /// <inheritdoc cref="Select{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="Select{T,TResult}(Maybe{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public Maybe<TResult> Select<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -47,7 +78,7 @@ public static partial class Maybe
                 ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
                 : default;
 
-        /// <inheritdoc cref="SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public TResult? SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -64,7 +95,7 @@ public static partial class Maybe
                 ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
                 : defaultValue;
 
-        /// <inheritdoc cref="SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult},TResult)" />
+        /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector, [NoEnumeration] TResult defaultValue)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -81,7 +112,7 @@ public static partial class Maybe
                 ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
                 : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
-        /// <inheritdoc cref="SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult},System.Func{TResult})" />
+        /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector, [InstantHandle] Func<TResult> defaultGenerator)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue

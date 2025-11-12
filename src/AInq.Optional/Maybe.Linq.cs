@@ -45,7 +45,7 @@ public static partial class Maybe
     /// <typeparam name="T"> Value type </typeparam>
     extension<T>(ParallelQuery<Maybe<T>> collection)
     {
-        /// <inheritdoc cref="Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}})" />
+        /// <inheritdoc cref="Values{T}(IEnumerable{Maybe{T}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<T> Values()
         {
@@ -53,7 +53,7 @@ public static partial class Maybe
             return collection.Where(item => item is {HasValue: true}).Select(item => item.Value);
         }
 
-        /// <inheritdoc cref="Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}},System.Func{T,bool})" />
+        /// <inheritdoc cref="Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<T> Values([InstantHandle] Func<T, bool> filter)
         {

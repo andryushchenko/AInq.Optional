@@ -16,6 +16,8 @@ namespace AInq.Optional;
 
 public static partial class TryAsync
 {
+#region Value
+
     private static async ValueTask<Try<T>> AwaitUnwrap<T>(Task<Try<Try<T>>> tryTask, CancellationToken cancellation)
     {
         try
@@ -27,6 +29,24 @@ public static partial class TryAsync
             return Try.Error<T>(ex);
         }
     }
+
+#endregion
+
+#region Convert
+
+    private static async ValueTask<Maybe<T>> AwaitAsMaybe<T>(Task<Try<T>> tryTask, CancellationToken cancellation)
+    {
+        try
+        {
+            return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).AsMaybe();
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            return Maybe.None<T>();
+        }
+    }
+
+#endregion
 
 #region Select
 

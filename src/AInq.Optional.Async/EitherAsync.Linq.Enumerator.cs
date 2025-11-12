@@ -24,7 +24,7 @@ public static partial class EitherAsync
     /// <typeparam name="TRight"> Right source type </typeparam>
     extension<TLeft, TRight>(IAsyncEnumerable<Either<TLeft, TRight>> collection)
     {
-        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI]
         public async IAsyncEnumerable<TLeft> LeftValues([EnumeratorCancellation] CancellationToken cancellation = default)
         {
@@ -34,7 +34,7 @@ public static partial class EitherAsync
                     yield return either.Left;
         }
 
-        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI]
         public async IAsyncEnumerable<TRight> RightValues([EnumeratorCancellation] CancellationToken cancellation = default)
         {

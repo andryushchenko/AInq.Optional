@@ -20,9 +20,21 @@ public static partial class TryAsync
     /// <typeparam name="T"> Source value type </typeparam>
     extension<T>(Task<Try<T>> tryTask)
     {
+
+#region Convert
+
+        /// <inheritdoc cref="Try.AsMaybe{T}" />
+        [PublicAPI, Pure]
+        public ValueTask<Maybe<T>> AsMaybe(CancellationToken cancellation = default)
+            => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
+                ? new ValueTask<Maybe<T>>(tryTask.Result.AsMaybe())
+                : AwaitAsMaybe(tryTask, cancellation);
+
+#endregion
+        
 #region Select
 
-        /// <inheritdoc cref="Try.Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public ValueTask<Try<TResult>> Select<TResult>([InstantHandle(RequireAwait = true)] Func<T, TResult> selector,
             CancellationToken cancellation = default)
@@ -30,7 +42,7 @@ public static partial class TryAsync
                 ? new ValueTask<Try<TResult>>(tryTask.Result.Select(selector ?? throw new ArgumentNullException(nameof(selector))))
                 : AwaitSelect(tryTask, selector ?? throw new ArgumentNullException(nameof(selector)), cancellation);
 
-        /// <inheritdoc cref="Try.Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,AInq.Optional.Try{TResult}})" />
+        /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
         [PublicAPI, Pure]
         public ValueTask<Try<TResult>> Select<TResult>([InstantHandle(RequireAwait = true)] Func<T, Try<TResult>> selector,
             CancellationToken cancellation = default)
@@ -42,7 +54,7 @@ public static partial class TryAsync
 
 #region SelectAsync
 
-        /// <inheritdoc cref="Try.Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public ValueTask<Try<TResult>> SelectAsync<TResult>(
             [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -51,7 +63,7 @@ public static partial class TryAsync
                 ? tryTask.Result.SelectAsync(asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation)
                 : AwaitSelect(tryTask, asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation);
 
-        /// <inheritdoc cref="Try.Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,AInq.Optional.Try{TResult}})" />
+        /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,Try{TResult}})" />
         [PublicAPI, Pure]
         public ValueTask<Try<TResult>> SelectAsync<TResult>(
             [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Try<TResult>>> asyncSelector,
@@ -90,7 +102,7 @@ public static partial class TryAsync
 
 #region Do
 
-        /// <inheritdoc cref="Try.Do{T}(AInq.Optional.Try{T},System.Action{T},System.Action{System.Exception})" />
+        /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
         [PublicAPI]
         public ValueTask Do([InstantHandle(RequireAwait = true)] Action<T> valueAction,
             [InstantHandle(RequireAwait = true)] Action<Exception> errorAction, CancellationToken cancellation = default)
@@ -105,7 +117,7 @@ public static partial class TryAsync
             return default;
         }
 
-        /// <inheritdoc cref="Try.Do{T}(AInq.Optional.Try{T},System.Action{T},bool)" />
+        /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},bool)" />
         [PublicAPI]
         public ValueTask Do([InstantHandle(RequireAwait = true)] Action<T> valueAction, bool throwIfError = false,
             CancellationToken cancellation = default)
@@ -130,7 +142,7 @@ public static partial class TryAsync
 
 #region DoWithArgument
 
-        /// <inheritdoc cref="Try.Do{T,TArgument}(AInq.Optional.Try{T},System.Action{T,TArgument},System.Action{System.Exception},TArgument)" />
+        /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
         [PublicAPI]
         public ValueTask Do<TArgument>([InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction,
             [InstantHandle(RequireAwait = true)] Action<Exception> errorAction, TArgument argument, CancellationToken cancellation = default)
@@ -147,7 +159,7 @@ public static partial class TryAsync
             return default;
         }
 
-        /// <inheritdoc cref="Try.Do{T,TArgument}(AInq.Optional.Try{T},System.Action{T,TArgument},TArgument,bool)" />
+        /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
         [PublicAPI]
         public ValueTask Do<TArgument>([InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction, TArgument argument,
             bool throwIfError = false, CancellationToken cancellation = default)
@@ -162,7 +174,7 @@ public static partial class TryAsync
 
 #region DoAsync
 
-        /// <inheritdoc cref="Try.Do{T}(AInq.Optional.Try{T},System.Action{T},System.Action{System.Exception})" />
+        /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},Action{Exception})" />
         [PublicAPI]
         public async Task DoAsync([InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction,
             [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> asyncErrorAction, CancellationToken cancellation = default)
@@ -185,7 +197,7 @@ public static partial class TryAsync
                 }
         }
 
-        /// <inheritdoc cref="Try.Do{T}(AInq.Optional.Try{T},System.Action{T},bool)" />
+        /// <inheritdoc cref="Try.Do{T}(Try{T},Action{T},bool)" />
         [PublicAPI]
         public async Task DoAsync([InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction, bool throwIfError = false,
             CancellationToken cancellation = default)
@@ -223,7 +235,7 @@ public static partial class TryAsync
 
 #region DoAsyncWithArgument
 
-        /// <inheritdoc cref="Try.Do{T,TArgument}(AInq.Optional.Try{T},System.Action{T,TArgument},System.Action{System.Exception},TArgument)" />
+        /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},Action{Exception},TArgument)" />
         [PublicAPI]
         public async Task DoAsync<TArgument>([InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction,
             [InstantHandle(RequireAwait = true)] Func<Exception, CancellationToken, Task> asyncErrorAction, TArgument argument,
@@ -247,7 +259,7 @@ public static partial class TryAsync
                 }
         }
 
-        /// <inheritdoc cref="Try.Do{T,TArgument}(AInq.Optional.Try{T},System.Action{T,TArgument},TArgument,bool)" />
+        /// <inheritdoc cref="Try.Do{T,TArgument}(Try{T},Action{T,TArgument},TArgument,bool)" />
         [PublicAPI]
         public async Task DoAsync<TArgument>([InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction,
             TArgument argument, bool throwIfError = false, CancellationToken cancellation = default)

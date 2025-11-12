@@ -21,7 +21,7 @@ public static partial class MaybeAsync
     /// <typeparam name="T"> Value type </typeparam>
     extension<T>(IAsyncEnumerable<Maybe<T>> collection)
     {
-        /// <inheritdoc cref="Maybe.Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}})" />
+        /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})" />
         [PublicAPI, LinqTunnel]
         public IAsyncEnumerable<T> Values()
         {
@@ -29,7 +29,7 @@ public static partial class MaybeAsync
             return collection.Where(maybe => maybe is {HasValue: true}).Select(maybe => maybe.Value);
         }
 
-        /// <inheritdoc cref="Maybe.Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}},System.Func{T,bool})" />
+        /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
         [PublicAPI, LinqTunnel]
         public IAsyncEnumerable<T> Values([InstantHandle(RequireAwait = true)] Func<T, bool> filter)
         {
@@ -38,7 +38,7 @@ public static partial class MaybeAsync
             return collection.Where(maybe => maybe is {HasValue: true} && filter.Invoke(maybe.Value)).Select(maybe => maybe.Value);
         }
 
-        /// <inheritdoc cref="Maybe.Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}},System.Func{T,bool})" />
+        /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
         [PublicAPI, LinqTunnel]
         public IAsyncEnumerable<T> Values([InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter)
         {
@@ -61,7 +61,7 @@ public static partial class MaybeAsync
             return await collection.Select(Maybe<T>.FromValue).FirstOrDefaultAsync(Maybe.None<T>(), cancellation).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="Maybe.FirstOrNone{T}(System.Collections.Generic.IEnumerable{T},System.Func{T,bool})" />
+        /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> FirstOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, bool> filter,
             CancellationToken cancellation = default)
@@ -71,7 +71,7 @@ public static partial class MaybeAsync
             return await collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefaultAsync(Maybe.None<T>(), cancellation).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="Maybe.FirstOrNone{T}(System.Collections.Generic.IEnumerable{T},System.Func{T,bool})" />
+        /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> FirstOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter,
             CancellationToken cancellation = default)
@@ -89,7 +89,7 @@ public static partial class MaybeAsync
             return await collection.Select(Maybe<T>.FromValue).SingleOrDefaultAsync(Maybe.None<T>(), cancellation).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="Maybe.SingleOrNone{T}(System.Collections.Generic.IEnumerable{T},System.Func{T,bool})" />
+        /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> SingleOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, bool> filter,
             CancellationToken cancellation = default)
@@ -102,7 +102,7 @@ public static partial class MaybeAsync
                                    .ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="Maybe.SingleOrNone{T}(System.Collections.Generic.IEnumerable{T},System.Func{T,bool})" />
+        /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> SingleOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter,
             CancellationToken cancellation = default)
@@ -121,7 +121,7 @@ public static partial class MaybeAsync
     extension<T>(IAsyncEnumerable<T?> collection)
         where T : class
     {
-        /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(System.Collections.Generic.IEnumerable{T?})" />
+        /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> FirstNotNullOrNoneAsync(CancellationToken cancellation = default)
         {
@@ -131,7 +131,7 @@ public static partial class MaybeAsync
                                    .ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(System.Collections.Generic.IEnumerable{T?})" />
+        /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> SingleNotNullOrNoneAsync(CancellationToken cancellation = default)
         {
@@ -147,7 +147,7 @@ public static partial class MaybeAsync
     extension<T>(IAsyncEnumerable<T?> collection)
         where T : struct
     {
-        /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(System.Collections.Generic.IEnumerable{T?})" />
+        /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> FirstNotNullOrNoneAsync(CancellationToken cancellation = default)
         {
@@ -157,7 +157,7 @@ public static partial class MaybeAsync
                                    .ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(System.Collections.Generic.IEnumerable{T?})" />
+        /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> SingleNotNullOrNoneAsync(CancellationToken cancellation = default)
         {

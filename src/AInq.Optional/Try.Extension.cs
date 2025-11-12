@@ -20,6 +20,18 @@ public static partial class Try
     /// <typeparam name="T"> Source value type </typeparam>
     extension<T>(Try<T> @try)
     {
+#region Convert
+
+        /// <summary> Convert <see cref="Try{T}" /> to <see cref="Maybe{T}" /> </summary>
+        /// <remarks> <b> WARNING </b> This operation potentially hides exception </remarks>
+        [PublicAPI, Pure]
+        public Maybe<T> AsMaybe()
+            => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? Maybe<T>.FromValue(@try.Value) : Maybe<T>.None;
+
+#endregion
+
+#region Select
+
         /// <summary> Convert to other value type </summary>
         /// <param name="selector"> Converter </param>
         /// <typeparam name="TResult"> Result value type </typeparam>
@@ -29,12 +41,16 @@ public static partial class Try
                 ? Try<TResult>.ConvertError(@try)
                 : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value);
 
-        /// <inheritdoc cref="Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="Select{T,TResult}(Try{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public Try<TResult> Select<TResult>([InstantHandle] Func<T, Try<TResult>> selector)
             => !(@try ?? throw new ArgumentNullException(nameof(@try))).Success
                 ? Try<TResult>.ConvertError(@try)
                 : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value).Unwrap();
+
+#endregion
+
+#region Do
 
         /// <summary> Try to execute action </summary>
         /// <param name="valueAction"> Action if value exists </param>
@@ -115,5 +131,7 @@ public static partial class Try
                 (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
             }
         }
+
+#endregion
     }
 }

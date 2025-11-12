@@ -22,7 +22,7 @@ public static partial class EitherAsync
     /// <typeparam name="TRight"> Right source type </typeparam>
     extension<TLeft, TRight>(IAsyncEnumerable<Either<TLeft, TRight>> collection)
     {
-        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public IAsyncEnumerable<TLeft> LeftValues()
         {
@@ -30,7 +30,7 @@ public static partial class EitherAsync
             return collection.Where(either => either is {HasLeft: true}).Select(either => either.Left);
         }
 
-        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public IAsyncEnumerable<TRight> RightValues()
         {

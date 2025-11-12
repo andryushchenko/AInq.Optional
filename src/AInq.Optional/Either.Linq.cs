@@ -39,12 +39,12 @@ public static partial class Either
     /// <typeparam name="TRight"> Right source type </typeparam>
     extension<TLeft, TRight>(ParallelQuery<Either<TLeft, TRight>> collection)
     {
-        /// <inheritdoc cref="LeftValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<TLeft> LeftValues()
             => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasLeft: true}).Select(item => item.Left);
 
-        /// <inheritdoc cref="RightValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<TRight> RightValues()
             => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasRight: true}).Select(item => item.Right);

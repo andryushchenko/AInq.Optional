@@ -30,6 +30,41 @@ public static partial class EitherAsync
 
 #endregion
 
+#region Convert
+
+    private static async ValueTask<Maybe<TLeft>> AwaitMaybeLeft<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask, CancellationToken cancellation)
+        => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).MaybeLeft();
+
+    private static async ValueTask<Maybe<TRight>> AwaitMaybeRight<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask,
+        CancellationToken cancellation)
+        => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).MaybeRight();
+    
+    private static async ValueTask<Try<TLeft>> AwaitTryLeft<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask, CancellationToken cancellation)
+    {
+        try
+        {
+            return (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).TryLeft();
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            return Try.Error<TLeft>(ex);
+        }
+    }
+
+    private static async ValueTask<Try<TRight>> AwaitTryRight<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask, CancellationToken cancellation)
+    {
+        try
+        {
+            return (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).TryRight();
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            return Try.Error<TRight>(ex);
+        }
+    }
+
+#endregion
+    
 #region SelectLeft
 
     private static async ValueTask<Either<TLeftResult, TRight>> AwaitSelectLeft<TLeft, TRight, TLeftResult>(Task<Either<TLeft, TRight>> eitherTask,
