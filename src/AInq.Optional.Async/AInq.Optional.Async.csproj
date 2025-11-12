@@ -6,24 +6,6 @@
         <Description>Async extensions for optional types</Description>
     </PropertyGroup>
 
-    <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">
-        <Compile Remove="EitherAsync.Linq.Enumerator.cs" />
-        <None Include="EitherAsync.Linq.Enumerator.cs" />
-        <Compile Remove="MaybeAsync.Linq.Enumerator.cs" />
-        <None Include="MaybeAsync.Linq.Enumerator.cs" />
-        <Compile Remove="TryAsync.Linq.Enumerator.cs" />
-        <None Include="TryAsync.Linq.Enumerator.cs" />
-    </ItemGroup>
-
-    <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0')) == false">
-        <Compile Remove="EitherAsync.Linq.Query.cs" />
-        <None Include="EitherAsync.Linq.Query.cs" />
-        <Compile Remove="MaybeAsync.Linq.Query.cs" />
-        <None Include="MaybeAsync.Linq.Query.cs" />
-        <Compile Remove="TryAsync.Linq.Query.cs" />
-        <None Include="TryAsync.Linq.Query.cs" />
-    </ItemGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\AInq.Optional\AInq.Optional.csproj" />
     </ItemGroup>

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #if NETSTANDARD
-
 namespace AInq.Optional;
 
 internal static class TaskHelper

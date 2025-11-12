@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if NET10_0_OR_GREATER
 namespace AInq.Optional;
 
 public static partial class EitherAsync
@@ -38,3 +39,5 @@ public static partial class EitherAsync
         }
     }
 }
+
+#endif
