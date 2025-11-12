@@ -17,13 +17,6 @@ namespace AInq.Optional;
 /// <summary> <see cref="Either{TLeft,TRight}" /> utils and extensions </summary>
 public static partial class Either
 {
-    /// <summary> Swap left and right values </summary>
-    [PublicAPI, Pure]
-    public static Either<TRight, TLeft> Invert<TLeft, TRight>(this Either<TLeft, TRight> either)
-        => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
-            ? Right<TRight, TLeft>(either.Left)
-            : Left<TRight, TLeft>(either.Right);
-
     /// <inheritdoc cref="Either{TLeft,TRight}.FromLeft(TLeft)" />
     [PublicAPI]
     public static Either<TLeft, TRight> Left<TLeft, TRight>([NoEnumeration] TLeft left)
@@ -43,4 +36,20 @@ public static partial class Either
     [PublicAPI, Pure]
     public static Either<TLeft, TRight> AsEither<TLeft, TRight>([NoEnumeration] this TRight right)
         => Either<TLeft, TRight>.FromRight(right);
+    
+    /// <summary> Swap left and right values </summary>
+    [PublicAPI, Pure]
+    public static Either<TRight, TLeft> Invert<TLeft, TRight>(this Either<TLeft, TRight> either)
+        => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
+            ? Right<TRight, TLeft>(either.Left)
+            : Left<TRight, TLeft>(either.Right);
+    
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    extension<TLeft, TRight>(Either<TLeft, TRight>)
+    {
+        /// <see cref="Invert{TLeft,TRight}(Either{TLeft,TRight})"/>
+        public static Either<TRight, TLeft> operator !(Either<TLeft, TRight> either)
+            => either.Invert();
+    }
 }

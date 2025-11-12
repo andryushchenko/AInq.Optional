@@ -93,29 +93,19 @@ public static class Converter
     /// <typeparam name="TLeft"> Left source type </typeparam>
     extension<TLeft>(Try<TLeft> @try)
     {
-        /// <summary> Get source value or other if exception </summary>
-        /// <param name="other"> Other value </param>
-        /// <typeparam name="TRight"> Right source type </typeparam>
-        /// <returns> Either </returns>
-        [PublicAPI, Pure]
-        public Either<TLeft, TRight> Or<TRight>([NoEnumeration] TRight other)
-            => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-                ? Either.Left<TLeft, TRight>(@try.Value)
-                : Either.Right<TLeft, TRight>(other);
-
-        /// <summary> Get source value or other if exception </summary>
-        /// <param name="otherGenerator"> Other generator </param>
-        /// <typeparam name="TRight"> Right source type </typeparam>
-        /// <returns> Either </returns>
-        [PublicAPI, Pure]
-        public Either<TLeft, TRight> Or<TRight>([InstantHandle] Func<TRight> otherGenerator)
-            => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-                ? Either.Left<TLeft, TRight>(@try.Value)
-                : Either.Right<TLeft, TRight>((otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke());
-
         /// <summary> Convert <see cref="Try{T}" /> to <see cref="Maybe{T}" /> </summary>
+        /// <remarks> <b> WARNING </b> This operation potentially hides exception </remarks>
         [PublicAPI, Pure]
         public Maybe<TLeft> AsMaybe()
             => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? Maybe.Value(@try.Value) : Maybe.None<TLeft>();
+    }
+
+    /// <typeparam name="TLeft"> Left value type </typeparam>
+    /// <typeparam name="TRight"> Right value type </typeparam>
+    extension<TLeft, TRight>(Maybe<TLeft>)
+    {
+        /// <see cref="Or{TLeft,TRight}(AInq.Optional.Maybe{TLeft},TRight)" />
+        public static Either<TLeft, TRight> operator |(Maybe<TLeft> maybeLeft, TRight right)
+            => maybeLeft.Or(right);
     }
 }

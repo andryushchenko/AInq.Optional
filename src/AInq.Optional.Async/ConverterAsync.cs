@@ -214,66 +214,6 @@ public static class ConverterAsync
                 maybeValueTask.Result.Or(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
             : AwaitOr(maybeValueTask.AsTask(), otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
 
-    private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Try<TLeft>> tryTask, TRight other,
-        CancellationToken cancellation)
-    {
-        try
-        {
-            return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(other);
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            return Either.Right<TLeft, TRight>(other);
-        }
-    }
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},TRight)" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Try<TLeft>> tryTask, [NoEnumeration] TRight other,
-        CancellationToken cancellation = default)
-        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
-            ? new ValueTask<Either<TLeft, TRight>>(tryTask.Result.Or(other))
-            : AwaitOr(tryTask, other, cancellation);
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},TRight)" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask, [NoEnumeration] TRight other,
-        CancellationToken cancellation = default)
-        => tryValueTask.IsCompletedSuccessfully
-            ? new ValueTask<Either<TLeft, TRight>>(tryValueTask.Result.Or(other))
-            : AwaitOr(tryValueTask.AsTask(), other, cancellation);
-
-    private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Try<TLeft>> tryTask, Func<TRight> otherGenerator,
-        CancellationToken cancellation)
-    {
-        Try<TLeft> @try;
-        try
-        {
-            @try = await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            @try = ex.AsTry<TLeft>();
-        }
-        return @try.Or(otherGenerator);
-    }
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},Func{TRight})" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this Task<Try<TLeft>> tryTask,
-        [InstantHandle(RequireAwait = true)] Func<TRight> otherGenerator, CancellationToken cancellation = default)
-        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
-            ? new ValueTask<Either<TLeft, TRight>>(tryTask.Result.Or(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
-            : AwaitOr(tryTask, otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},Func{TRight})" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> Or<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask,
-        [InstantHandle(RequireAwait = true)] Func<TRight> otherGenerator, CancellationToken cancellation = default)
-        => tryValueTask.IsCompletedSuccessfully
-            ? new ValueTask<Either<TLeft, TRight>>(tryValueTask.Result.Or(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
-            : AwaitOr(tryValueTask.AsTask(), otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
-
 #endregion
 
 #region OrAsync
@@ -288,14 +228,6 @@ public static class ConverterAsync
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation = default)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
             ? new ValueTask<Either<TLeft, TRight>>(Either.Left<TLeft, TRight>(maybe.Value))
-            : AwaitGenerator<TLeft, TRight>(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},Func{TRight})" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> OrAsync<TLeft, TRight>(this Try<TLeft> @try,
-        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation = default)
-        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success
-            ? new ValueTask<Either<TLeft, TRight>>(Either.Left<TLeft, TRight>(@try.Value))
             : AwaitGenerator<TLeft, TRight>(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
     private static async ValueTask<Either<TLeft, TRight>> AwaitOrAsync<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask,
@@ -319,38 +251,6 @@ public static class ConverterAsync
             : AwaitOrAsync(maybeValueTask.AsTask(),
                 asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)),
                 cancellation);
-
-    private static async ValueTask<Either<TLeft, TRight>> AwaitOrAsync<TLeft, TRight>(Task<Try<TLeft>> tryTask,
-        Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
-
-    {
-        Try<TLeft> @try;
-        try
-        {
-            @try = await tryTask.WaitAsync(cancellation).ConfigureAwait(false);
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            @try = ex.AsTry<TLeft>();
-        }
-        return await @try.OrAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
-    }
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},Func{TRight})" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> OrAsync<TLeft, TRight>(this Task<Try<TLeft>> tryTask,
-        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation = default)
-        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
-            ? tryTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
-            : AwaitOrAsync(tryTask, asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
-
-    /// <inheritdoc cref="Converter.Or{TLeft,TRight}(Try{TLeft},Func{TRight})" />
-    [PublicAPI, Pure]
-    public static ValueTask<Either<TLeft, TRight>> OrAsync<TLeft, TRight>(this ValueTask<Try<TLeft>> tryValueTask,
-        [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation = default)
-        => tryValueTask.IsCompletedSuccessfully
-            ? tryValueTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
-            : AwaitOrAsync(tryValueTask.AsTask(), asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
 #endregion
 }

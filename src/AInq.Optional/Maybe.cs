@@ -64,4 +64,16 @@ public static partial class Maybe
     [PublicAPI, Pure]
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> maybe)
         => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : None<T>();
+    
+    /// <typeparam name="T"> Value type </typeparam>
+    extension<T>(Maybe<T>)
+    {
+        /// <see cref="ValueOrDefault{T}(Maybe{T},T)" />
+        public static T operator |(Maybe<T> maybe, T value)
+            => maybe.ValueOrDefault(value);
+
+        /// <see cref="Or{T}(Maybe{T},Maybe{T})" />
+        public static Maybe<T> operator |(Maybe<T> maybe, Maybe<T> other)
+            => maybe.Or(other);
+    }
 }
