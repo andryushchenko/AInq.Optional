@@ -38,7 +38,7 @@ public static partial class EitherAsync
     private static async ValueTask<Maybe<TRight>> AwaitMaybeRight<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation)
         => (await eitherTask.WaitAsync(cancellation).ConfigureAwait(false)).MaybeRight();
-    
+
     private static async ValueTask<Try<TLeft>> AwaitTryLeft<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask, CancellationToken cancellation)
     {
         try
@@ -64,7 +64,7 @@ public static partial class EitherAsync
     }
 
 #endregion
-    
+
 #region SelectLeft
 
     private static async ValueTask<Either<TLeftResult, TRight>> AwaitSelectLeft<TLeft, TRight, TLeftResult>(Task<Either<TLeft, TRight>> eitherTask,

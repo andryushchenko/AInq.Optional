@@ -20,10 +20,9 @@ public static partial class MaybeAsync
     /// <typeparam name="T"> Source value type </typeparam>
     extension<T>(Task<Maybe<T>> maybeTask)
     {
-
 #region Convert
 
-                /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},TOther)" />
+        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},TOther)" />
         [PublicAPI, Pure]
         public ValueTask<Either<T, TOther>> Or<TOther>([NoEnumeration] TOther other, CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
@@ -40,7 +39,8 @@ public static partial class MaybeAsync
 
         /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},Func{TOther})" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> OrAsync<TOther>([InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TOther>> asyncOtherGenerator,
+        public ValueTask<Either<T, TOther>> OrAsync<TOther>(
+            [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TOther>> asyncOtherGenerator,
             CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
                 ? maybeTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
@@ -54,7 +54,7 @@ public static partial class MaybeAsync
                 : AwaitAsTry(maybeTask, cancellation);
 
 #endregion
-        
+
 #region Select
 
         /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,TResult})" />

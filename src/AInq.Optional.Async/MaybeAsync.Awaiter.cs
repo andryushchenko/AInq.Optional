@@ -49,11 +49,11 @@ public static partial class MaybeAsync
     private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask, Func<TRight> otherGenerator,
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(otherGenerator);
-    
+
     private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask,
         Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).OrAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
-    
+
     private static async ValueTask<Try<T>> AwaitAsTry<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
     {
         try
@@ -65,13 +65,13 @@ public static partial class MaybeAsync
             return Try.Error<T>(ex);
         }
     }
-    
+
     private static async ValueTask<Either<TLeft, TRight>> AwaitGenerator<TLeft, TRight>(
         Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
         => Either.Right<TLeft, TRight>(await asyncOtherGenerator.Invoke(cancellation).ConfigureAwait(false));
 
 #endregion
-    
+
 #region Select
 
     private static async ValueTask<Maybe<TResult>> AwaitSelect<T, TResult>(Task<Maybe<T>> maybeTask, Func<T, TResult> selector,

@@ -20,7 +20,6 @@ public static partial class TryAsync
     /// <typeparam name="T"> Source value type </typeparam>
     extension<T>(Task<Try<T>> tryTask)
     {
-
 #region Convert
 
         /// <inheritdoc cref="Try.AsMaybe{T}" />
@@ -31,7 +30,7 @@ public static partial class TryAsync
                 : AwaitAsMaybe(tryTask, cancellation);
 
 #endregion
-        
+
 #region Select
 
         /// <inheritdoc cref="Try.Select{T,TResult}(Try{T},Func{T,TResult})" />

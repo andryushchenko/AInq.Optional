@@ -50,7 +50,7 @@ public static partial class Maybe
                 : Try<T>.FromError(new InvalidOperationException("No value"));
 
 #endregion
-        
+
 #region Select
 
         /// <summary> Convert to other value type </summary>

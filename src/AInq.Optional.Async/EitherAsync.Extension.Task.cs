@@ -21,7 +21,6 @@ public static partial class EitherAsync
     /// <typeparam name="TRight"> Right value type </typeparam>
     extension<TLeft, TRight>(Task<Either<TLeft, TRight>> eitherTask)
     {
-
 #region Convert
 
         /// <inheritdoc cref="Either.MaybeLeft{TLeft,TRight}" />
@@ -53,7 +52,7 @@ public static partial class EitherAsync
                 : AwaitTryRight(eitherTask, cancellation);
 
 #endregion
-        
+
 #region SelectLeft
 
         /// <inheritdoc cref="Either.SelectLeft{TLeft,TRight,TLeftResult}(Either{TLeft,TRight},Func{TLeft,TLeftResult})" />
