@@ -14,8 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Try{T}" /> LINQ utils </summary>
-public static class TryLinq
+public static partial class Try
 {
     /// <summary> Select existing values </summary>
     /// <param name="collection"> Try collection </param>
@@ -25,9 +24,8 @@ public static class TryLinq
     public static IEnumerable<T> Values<T>(this IEnumerable<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {Success: true}).Select(item => item.Value);
 
-    /// <inheritdoc cref="TryLinq.Values{T}(IEnumerable{Try{T}})" />
+    /// <inheritdoc cref="Values{T}(IEnumerable{Try{T}})" />
     [PublicAPI, LinqTunnel]
     public static ParallelQuery<T> Values<T>(this ParallelQuery<Try<T>> collection)
         => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {Success: true}).Select(item => item.Value);
-
 }

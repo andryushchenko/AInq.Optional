@@ -14,8 +14,8 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Maybe{T}" /> utils </summary>
-public static class Maybe
+/// <summary> <see cref="Maybe{T}" /> utils and extensions </summary>
+public static partial class Maybe
 {
     /// <inheritdoc cref="Maybe{T}.None" />
     [PublicAPI]

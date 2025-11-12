@@ -14,8 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Either{TLeft,TRight}" /> LINQ utils </summary>
-public static class EitherLinq
+public static partial class Either
 {
     /// <param name="collection"> <see cref="Either{TLeft,TRight}" /> collection </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
@@ -40,12 +39,12 @@ public static class EitherLinq
     /// <typeparam name="TRight"> Right source type </typeparam>
     extension<TLeft, TRight>(ParallelQuery<Either<TLeft, TRight>> collection)
     {
-        /// <inheritdoc cref="EitherLinq.LeftValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="LeftValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<TLeft> LeftValues()
             => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasLeft: true}).Select(item => item.Left);
 
-        /// <inheritdoc cref="EitherLinq.RightValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
+        /// <inheritdoc cref="RightValues{TLeft,TRight}(System.Collections.Generic.IEnumerable{AInq.Optional.Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<TRight> RightValues()
             => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasRight: true}).Select(item => item.Right);

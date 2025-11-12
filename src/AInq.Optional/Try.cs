@@ -14,8 +14,8 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Try{T}" /> utils </summary>
-public static class Try
+/// <summary> <see cref="Try{T}" /> utils and extensions </summary>
+public static partial class Try
 {
 #region Value
 
@@ -55,7 +55,7 @@ public static class Try
             return Error<T>(ex);
         }
     }
-    
+
     /// <summary> Create Try from value generator with argument </summary>
     /// <param name="generator"> Value generator </param>
     /// <param name="argument"> Generator argument </param>
@@ -74,7 +74,7 @@ public static class Try
             return Error<T>(ex);
         }
     }
-    
+
     /// <summary> Unwrap nested Try </summary>
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Value type </typeparam>

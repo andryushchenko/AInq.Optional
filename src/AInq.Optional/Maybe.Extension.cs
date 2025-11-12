@@ -14,8 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Maybe{T}" /> extensions </summary>
-public static class MaybeExtension
+public static partial class Maybe
 {
     /// <param name="maybe"> Maybe item </param>
     /// <typeparam name="T"> Source value type </typeparam>
@@ -32,7 +31,7 @@ public static class MaybeExtension
                 ? Maybe<TResult>.FromValue((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value))
                 : Maybe<TResult>.None;
 
-        /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="Select{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult})" />
         [PublicAPI, Pure]
         public Maybe<TResult> Select<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -48,7 +47,7 @@ public static class MaybeExtension
                 ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
                 : default;
 
-        /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult})" />
         [PublicAPI, Pure]
         public TResult? SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -65,7 +64,7 @@ public static class MaybeExtension
                 ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
                 : defaultValue;
 
-        /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult},TResult)" />
+        /// <inheritdoc cref="SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult},TResult)" />
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector, [NoEnumeration] TResult defaultValue)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
@@ -82,7 +81,7 @@ public static class MaybeExtension
                 ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
                 : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
 
-        /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult},System.Func{TResult})" />
+        /// <inheritdoc cref="SelectOrDefault{T,TResult}(AInq.Optional.Maybe{T},System.Func{T,TResult},System.Func{TResult})" />
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector, [InstantHandle] Func<TResult> defaultGenerator)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue

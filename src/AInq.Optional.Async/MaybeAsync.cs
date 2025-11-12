@@ -126,7 +126,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> Select<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, CancellationToken cancellation = default)
@@ -134,7 +134,7 @@ public static class MaybeAsync
             ? new ValueTask<Maybe<TResult>>(maybeTask.Result.Select(selector) ?? throw new ArgumentNullException(nameof(selector)))
             : AwaitSelect(maybeTask, selector ?? throw new ArgumentNullException(nameof(selector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> Select<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, CancellationToken cancellation = default)
@@ -146,7 +146,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Select(selector);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> Select<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, CancellationToken cancellation = default)
@@ -154,7 +154,7 @@ public static class MaybeAsync
             ? new ValueTask<Maybe<TResult>>(maybeTask.Result.Select(selector ?? throw new ArgumentNullException(nameof(selector))))
             : AwaitSelect(maybeTask, selector ?? throw new ArgumentNullException(nameof(selector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> Select<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, CancellationToken cancellation = default)
@@ -166,7 +166,7 @@ public static class MaybeAsync
 
 #region SelectAsync
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
@@ -178,7 +178,7 @@ public static class MaybeAsync
         Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectAsync(asyncSelector, cancellation).ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> SelectAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
@@ -186,7 +186,7 @@ public static class MaybeAsync
             ? maybeTask.Result.SelectAsync(asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation)
             : AwaitSelectAsync(maybeTask, asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> SelectAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
@@ -194,7 +194,7 @@ public static class MaybeAsync
             ? maybeValueTask.Result.SelectAsync(asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation)
             : AwaitSelectAsync(maybeValueTask.AsTask(), asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> SelectAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -207,7 +207,7 @@ public static class MaybeAsync
         Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector, CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectAsync(asyncSelector, cancellation).ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> SelectAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -216,7 +216,7 @@ public static class MaybeAsync
             ? maybeTask.Result.SelectAsync(asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation)
             : AwaitSelectAsync(maybeTask, asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.Select{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<TResult>> SelectAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -233,7 +233,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, CancellationToken cancellation = default)
@@ -241,7 +241,7 @@ public static class MaybeAsync
             ? new ValueTask<TResult?>(maybeTask.Result.SelectOrDefault(selector ?? throw new ArgumentNullException(nameof(selector))))
             : AwaitSelectOrDefault(maybeTask, selector ?? throw new ArgumentNullException(nameof(selector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, CancellationToken cancellation = default)
@@ -253,7 +253,7 @@ public static class MaybeAsync
         TResult defaultValue, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultValue);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, [NoEnumeration] TResult defaultValue,
@@ -262,7 +262,7 @@ public static class MaybeAsync
             ? new ValueTask<TResult>(maybeTask.Result.SelectOrDefault(selector ?? throw new ArgumentNullException(nameof(selector)), defaultValue))
             : AwaitSelectOrDefault(maybeTask, selector ?? throw new ArgumentNullException(nameof(selector)), defaultValue, cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, [NoEnumeration] TResult defaultValue,
@@ -279,7 +279,7 @@ public static class MaybeAsync
         Func<TResult> defaultGenerator, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultGenerator);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, [InstantHandle(RequireAwait = true)] Func<TResult> defaultGenerator,
@@ -292,7 +292,7 @@ public static class MaybeAsync
                 defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TResult> selector, [InstantHandle(RequireAwait = true)] Func<TResult> defaultGenerator,
@@ -313,7 +313,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, CancellationToken cancellation = default)
@@ -321,7 +321,7 @@ public static class MaybeAsync
             ? new ValueTask<TResult?>(maybeTask.Result.SelectOrDefault(selector ?? throw new ArgumentNullException(nameof(selector))))
             : AwaitSelectOrDefault(maybeTask, selector ?? throw new ArgumentNullException(nameof(selector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, CancellationToken cancellation = default)
@@ -333,7 +333,7 @@ public static class MaybeAsync
         TResult defaultValue, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultValue);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, [NoEnumeration] TResult defaultValue,
@@ -342,7 +342,7 @@ public static class MaybeAsync
             ? new ValueTask<TResult>(maybeTask.Result.SelectOrDefault(selector ?? throw new ArgumentNullException(nameof(selector)), defaultValue))
             : AwaitSelectOrDefault(maybeTask, selector ?? throw new ArgumentNullException(nameof(selector)), defaultValue, cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, [NoEnumeration] TResult defaultValue,
@@ -359,7 +359,7 @@ public static class MaybeAsync
         Func<TResult> defaultGenerator, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefault(selector, defaultGenerator);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, [InstantHandle(RequireAwait = true)] Func<TResult> defaultGenerator,
@@ -372,7 +372,7 @@ public static class MaybeAsync
                 defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefault<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, Maybe<TResult>> selector, [InstantHandle(RequireAwait = true)] Func<TResult> defaultGenerator,
@@ -392,7 +392,7 @@ public static class MaybeAsync
     private static async ValueTask<T?> AwaitNullable<T>(ValueTask<T> valueTask)
         => await valueTask.ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
@@ -408,7 +408,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefaultAsync(asyncSelector, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
@@ -416,7 +416,7 @@ public static class MaybeAsync
             ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation)
             : AwaitSelectOrDefaultAsync(maybeTask, asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, CancellationToken cancellation = default)
@@ -426,7 +426,7 @@ public static class MaybeAsync
                 asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, [NoEnumeration] TResult defaultValue,
@@ -440,7 +440,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, [NoEnumeration] TResult defaultValue,
@@ -454,7 +454,7 @@ public static class MaybeAsync
                 defaultValue,
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector, [NoEnumeration] TResult defaultValue,
@@ -468,7 +468,7 @@ public static class MaybeAsync
                 defaultValue,
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -482,7 +482,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefaultAsync(asyncSelector, defaultGenerator, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -496,7 +496,7 @@ public static class MaybeAsync
                 defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -510,7 +510,7 @@ public static class MaybeAsync
                 defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -527,7 +527,7 @@ public static class MaybeAsync
                  .SelectOrDefaultAsync(asyncSelector, asyncDefaultGenerator, cancellation)
                  .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -542,7 +542,7 @@ public static class MaybeAsync
                 asyncDefaultGenerator ?? throw new ArgumentNullException(nameof(asyncDefaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<TResult>> asyncSelector,
@@ -561,7 +561,7 @@ public static class MaybeAsync
 
 #region SelectOrDefaultAsync_Maybe
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -575,7 +575,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefaultAsync(asyncSelector, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -584,7 +584,7 @@ public static class MaybeAsync
             ? maybeTask.Result.SelectOrDefaultAsync(asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation)
             : AwaitSelectOrDefaultAsync(maybeTask, asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult?> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -595,7 +595,7 @@ public static class MaybeAsync
                 asyncSelector ?? throw new ArgumentNullException(nameof(asyncSelector)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -610,7 +610,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefaultAsync(asyncSelector, defaultValue, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -624,7 +624,7 @@ public static class MaybeAsync
                 defaultValue,
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},TResult)" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -638,7 +638,7 @@ public static class MaybeAsync
                 defaultValue,
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -657,7 +657,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).SelectOrDefaultAsync(asyncSelector, defaultGenerator, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -671,7 +671,7 @@ public static class MaybeAsync
                 defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -685,7 +685,7 @@ public static class MaybeAsync
                 defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -707,7 +707,7 @@ public static class MaybeAsync
                  .SelectOrDefaultAsync(asyncSelector, asyncDefaultGenerator, cancellation)
                  .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -722,7 +722,7 @@ public static class MaybeAsync
                 asyncDefaultGenerator ?? throw new ArgumentNullException(nameof(asyncDefaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
+    /// <inheritdoc cref="Maybe.SelectOrDefault{T,TResult}(Maybe{T},Func{T,Maybe{TResult}},Func{TResult})" />
     [PublicAPI, Pure]
     public static ValueTask<TResult> SelectOrDefaultAsync<T, TResult>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<Maybe<TResult>>> asyncSelector,
@@ -744,14 +744,14 @@ public static class MaybeAsync
     private static async ValueTask<T?> AwaitValueOrDefault<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ValueOrDefault();
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T?> ValueOrDefault<T>(this Task<Maybe<T>> maybeTask, CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<T?>(maybeTask.Result.ValueOrDefault())
             : AwaitValueOrDefault(maybeTask, cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T?> ValueOrDefault<T>(this ValueTask<Maybe<T>> maybeValueTask, CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
@@ -761,7 +761,7 @@ public static class MaybeAsync
     private static async ValueTask<T> AwaitValueOrDefault<T>(Task<Maybe<T>> maybeTask, T defaultValue, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ValueOrDefault(defaultValue);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},T)" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},T)" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefault<T>(this Task<Maybe<T>> maybeTask, [NoEnumeration] T defaultValue,
         CancellationToken cancellation = default)
@@ -769,7 +769,7 @@ public static class MaybeAsync
             ? new ValueTask<T>(maybeTask.Result.ValueOrDefault(defaultValue))
             : AwaitValueOrDefault(maybeTask, defaultValue, cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},T)" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},T)" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefault<T>(this ValueTask<Maybe<T>> maybeValueTask, [NoEnumeration] T defaultValue,
         CancellationToken cancellation = default)
@@ -780,7 +780,7 @@ public static class MaybeAsync
     private static async ValueTask<T> AwaitValueOrDefault<T>(Task<Maybe<T>> maybeTask, Func<T> defaultGenerator, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ValueOrDefault(defaultGenerator);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},Func{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},Func{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefault<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Func<T> defaultGenerator,
         CancellationToken cancellation = default)
@@ -788,7 +788,7 @@ public static class MaybeAsync
             ? new ValueTask<T>(maybeTask.Result.ValueOrDefault(defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))))
             : AwaitValueOrDefault(maybeTask, defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},Func{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},Func{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefault<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T> defaultGenerator, CancellationToken cancellation = default)
@@ -802,7 +802,7 @@ public static class MaybeAsync
 
 #region ValueOrDefautAsync
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},Func{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},Func{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefaultAsync<T>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator, CancellationToken cancellation = default)
@@ -815,7 +815,7 @@ public static class MaybeAsync
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ValueOrDefaultAsync(asyncDefaultGenerator, cancellation)
                                                                                 .ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},Func{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},Func{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefaultAsync<T>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator, CancellationToken cancellation = default)
@@ -826,7 +826,7 @@ public static class MaybeAsync
                 asyncDefaultGenerator ?? throw new ArgumentNullException(nameof(asyncDefaultGenerator)),
                 cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.ValueOrDefault{T}(Maybe{T},Func{T})" />
+    /// <inheritdoc cref="Maybe.ValueOrDefault{T}(Maybe{T},Func{T})" />
     [PublicAPI, Pure]
     public static ValueTask<T> ValueOrDefaultAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator, CancellationToken cancellation = default)
@@ -844,14 +844,14 @@ public static class MaybeAsync
     private static async ValueTask<Maybe<T>> AwaitOr<T>(Task<Maybe<T>> maybeTask, Maybe<T> other, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(other);
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Maybe{T})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> Or<T>(this Task<Maybe<T>> maybeTask, Maybe<T> other, CancellationToken cancellation = default)
         => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
             ? new ValueTask<Maybe<T>>(maybeTask.Result.Or(other ?? throw new ArgumentNullException(nameof(other))))
             : AwaitOr(maybeTask, other ?? throw new ArgumentNullException(nameof(other)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Maybe{T})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> Or<T>(this ValueTask<Maybe<T>> maybeValueTask, Maybe<T> other, CancellationToken cancellation = default)
         => maybeValueTask.IsCompletedSuccessfully
@@ -861,7 +861,7 @@ public static class MaybeAsync
     private static async ValueTask<Maybe<T>> AwaitOr<T>(Task<Maybe<T>> maybeTask, Func<Maybe<T>> otherGenerator, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(otherGenerator);
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Func{Maybe{T}})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Func{Maybe{T}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> Or<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Func<Maybe<T>> otherGenerator,
         CancellationToken cancellation = default)
@@ -869,7 +869,7 @@ public static class MaybeAsync
             ? new ValueTask<Maybe<T>>(maybeTask.Result.Or(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
             : AwaitOr(maybeTask, otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Func{Maybe{T}})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Func{Maybe{T}})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> Or<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<Maybe<T>> otherGenerator, CancellationToken cancellation = default)
@@ -881,7 +881,7 @@ public static class MaybeAsync
 
 #region OrAsync
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Maybe{T})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> OrAsync<T>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator,
@@ -894,7 +894,7 @@ public static class MaybeAsync
         Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator, CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).OrAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Maybe{T})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> OrAsync<T>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator,
@@ -903,7 +903,7 @@ public static class MaybeAsync
             ? maybeTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
             : AwaitOrAsync(maybeTask, asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Or{T}(Maybe{T},Maybe{T})" />
+    /// <inheritdoc cref="Maybe.Or{T}(Maybe{T},Maybe{T})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> OrAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<Maybe<T>>> asyncOtherGenerator,
@@ -921,7 +921,7 @@ public static class MaybeAsync
     private static async ValueTask<Maybe<T>> AwaitFilter<T>(Task<Maybe<T>> maybeTask, Func<T, bool> filter, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Filter(filter);
 
-    /// <inheritdoc cref="MaybeExtension.Filter{T}(Maybe{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Filter{T}(Maybe{T},Func{T,bool})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> Filter<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Func<T, bool> filter,
         CancellationToken cancellation = default)
@@ -929,7 +929,7 @@ public static class MaybeAsync
             ? new ValueTask<Maybe<T>>(maybeTask.Result.Filter(filter ?? throw new ArgumentNullException(nameof(filter))))
             : AwaitFilter(maybeTask, filter ?? throw new ArgumentNullException(nameof(filter)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Filter{T}(Maybe{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Filter{T}(Maybe{T},Func{T,bool})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> Filter<T>(this ValueTask<Maybe<T>> maybeValueTask, [InstantHandle(RequireAwait = true)] Func<T, bool> filter,
         CancellationToken cancellation = default)
@@ -940,7 +940,7 @@ public static class MaybeAsync
     private static async ValueTask<Maybe<T>> AwaitFiltered<T>(Maybe<T> maybe, ValueTask<bool> filter)
         => await filter.ConfigureAwait(false) ? maybe : Maybe.None<T>();
 
-    /// <inheritdoc cref="MaybeExtension.Filter{T}(Maybe{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Filter{T}(Maybe{T},Func{T,bool})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> FilterAsync<T>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> asyncFilter, CancellationToken cancellation = default)
@@ -954,7 +954,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).FilterAsync(asyncFilter, cancellation).ConfigureAwait(false);
 
-    /// <inheritdoc cref="MaybeExtension.Filter{T}(Maybe{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Filter{T}(Maybe{T},Func{T,bool})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> FilterAsync<T>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> asyncFilter, CancellationToken cancellation = default)
@@ -962,7 +962,7 @@ public static class MaybeAsync
             ? maybeTask.Result.FilterAsync(asyncFilter ?? throw new ArgumentNullException(nameof(asyncFilter)), cancellation)
             : AwaitFilterAsync(maybeTask, asyncFilter ?? throw new ArgumentNullException(nameof(asyncFilter)), cancellation);
 
-    /// <inheritdoc cref="MaybeExtension.Filter{T}(Maybe{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Filter{T}(Maybe{T},Func{T,bool})" />
     [PublicAPI, Pure]
     public static ValueTask<Maybe<T>> FilterAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> asyncFilter, CancellationToken cancellation = default)
@@ -991,7 +991,7 @@ public static class MaybeAsync
 
 #region Linq
 
-    /// <inheritdoc cref="MaybeLinq.Values{T}(IEnumerable{Maybe{T}})" />
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}})" />
     [PublicAPI]
     public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
         [EnumeratorCancellation] CancellationToken cancellation = default)
@@ -1002,7 +1002,7 @@ public static class MaybeAsync
                 yield return maybe.Value;
     }
 
-    /// <inheritdoc cref="MaybeLinq.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
     [PublicAPI]
     public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
         [InstantHandle(RequireAwait = true)] Func<T, bool> filter, [EnumeratorCancellation] CancellationToken cancellation = default)
@@ -1014,7 +1014,7 @@ public static class MaybeAsync
                 yield return maybe.Value;
     }
 
-    /// <inheritdoc cref="MaybeLinq.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.Values{T}(IEnumerable{Maybe{T}},Func{T,bool})" />
     [PublicAPI]
     public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Maybe<T>> collection,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter,
@@ -1027,7 +1027,7 @@ public static class MaybeAsync
                 yield return maybe.Value;
     }
 
-    /// <inheritdoc cref="MaybeLinq.FirstOrNone{T}(IEnumerable{T})" />
+    /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
     {
@@ -1036,7 +1036,7 @@ public static class MaybeAsync
         return await enumerator.MoveNextAsync().ConfigureAwait(false) ? enumerator.Current : Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
         [InstantHandle(RequireAwait = true)] Func<T, bool> filter, CancellationToken cancellation = default)
@@ -1050,7 +1050,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.FirstOrNone{T}(IEnumerable{T},Func{T,bool})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> FirstOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter, CancellationToken cancellation = default)
@@ -1064,7 +1064,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.FirstNotNullOrNone{T}(IEnumerable{T})" />
+    /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> FirstNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection, CancellationToken cancellation = default)
         where T : class
@@ -1077,7 +1077,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.FirstNotNullOrNone{T}(IEnumerable{T})" />
+    /// <inheritdoc cref="Maybe.FirstNotNullOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> FirstNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection, CancellationToken cancellation = default)
         where T : struct
@@ -1090,7 +1090,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.SingleOrNone{T}(IEnumerable{T})" />
+    /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<Maybe<T>> collection, CancellationToken cancellation = default)
     {
@@ -1103,7 +1103,7 @@ public static class MaybeAsync
             : result;
     }
 
-    /// <inheritdoc cref="MaybeLinq.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
         [InstantHandle(RequireAwait = true)] Func<T, bool> filter, CancellationToken cancellation = default)
@@ -1123,7 +1123,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
+    /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T},Func{T,bool})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> SingleOrNoneAsync<T>(this IAsyncEnumerable<T> collection,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter, CancellationToken cancellation = default)
@@ -1143,7 +1143,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.SingleNotNullOrNone{T}(IEnumerable{T})" />
+    /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> SingleNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection,
         CancellationToken cancellation = default)
@@ -1163,7 +1163,7 @@ public static class MaybeAsync
         return Maybe.None<T>();
     }
 
-    /// <inheritdoc cref="MaybeLinq.SingleNotNullOrNone{T}(IEnumerable{T})" />
+    /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T})" />
     [PublicAPI]
     public static async ValueTask<Maybe<T>> SingleNotNullOrNoneAsync<T>(this IAsyncEnumerable<T?> collection,
         CancellationToken cancellation = default)
@@ -1190,7 +1190,7 @@ public static class MaybeAsync
     private static async ValueTask AwaitDo<T>(Task<Maybe<T>> maybeTask, Action<T> valueAction, Action emptyAction, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, emptyAction);
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T},Action)" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
     [PublicAPI]
     public static ValueTask Do<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Action<T> valueAction,
         [InstantHandle(RequireAwait = true)] Action emptyAction, CancellationToken cancellation = default)
@@ -1205,7 +1205,7 @@ public static class MaybeAsync
         return default;
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T},Action)" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
     [PublicAPI]
     public static ValueTask Do<T>(this ValueTask<Maybe<T>> maybeValueTask, [InstantHandle(RequireAwait = true)] Action<T> valueAction,
         [InstantHandle(RequireAwait = true)] Action emptyAction, CancellationToken cancellation = default)
@@ -1223,7 +1223,7 @@ public static class MaybeAsync
     private static async ValueTask AwaitDo<T>(Task<Maybe<T>> maybeTask, Action<T> valueAction, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction);
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T})" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T})" />
     [PublicAPI]
     public static ValueTask Do<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Action<T> valueAction,
         CancellationToken cancellation = default)
@@ -1234,7 +1234,7 @@ public static class MaybeAsync
         return default;
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T})" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T})" />
     [PublicAPI]
     public static ValueTask Do<T>(this ValueTask<Maybe<T>> maybeValueTask, [InstantHandle(RequireAwait = true)] Action<T> valueAction,
         CancellationToken cancellation = default)
@@ -1248,7 +1248,7 @@ public static class MaybeAsync
     private static async ValueTask AwaitDoIfEmpty<T>(Task<Maybe<T>> maybeTask, Action emptyAction, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).DoIfEmpty(emptyAction);
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T}(Maybe{T},Action)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
     [PublicAPI]
     public static ValueTask DoIfEmpty<T>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Action emptyAction,
         CancellationToken cancellation = default)
@@ -1259,7 +1259,7 @@ public static class MaybeAsync
         return default;
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T}(Maybe{T},Action)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
     [PublicAPI]
     public static ValueTask DoIfEmpty<T>(this ValueTask<Maybe<T>> maybeValueTask, [InstantHandle(RequireAwait = true)] Action emptyAction,
         CancellationToken cancellation = default)
@@ -1278,7 +1278,7 @@ public static class MaybeAsync
         TArgument argument, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, emptyAction, argument);
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction,
         [InstantHandle(RequireAwait = true)] Action<TArgument> emptyAction, TArgument argument, CancellationToken cancellation = default)
@@ -1295,7 +1295,7 @@ public static class MaybeAsync
         return default;
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction, [InstantHandle(RequireAwait = true)] Action<TArgument> emptyAction,
@@ -1317,7 +1317,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Do(valueAction, argument);
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction,
         TArgument argument, CancellationToken cancellation = default)
@@ -1328,7 +1328,7 @@ public static class MaybeAsync
         return default;
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask Do<T, TArgument>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Action<T, TArgument> valueAction, TArgument argument, CancellationToken cancellation = default)
@@ -1343,7 +1343,7 @@ public static class MaybeAsync
         CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).DoIfEmpty(emptyAction, argument);
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask DoIfEmpty<T, TArgument>(this Task<Maybe<T>> maybeTask, [InstantHandle(RequireAwait = true)] Action<TArgument> emptyAction,
         TArgument argument, CancellationToken cancellation = default)
@@ -1354,7 +1354,7 @@ public static class MaybeAsync
         return default;
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static ValueTask DoIfEmpty<T, TArgument>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Action<TArgument> emptyAction, TArgument argument, CancellationToken cancellation = default)
@@ -1372,7 +1372,7 @@ public static class MaybeAsync
 
 #region DoAsync
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T},Action)" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
     [PublicAPI]
     public static async Task DoAsync<T>(this Maybe<T> maybe, [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, Task> asyncEmptyAction, CancellationToken cancellation = default)
@@ -1383,7 +1383,7 @@ public static class MaybeAsync
         else await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T})" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T})" />
     [PublicAPI]
     public static async Task DoAsync<T>(this Maybe<T> maybe, [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction,
         CancellationToken cancellation = default)
@@ -1393,7 +1393,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T}(Maybe{T},Action)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
     [PublicAPI]
     public static async Task DoIfEmptyAsync<T>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, Task> asyncEmptyAction, CancellationToken cancellation = default)
@@ -1402,7 +1402,7 @@ public static class MaybeAsync
             await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T},Action)" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
     [PublicAPI]
     public static async Task DoAsync<T>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction,
@@ -1417,7 +1417,7 @@ public static class MaybeAsync
         else await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T})" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T})" />
     [PublicAPI]
     public static async Task DoAsync<T>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction, CancellationToken cancellation = default)
@@ -1430,7 +1430,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T}(Maybe{T},Action)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
     [PublicAPI]
     public static async Task DoIfEmptyAsync<T>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, Task> asyncEmptyAction, CancellationToken cancellation = default)
@@ -1442,7 +1442,7 @@ public static class MaybeAsync
             await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T},Action)" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T},Action)" />
     [PublicAPI]
     public static async Task DoAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction,
@@ -1457,7 +1457,7 @@ public static class MaybeAsync
         else await (asyncEmptyAction ?? throw new ArgumentNullException(nameof(asyncEmptyAction))).Invoke(cancellation).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T}(Maybe{T},Action{T})" />
+    /// <inheritdoc cref="Maybe.Do{T}(Maybe{T},Action{T})" />
     [PublicAPI]
     public static async Task DoAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, CancellationToken, Task> asyncValueAction, CancellationToken cancellation = default)
@@ -1470,7 +1470,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T}(Maybe{T},Action)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T}(Maybe{T},Action)" />
     [PublicAPI]
     public static async Task DoIfEmptyAsync<T>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<CancellationToken, Task> asyncEmptyAction, CancellationToken cancellation = default)
@@ -1486,7 +1486,7 @@ public static class MaybeAsync
 
 #region DoAsyncWithArgument
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction,
@@ -1501,7 +1501,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction, TArgument argument,
@@ -1512,7 +1512,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoIfEmptyAsync<T, TArgument>(this Maybe<T> maybe,
         [InstantHandle(RequireAwait = true)] Func<TArgument, CancellationToken, Task> asyncEmptyAction, TArgument argument,
@@ -1523,7 +1523,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction,
@@ -1541,7 +1541,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction, TArgument argument,
@@ -1555,7 +1555,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoIfEmptyAsync<T, TArgument>(this Task<Maybe<T>> maybeTask,
         [InstantHandle(RequireAwait = true)] Func<TArgument, CancellationToken, Task> asyncEmptyAction, TArgument argument,
@@ -1569,7 +1569,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction,
@@ -1587,7 +1587,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.Do{T,TArgument}(Maybe{T},Action{T,TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoAsync<T, TArgument>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<T, TArgument, CancellationToken, Task> asyncValueAction, TArgument argument,
@@ -1601,7 +1601,7 @@ public static class MaybeAsync
                                                                                                  .ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="MaybeExtension.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
+    /// <inheritdoc cref="Maybe.DoIfEmpty{T,TArgument}(Maybe{T},Action{TArgument},TArgument)" />
     [PublicAPI]
     public static async Task DoIfEmptyAsync<T, TArgument>(this ValueTask<Maybe<T>> maybeValueTask,
         [InstantHandle(RequireAwait = true)] Func<TArgument, CancellationToken, Task> asyncEmptyAction, TArgument argument,

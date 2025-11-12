@@ -14,8 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Try{T}" /> extensions </summary>
-public static class TryExtension
+public static partial class Try
 {
     /// <param name="try"> Try item </param>
     /// <typeparam name="T"> Source value type </typeparam>
@@ -28,14 +27,14 @@ public static class TryExtension
         public Try<TResult> Select<TResult>([InstantHandle] Func<T, TResult> selector)
             => !(@try ?? throw new ArgumentNullException(nameof(@try))).Success
                 ? Try<TResult>.ConvertError(@try)
-                : Try.Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value);
+                : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value);
 
-        /// <inheritdoc cref="TryExtension.Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,TResult})" />
+        /// <inheritdoc cref="Select{T,TResult}(AInq.Optional.Try{T},System.Func{T,TResult})" />
         [PublicAPI, Pure]
         public Try<TResult> Select<TResult>([InstantHandle] Func<T, Try<TResult>> selector)
             => !(@try ?? throw new ArgumentNullException(nameof(@try))).Success
                 ? Try<TResult>.ConvertError(@try)
-                : Try.Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value).Unwrap();
+                : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value).Unwrap();
 
         /// <summary> Get value form this item or other </summary>
         /// <param name="other"> Other </param>

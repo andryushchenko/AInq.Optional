@@ -14,8 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Either{TLeft,TRight}" /> extensions </summary>
-public static class EitherExtension
+public static partial class Either
 {
     /// <param name="either"> Either item </param>
     /// <typeparam name="TLeft"> Left source type </typeparam>
@@ -33,7 +32,7 @@ public static class EitherExtension
                 ? Either<TLeftResult, TRight>.FromLeft((leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(either.Left))
                 : Either<TLeftResult, TRight>.FromRight(either.Right);
 
-        /// <inheritdoc cref="EitherExtension.SelectLeft{TLeft,TRight,TLeftResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult})" />
+        /// <inheritdoc cref="SelectLeft{TLeft,TRight,TLeftResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult})" />
         [PublicAPI, Pure]
         public Either<TLeftResult, TRight> SelectLeft<TLeftResult>([InstantHandle] Func<TLeft, Either<TLeftResult, TRight>> leftSelector)
             => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
@@ -50,7 +49,7 @@ public static class EitherExtension
                     (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right))
                 : Either<TLeft, TRightResult>.FromLeft(either.Left);
 
-        /// <inheritdoc cref="EitherExtension.SelectRight{TLeft,TRight,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TRight,TRightResult})" />
+        /// <inheritdoc cref="SelectRight{TLeft,TRight,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TRight,TRightResult})" />
         [PublicAPI, Pure]
         public Either<TLeft, TRightResult> SelectRight<TRightResult>([InstantHandle] Func<TRight, Either<TLeft, TRightResult>> rightSelector)
             => (either ?? throw new ArgumentNullException(nameof(either))).HasRight
@@ -71,7 +70,7 @@ public static class EitherExtension
                 : Either<TLeftResult, TRightResult>.FromRight(
                     (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right));
 
-        /// <inheritdoc cref="EitherExtension.Select{TLeft,TRight,TLeftResult,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult},System.Func{TRight,TRightResult})" />
+        /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult},System.Func{TRight,TRightResult})" />
         [PublicAPI, Pure]
         public Either<TLeftResult, TRightResult> Select<TLeftResult, TRightResult>(
             [InstantHandle] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector, [InstantHandle] Func<TRight, TRightResult> rightSelector)
@@ -80,7 +79,7 @@ public static class EitherExtension
                 : Either<TLeftResult, TRightResult>.FromRight(
                     (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right));
 
-        /// <inheritdoc cref="EitherExtension.Select{TLeft,TRight,TLeftResult,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult},System.Func{TRight,TRightResult})" />
+        /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult},System.Func{TRight,TRightResult})" />
         [PublicAPI, Pure]
         public Either<TLeftResult, TRightResult> Select<TLeftResult, TRightResult>([InstantHandle] Func<TLeft, TLeftResult> leftSelector,
             [InstantHandle] Func<TRight, Either<TLeftResult, TRightResult>> rightSelector)
@@ -89,7 +88,7 @@ public static class EitherExtension
                     (leftSelector ?? throw new ArgumentNullException(nameof(leftSelector))).Invoke(either.Left))
                 : (rightSelector ?? throw new ArgumentNullException(nameof(rightSelector))).Invoke(either.Right);
 
-        /// <inheritdoc cref="EitherExtension.Select{TLeft,TRight,TLeftResult,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult},System.Func{TRight,TRightResult})" />
+        /// <inheritdoc cref="Select{TLeft,TRight,TLeftResult,TRightResult}(AInq.Optional.Either{TLeft,TRight},System.Func{TLeft,TLeftResult},System.Func{TRight,TRightResult})" />
         [PublicAPI, Pure]
         public Either<TLeftResult, TRightResult> Select<TLeftResult, TRightResult>(
             [InstantHandle] Func<TLeft, Either<TLeftResult, TRightResult>> leftSelector,

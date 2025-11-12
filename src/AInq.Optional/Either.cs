@@ -14,8 +14,8 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Either{TLeft,TRight}" /> utils </summary>
-public static class Either
+/// <summary> <see cref="Either{TLeft,TRight}" /> utils and extensions </summary>
+public static partial class Either
 {
     /// <summary> Swap left and right values </summary>
     [PublicAPI, Pure]

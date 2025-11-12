@@ -14,8 +14,7 @@
 
 namespace AInq.Optional;
 
-/// <summary> <see cref="Maybe{T}" /> LINQ utils </summary>
-public static class MaybeLinq
+public static partial class Maybe
 {
     /// <param name="collection"> <see cref="Maybe{T}" /> collection </param>
     /// <typeparam name="T"> Value type </typeparam>
@@ -43,12 +42,12 @@ public static class MaybeLinq
     /// <typeparam name="T"> Value type </typeparam>
     extension<T>(ParallelQuery<Maybe<T>> collection)
     {
-        /// <inheritdoc cref="MaybeLinq.Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}})" />
+        /// <inheritdoc cref="Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<T> Values()
             => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasValue: true}).Select(item => item.Value);
 
-        /// <inheritdoc cref="MaybeLinq.Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}},System.Func{T,bool})" />
+        /// <inheritdoc cref="Values{T}(System.Collections.Generic.IEnumerable{AInq.Optional.Maybe{T}},System.Func{T,bool})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<T> Values([InstantHandle] Func<T, bool> filter)
         {
@@ -76,8 +75,8 @@ public static class MaybeLinq
                     return readOnlyList.Count == 0 ? Maybe<T>.None : readOnlyList[0];
             }
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count))
-            return count == 0 ? Maybe<T>.None : collection.ElementAt(0);
+            if (collection.TryGetNonEnumeratedCount(out var count))
+                return count == 0 ? Maybe<T>.None : collection.ElementAt(0);
 #endif
             using var enumerator = collection.GetEnumerator();
             return enumerator.MoveNext() ? enumerator.Current : Maybe<T>.None;
@@ -92,8 +91,8 @@ public static class MaybeLinq
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return Maybe<T>.None;
+            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+                return Maybe<T>.None;
 #endif
             using var enumerator = collection.GetEnumerator();
             while (enumerator.MoveNext())
@@ -127,13 +126,13 @@ public static class MaybeLinq
                     };
             }
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count))
-            return count switch
-            {
-                0 => Maybe<T>.None,
-                1 => collection.ElementAt(0),
-                _ => throw new InvalidOperationException("Collection contains more than one element")
-            };
+            if (collection.TryGetNonEnumeratedCount(out var count))
+                return count switch
+                {
+                    0 => Maybe<T>.None,
+                    1 => collection.ElementAt(0),
+                    _ => throw new InvalidOperationException("Collection contains more than one element")
+                };
 #endif
             using var enumerator = collection.GetEnumerator();
             if (!enumerator.MoveNext()) return Maybe<T>.None;
@@ -151,8 +150,8 @@ public static class MaybeLinq
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return Maybe<T>.None;
+            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+                return Maybe<T>.None;
 #endif
             using var enumerator = collection.GetEnumerator();
             while (enumerator.MoveNext())
@@ -180,8 +179,8 @@ public static class MaybeLinq
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return Maybe<T>.None;
+            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+                return Maybe<T>.None;
 #endif
             using var enumerator = collection.GetEnumerator();
             while (enumerator.MoveNext())
@@ -198,8 +197,8 @@ public static class MaybeLinq
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return Maybe<T>.None;
+            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+                return Maybe<T>.None;
 #endif
             using var enumerator = collection.GetEnumerator();
             while (enumerator.MoveNext())
@@ -226,8 +225,8 @@ public static class MaybeLinq
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return Maybe<T>.None;
+            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+                return Maybe<T>.None;
 #endif
             using var enumerator = collection.GetEnumerator();
             while (enumerator.MoveNext())
@@ -242,8 +241,8 @@ public static class MaybeLinq
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if !NETSTANDARD
-        if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
-            return Maybe<T>.None;
+            if (collection.TryGetNonEnumeratedCount(out var count) && count == 0)
+                return Maybe<T>.None;
 #endif
             using var enumerator = collection.GetEnumerator();
             while (enumerator.MoveNext())
