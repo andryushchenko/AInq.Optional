@@ -34,11 +34,11 @@ public static partial class TryAsync
 
 #region Convert
 
-    private static async ValueTask<Maybe<T>> AwaitAsMaybe<T>(Task<Try<T>> tryTask, CancellationToken cancellation)
+    private static async ValueTask<Maybe<T>> AwaitToMaybe<T>(Task<Try<T>> tryTask, bool suppressException, CancellationToken cancellation)
     {
         try
         {
-            return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).AsMaybe();
+            return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).ToMaybe(suppressException);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

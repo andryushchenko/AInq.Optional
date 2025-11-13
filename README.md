@@ -20,16 +20,18 @@ Simple optional types with basic helpers and converters
 
 Large refactoring and internal optimization with some **breaking changes**
 
-- Remove build tagets for STS .Net versions
-- Remove all `Try<T>` extensions (except `Try.AsMaybe`), which can implicitly hide exceptions
+- Remove build targets for STS .Net versions
+- `System.Linq` is used for collection extensions, which may cause minor behavior changes
+- `System.Linq.AsyncEnumerable` is used in .net10 with minor API changes
+- Rename `Maybe.AsTry` to `Maybe.ToTry` and `Try.AsMaybe` to `Try.ToMaybe` to remove ambiguity
+- Remove all `Try<T>` extensions, which can implicitly hide exceptions
+- `Try.ToMaybe` now throw exception if source is not success, introduced flag to suppress this
 - Save exception stacktrace in `Try<T>`
-- Use `System.Linq` for collection extensions, which may cause minor behavior changes
-- Use `System.Linq.AsyncEnumerable` in .net10 with minor API changes
 - New APIs
     - `|` (or) operator for `Maybe<T>`
     - `!` (invert) operator for `Either<TLeft, TRight>`
     - `Maybe.Values` collection extension with filtering
-    - `Try.Result` with additional gerenrator parameter
+    - `Try.Result` with additional generator parameter
 
 ### New in 3.0
 

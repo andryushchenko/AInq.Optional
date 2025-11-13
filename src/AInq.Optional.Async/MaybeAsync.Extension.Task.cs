@@ -46,12 +46,12 @@ public static partial class MaybeAsync
                 ? maybeTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
                 : AwaitOr(maybeTask, asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
-        /// <inheritdoc cref="Maybe.AsTry{T}" />
+        /// <inheritdoc cref="Maybe.ToTry{T}" />
         [PublicAPI, Pure]
-        public ValueTask<Try<T>> AsTry(CancellationToken cancellation = default)
+        public ValueTask<Try<T>> ToTry(CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
-                ? new ValueTask<Try<T>>(maybeTask.Result.AsTry())
-                : AwaitAsTry(maybeTask, cancellation);
+                ? new ValueTask<Try<T>>(maybeTask.Result.ToTry())
+                : AwaitToTry(maybeTask, cancellation);
 
 #endregion
 

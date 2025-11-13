@@ -22,11 +22,15 @@ public static partial class Try
     {
 #region Convert
 
-        /// <summary> Convert <see cref="Try{T}" /> to <see cref="Maybe{T}" /> </summary>
-        /// <remarks> <b> WARNING </b> This operation potentially hides exception </remarks>
+        /// <summary> Convert <see cref="Try{T}" /> to <see cref="Maybe{T}" />, throw if not success </summary>
+        /// <param name="suppressException"> Don't throw exception </param>
         [PublicAPI, Pure]
-        public Maybe<T> AsMaybe()
-            => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? Maybe<T>.FromValue(@try.Value) : Maybe<T>.None;
+        public Maybe<T> ToMaybe(bool suppressException = false)
+        {
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            if (!suppressException) @try.Throw();
+            return @try.Success ? Maybe<T>.FromValue(@try.Value) : Maybe<T>.None;
+        }
 
 #endregion
 

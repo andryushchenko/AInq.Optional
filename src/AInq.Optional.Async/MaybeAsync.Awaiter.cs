@@ -54,11 +54,11 @@ public static partial class MaybeAsync
         Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).OrAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
 
-    private static async ValueTask<Try<T>> AwaitAsTry<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
+    private static async ValueTask<Try<T>> AwaitToTry<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
     {
         try
         {
-            return (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).AsTry();
+            return (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ToTry();
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

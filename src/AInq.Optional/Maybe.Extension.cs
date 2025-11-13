@@ -44,7 +44,7 @@ public static partial class Maybe
 
         /// <summary> Convert <see cref="Maybe{T}" /> to <see cref="Try{T}" /> </summary>
         [PublicAPI, Pure]
-        public Try<T> AsTry()
+        public Try<T> ToTry()
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
                 ? Try<T>.FromValue(maybe.Value)
                 : Try<T>.FromError(new InvalidOperationException("No value"));
