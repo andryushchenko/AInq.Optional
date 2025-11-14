@@ -73,7 +73,11 @@ public static partial class Maybe
         public Maybe<T> FirstOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
             return collection.Select(Maybe<T>.FromValue).FirstOrDefault() ?? Maybe<T>.None;
+#else
+            return collection.Select(Maybe<T>.FromValue).FirstOrDefault(Maybe<T>.None);
+#endif
         }
 
         /// <summary> Get first matching value or none </summary>
@@ -84,7 +88,11 @@ public static partial class Maybe
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
+#if NETSTANDARD
             return collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefault() ?? Maybe<T>.None;
+#else
+            return collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefault(Maybe<T>.None);
+#endif
         }
 
         /// <summary> Get single value or none </summary>
@@ -94,7 +102,11 @@ public static partial class Maybe
         public Maybe<T> SingleOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
             return collection.Select(Maybe<T>.FromValue).SingleOrDefault() ?? Maybe<T>.None;
+#else
+            return collection.Select(Maybe<T>.FromValue).SingleOrDefault(Maybe<T>.None);
+#endif
         }
 
         /// <summary> Get single matching value or none </summary>
@@ -106,7 +118,11 @@ public static partial class Maybe
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
+#if NETSTANDARD
             return collection.Where(filter).Select(Maybe<T>.FromValue).SingleOrDefault() ?? Maybe<T>.None;
+#else
+            return collection.Where(filter).Select(Maybe<T>.FromValue).SingleOrDefault(Maybe<T>.None);
+#endif
         }
     }
 
@@ -121,7 +137,11 @@ public static partial class Maybe
         public Maybe<T> FirstNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
+#else
+            return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
+#endif
         }
 
         /// <summary> Get single not null value or none </summary>
@@ -131,7 +151,11 @@ public static partial class Maybe
         public Maybe<T> SingleNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
             return collection.Select(ValueIfNotNull).SingleOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
+#else
+            return collection.Select(ValueIfNotNull).SingleOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
+#endif
         }
     }
 
@@ -145,7 +169,11 @@ public static partial class Maybe
         public Maybe<T> FirstNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
+#else
+            return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
+#endif
         }
 
         /// <inheritdoc cref="SingleNotNullOrNone{T}(IEnumerable{T})" />
@@ -153,7 +181,11 @@ public static partial class Maybe
         public Maybe<T> SingleNotNullOrNone()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
             return collection.Select(ValueIfNotNull).SingleOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
+#else
+            return collection.Select(ValueIfNotNull).SingleOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
+#endif
         }
     }
 }
