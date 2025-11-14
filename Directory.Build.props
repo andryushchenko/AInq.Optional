@@ -3,21 +3,25 @@
     <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="1.2.39" />
 
     <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net8.0;net10.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <RootNamespace>AInq.Optional</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <Product>AInq.Optional</Product>
         <Authors>Anton Andryushchenko</Authors>
         <RepositoryUrl>https://github.com/andryushchenko/AInq.Optional</RepositoryUrl>
         <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
-        <LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
-        <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
-        <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-        <RootNamespace>AInq.Optional</RootNamespace>
+        <PackageProjectUrl>https://github.com/andryushchenko/AInq.Optional</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>AInq.png</PackageIcon>
     </PropertyGroup>

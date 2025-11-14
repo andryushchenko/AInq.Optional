@@ -52,7 +52,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     public static implicit operator Maybe<T>([NoEnumeration] T value)
         => FromValue(value);
 
-    /// <summary> True if has value </summary>
+    /// <summary> True if contains value </summary>
     /// <param name="maybe"> Maybe item </param>
     [PublicAPI]
     public static implicit operator bool(Maybe<T> maybe)
