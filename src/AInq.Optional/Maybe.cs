@@ -78,14 +78,4 @@ public static partial class Maybe
         public static Maybe<T> operator |(Maybe<T> maybe, Maybe<T> other)
             => maybe.Or(other);
     }
-
-    /// <typeparam name="T"> Value type </typeparam>
-    /// <typeparam name="TOther"> Other value type </typeparam>
-    extension<T, TOther>(Maybe<T>)
-    {
-        /// <inheritdoc cref="Or{T,TOther}(Maybe{T},TOther)" />
-        [PublicAPI, Pure]
-        public static Either<T, TOther> operator |(Maybe<T> maybeLeft, TOther right)
-            => maybeLeft.Or(right);
-    }
 }
