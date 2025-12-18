@@ -55,7 +55,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     /// <summary> True if contains value </summary>
     /// <param name="maybe"> Maybe item </param>
     [PublicAPI]
-    public static implicit operator bool(Maybe<T> maybe)
+    public static explicit operator bool(Maybe<T> maybe)
         => maybe.HasValue;
 
     /// <summary> True if empty </summary>
@@ -63,6 +63,20 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     [PublicAPI]
     public static bool operator !(Maybe<T> maybe)
         => !maybe.HasValue;
+
+    /// <summary> Get value or default </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="defaultValue"> Default value </param>
+    [PublicAPI, Pure]
+    public static T operator |(Maybe<T> maybe, T defaultValue)
+        => maybe.HasValue ? maybe.Value : defaultValue;
+
+    /// <summary> Get value form this item or other </summary>
+    /// <param name="maybe"> Maybe item </param>
+    /// <param name="other"> Other </param>
+    [PublicAPI, Pure]
+    public static Maybe<T> operator |(Maybe<T> maybe, Maybe<T> other)
+        => maybe.HasValue ? maybe : other;
 
     private protected abstract bool IsNotEmpty();
     private protected abstract T GetValue();
