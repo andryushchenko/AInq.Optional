@@ -27,27 +27,27 @@ public static partial class Maybe
         /// <typeparam name="TOther"> Other source type </typeparam>
         /// <returns> Either </returns>
         [PublicAPI, Pure]
-        public Either<T, TOther> Either<TOther>([NoEnumeration] TOther other)
+        public Either<T, TOther> EitherValue<TOther>([NoEnumeration] TOther other)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Optional.Either<T, TOther>.FromLeft(maybe.Value)
-                : Optional.Either<T, TOther>.FromRight(other);
+                ? Either<T, TOther>.FromLeft(maybe.Value)
+                : Either<T, TOther>.FromRight(other);
 
         /// <summary> Get source value or other if empty </summary>
         /// <param name="otherGenerator"> Other generator </param>
         /// <typeparam name="TOther"> Other source type </typeparam>
         /// <returns> Either </returns>
         [PublicAPI, Pure]
-        public Either<T, TOther> Either<TOther>([InstantHandle] Func<TOther> otherGenerator)
+        public Either<T, TOther> EitherValue<TOther>([InstantHandle] Func<TOther> otherGenerator)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Optional.Either<T, TOther>.FromLeft(maybe.Value)
-                : Optional.Either<T, TOther>.FromRight((otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke());
+                ? Either<T, TOther>.FromLeft(maybe.Value)
+                : Either<T, TOther>.FromRight((otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke());
 
         /// <summary> Convert <see cref="Maybe{T}" /> to <see cref="Try{T}" /> </summary>
         [PublicAPI, Pure]
-        public Try<T> Try()
+        public Try<T> TryValue()
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Optional.Try<T>.FromValue(maybe.Value)
-                : Optional.Try<T>.FromError(new InvalidOperationException("No value"));
+                ? Try<T>.FromValue(maybe.Value)
+                : Try<T>.FromError(new InvalidOperationException("No value"));
 
 #endregion
 

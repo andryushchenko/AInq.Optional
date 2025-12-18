@@ -22,14 +22,14 @@ public static partial class MaybeAsync
     {
 #region Convert
 
-        /// <inheritdoc cref="Maybe.Either{T,TOther}(AInq.Optional.Maybe{T},System.Func{TOther})" />
+        /// <inheritdoc cref="Maybe.EitherValue{T,TOther}(Maybe{T},Func{TOther})" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> EitherAsync<TOther>(
+        public ValueTask<Either<T, TOther>> EitherValueAsync<TOther>(
             [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TOther>> asyncOtherGenerator,
             CancellationToken cancellation = default)
             => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
                 ? new ValueTask<Either<T, TOther>>(Optional.Either.Left<T, TOther>(maybe.Value))
-                : AwaitGenerator<T, TOther>(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
+                : AwaitEither<T, TOther>(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
 #endregion
 

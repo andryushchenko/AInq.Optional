@@ -38,11 +38,11 @@ public static partial class TryAsync
     {
         try
         {
-            return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).Maybe(suppressException);
+            return (await tryTask.WaitAsync(cancellation).ConfigureAwait(false)).MaybeValue(suppressException);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            return Optional.Maybe.None<T>();
+            return Maybe.None<T>();
         }
     }
 
