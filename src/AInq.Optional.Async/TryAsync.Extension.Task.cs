@@ -22,12 +22,12 @@ public static partial class TryAsync
     {
 #region Convert
 
-        /// <inheritdoc cref="Try.ToMaybe{T}(Try{T},bool)" />
+        /// <inheritdoc cref="Try.Maybe{T}" />
         [PublicAPI, Pure]
-        public ValueTask<Maybe<T>> ToMaybe(bool suppressException = false, CancellationToken cancellation = default)
+        public ValueTask<Maybe<T>> Maybe(bool suppressException = false, CancellationToken cancellation = default)
             => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
-                ? new ValueTask<Maybe<T>>(tryTask.Result.ToMaybe(suppressException))
-                : AwaitToMaybe(tryTask, suppressException, cancellation);
+                ? new ValueTask<Maybe<T>>(tryTask.Result.Maybe(suppressException))
+                : AwaitMaybe(tryTask, suppressException, cancellation);
 
 #endregion
 

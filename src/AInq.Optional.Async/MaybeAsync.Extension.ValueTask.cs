@@ -22,37 +22,37 @@ public static partial class MaybeAsync
     {
 #region Convert
 
-        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},TOther)" />
+        /// <inheritdoc cref="Maybe.Either{T,TOther}(Maybe{T},TOther)" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> Or<TOther>([NoEnumeration] TOther other, CancellationToken cancellation = default)
+        public ValueTask<Either<T, TOther>> Either<TOther>([NoEnumeration] TOther other, CancellationToken cancellation = default)
             => maybeValueTask.IsCompletedSuccessfully
-                ? new ValueTask<Either<T, TOther>>(maybeValueTask.Result.Or(other))
-                : AwaitOr(maybeValueTask.AsTask(), other, cancellation);
+                ? new ValueTask<Either<T, TOther>>(maybeValueTask.Result.Either(other))
+                : AwaitEither(maybeValueTask.AsTask(), other, cancellation);
 
-        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},Func{TOther})" />
+        /// <inheritdoc cref="Maybe.Either{T,TOther}(Maybe{T},System.Func{TOther})" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> Or<TOther>([InstantHandle(RequireAwait = true)] Func<TOther> otherGenerator,
+        public ValueTask<Either<T, TOther>> Either<TOther>([InstantHandle(RequireAwait = true)] Func<TOther> otherGenerator,
             CancellationToken cancellation = default)
             => maybeValueTask.IsCompletedSuccessfully
                 ? new ValueTask<Either<T, TOther>>(
-                    maybeValueTask.Result.Or(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
-                : AwaitOr(maybeValueTask.AsTask(), otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
+                    maybeValueTask.Result.Either(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
+                : AwaitEither(maybeValueTask.AsTask(), otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
 
-        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},Func{TOther})" />
+        /// <inheritdoc cref="Maybe.Either{T,TOther}(Maybe{T},System.Func{TOther})" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> OrAsync<TOther>(
+        public ValueTask<Either<T, TOther>> EitherAsync<TOther>(
             [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TOther>> asyncOtherGenerator,
             CancellationToken cancellation = default)
             => maybeValueTask.IsCompletedSuccessfully
-                ? maybeValueTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
-                : AwaitOr(maybeValueTask.AsTask(), asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
+                ? maybeValueTask.Result.EitherAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
+                : AwaitEither(maybeValueTask.AsTask(), asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
-        /// <inheritdoc cref="Maybe.ToTry{T}" />
+        /// <inheritdoc cref="Maybe.Try{T}" />
         [PublicAPI, Pure]
-        public ValueTask<Try<T>> ToTry(CancellationToken cancellation = default)
+        public ValueTask<Try<T>> Try(CancellationToken cancellation = default)
             => maybeValueTask.IsCompletedSuccessfully
-                ? new ValueTask<Try<T>>(maybeValueTask.Result.ToTry())
-                : AwaitToTry(maybeValueTask.AsTask(), cancellation);
+                ? new ValueTask<Try<T>>(maybeValueTask.Result.Try())
+                : AwaitTry(maybeValueTask.AsTask(), cancellation);
 
 #endregion
 

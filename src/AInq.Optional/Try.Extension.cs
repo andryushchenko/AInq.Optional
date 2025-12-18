@@ -25,11 +25,11 @@ public static partial class Try
         /// <summary> Convert <see cref="Try{T}" /> to <see cref="Maybe{T}" />, throw if not success </summary>
         /// <param name="suppressException"> Don't throw exception </param>
         [PublicAPI, Pure]
-        public Maybe<T> ToMaybe(bool suppressException = false)
+        public Maybe<T> Maybe(bool suppressException = false)
         {
             _ = @try ?? throw new ArgumentNullException(nameof(@try));
             if (!suppressException) @try.Throw();
-            return @try.Success ? Maybe<T>.FromValue(@try.Value) : Maybe<T>.None;
+            return @try.Success ? Optional.Maybe<T>.FromValue(@try.Value) : Optional.Maybe<T>.None;
         }
 
 #endregion

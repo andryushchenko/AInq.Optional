@@ -22,36 +22,36 @@ public static partial class MaybeAsync
     {
 #region Convert
 
-        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},TOther)" />
+        /// <inheritdoc cref="Maybe.Either{T,TOther}(Maybe{T},TOther)" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> Or<TOther>([NoEnumeration] TOther other, CancellationToken cancellation = default)
+        public ValueTask<Either<T, TOther>> Either<TOther>([NoEnumeration] TOther other, CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
-                ? new ValueTask<Either<T, TOther>>(maybeTask.Result.Or(other))
-                : AwaitOr(maybeTask, other, cancellation);
+                ? new ValueTask<Either<T, TOther>>(maybeTask.Result.Either(other))
+                : AwaitEither(maybeTask, other, cancellation);
 
-        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},Func{TOther})" />
+        /// <inheritdoc cref="Maybe.Either{T,TOther}(Maybe{T},System.Func{TOther})" />
         [PublicAPI, Pure]
-        public ValueTask<Either<T, TOther>> Or<TOther>([InstantHandle(RequireAwait = true)] Func<TOther> otherGenerator,
+        public ValueTask<Either<T, TOther>> Either<TOther>([InstantHandle(RequireAwait = true)] Func<TOther> otherGenerator,
             CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
-                ? new ValueTask<Either<T, TOther>>(maybeTask.Result.Or(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
-                : AwaitOr(maybeTask, otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
+                ? new ValueTask<Either<T, TOther>>(maybeTask.Result.Either(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
+                : AwaitEither(maybeTask, otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
 
-        /// <inheritdoc cref="Maybe.Or{T,TOther}(Maybe{T},Func{TOther})" />
+        /// <inheritdoc cref="Maybe.Either{T,TOther}(Maybe{T},System.Func{TOther})" />
         [PublicAPI, Pure]
         public ValueTask<Either<T, TOther>> OrAsync<TOther>(
             [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TOther>> asyncOtherGenerator,
             CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
-                ? maybeTask.Result.OrAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
-                : AwaitOr(maybeTask, asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
+                ? maybeTask.Result.EitherAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
+                : AwaitEither(maybeTask, asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
 
-        /// <inheritdoc cref="Maybe.ToTry{T}" />
+        /// <inheritdoc cref="Maybe.Try{T}" />
         [PublicAPI, Pure]
-        public ValueTask<Try<T>> ToTry(CancellationToken cancellation = default)
+        public ValueTask<Try<T>> Try(CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
-                ? new ValueTask<Try<T>>(maybeTask.Result.ToTry())
-                : AwaitToTry(maybeTask, cancellation);
+                ? new ValueTask<Try<T>>(maybeTask.Result.Try())
+                : AwaitTry(maybeTask, cancellation);
 
 #endregion
 

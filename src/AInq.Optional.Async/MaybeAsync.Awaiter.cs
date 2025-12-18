@@ -42,33 +42,33 @@ public static partial class MaybeAsync
 
 #region Convert
 
-    private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask, TRight other,
+    private static async ValueTask<Either<TLeft, TRight>> AwaitEither<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask, TRight other,
         CancellationToken cancellation)
-        => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(other);
+        => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Either(other);
 
-    private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask, Func<TRight> otherGenerator,
+    private static async ValueTask<Either<TLeft, TRight>> AwaitEither<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask, Func<TRight> otherGenerator,
         CancellationToken cancellation)
-        => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Or(otherGenerator);
+        => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Either(otherGenerator);
 
-    private static async ValueTask<Either<TLeft, TRight>> AwaitOr<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask,
+    private static async ValueTask<Either<TLeft, TRight>> AwaitEither<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask,
         Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
-        => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).OrAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
+        => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).EitherAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
 
-    private static async ValueTask<Try<T>> AwaitToTry<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
+    private static async ValueTask<Try<T>> AwaitTry<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
     {
         try
         {
-            return (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ToTry();
+            return (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).Try();
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            return Try.Error<T>(ex);
+            return Optional.Try.Error<T>(ex);
         }
     }
 
     private static async ValueTask<Either<TLeft, TRight>> AwaitGenerator<TLeft, TRight>(
         Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
-        => Either.Right<TLeft, TRight>(await asyncOtherGenerator.Invoke(cancellation).ConfigureAwait(false));
+        => Optional.Either.Right<TLeft, TRight>(await asyncOtherGenerator.Invoke(cancellation).ConfigureAwait(false));
 
 #endregion
 
