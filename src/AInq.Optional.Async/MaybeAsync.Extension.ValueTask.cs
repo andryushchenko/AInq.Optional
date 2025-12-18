@@ -44,8 +44,11 @@ public static partial class MaybeAsync
             [InstantHandle(RequireAwait = true)] Func<CancellationToken, ValueTask<TOther>> asyncOtherGenerator,
             CancellationToken cancellation = default)
             => maybeValueTask.IsCompletedSuccessfully
-                ? maybeValueTask.Result.EitherValueAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation)
-                : AwaitEither(maybeValueTask.AsTask(), asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)), cancellation);
+                ? maybeValueTask.Result.EitherValueAsync(asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)),
+                    cancellation)
+                : AwaitEither(maybeValueTask.AsTask(),
+                    asyncOtherGenerator ?? throw new ArgumentNullException(nameof(asyncOtherGenerator)),
+                    cancellation);
 
         /// <inheritdoc cref="Maybe.TryValue{T}" />
         [PublicAPI, Pure]

@@ -34,7 +34,8 @@ public static partial class MaybeAsync
         public ValueTask<Either<T, TOther>> EitherValue<TOther>([InstantHandle(RequireAwait = true)] Func<TOther> otherGenerator,
             CancellationToken cancellation = default)
             => (maybeTask ?? throw new ArgumentNullException(nameof(maybeTask))).Status is TaskStatus.RanToCompletion
-                ? new ValueTask<Either<T, TOther>>(maybeTask.Result.EitherValue(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
+                ? new ValueTask<Either<T, TOther>>(
+                    maybeTask.Result.EitherValue(otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))))
                 : AwaitEither(maybeTask, otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator)), cancellation);
 
         /// <inheritdoc cref="Maybe.EitherValue{T,TOther}(Maybe{T},Func{TOther})" />

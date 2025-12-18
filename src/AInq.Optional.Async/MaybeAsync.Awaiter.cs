@@ -52,12 +52,13 @@ public static partial class MaybeAsync
 
     private static async ValueTask<Either<TLeft, TRight>> AwaitEither<TLeft, TRight>(Task<Maybe<TLeft>> maybeTask,
         Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
-        => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).EitherValueAsync(asyncOtherGenerator, cancellation).ConfigureAwait(false);
+        => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).EitherValueAsync(asyncOtherGenerator, cancellation)
+                                                                                .ConfigureAwait(false);
 
-    private static async ValueTask<Either<TLeft, TRight>> AwaitEither<TLeft, TRight>(
-        Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator, CancellationToken cancellation)
+    private static async ValueTask<Either<TLeft, TRight>> AwaitEither<TLeft, TRight>(Func<CancellationToken, ValueTask<TRight>> asyncOtherGenerator,
+        CancellationToken cancellation)
         => Optional.Either.Right<TLeft, TRight>(await asyncOtherGenerator.Invoke(cancellation).ConfigureAwait(false));
-    
+
     private static async ValueTask<Try<T>> AwaitTry<T>(Task<Maybe<T>> maybeTask, CancellationToken cancellation)
     {
         try
