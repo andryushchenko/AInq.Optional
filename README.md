@@ -16,19 +16,24 @@ Simple optional types with basic helpers and converters
 [![Nuget](https://img.shields.io/nuget/v/AInq.Optional.Async)](https://www.nuget.org/packages/AInq.Optional.Async/)
 **AInq.Optional.Async** - Async helpers and extensions
 
-## New in 4.0
+## New in 4.1
 
 Large refactoring and internal optimization with some **breaking changes**
 
 - Remove build targets for STS .Net versions
 - `System.Linq` is used for collection extensions, which may cause minor behavior changes
 - `System.Linq.AsyncEnumerable` is used in .net10 with minor API changes
-- Rename `Maybe.AsTry` to `Maybe.ToTry` and `Try.AsMaybe` to `Try.ToMaybe` to remove ambiguity
+- Change some methods to remove ambiguity
+    - Rename `Maybe.AsTry` to `Maybe.TryValue` 
+    - Rename `Try.AsMaybe` to `Try.MaybeValue` 
+    - Rename converter `Maybe.Or` to `Maybe.EitherValue`
+    - Make `bool` cast operators explicit
 - Remove all `Try<T>` extensions, which can implicitly hide exceptions
-- `Try.ToMaybe` now throw exception if source is not success, introduced flag to suppress this
+- `Try.MaybeValue` now throw exception if source is not success, introduced flag to suppress this
 - Save exception stacktrace in `Try<T>`
 - New APIs
     - `|` (or) operator for `Maybe<T>`
+    - `!` (not) operator for `Maybe<T>` and `Try<T>`
     - `!` (invert) operator for `Either<TLeft, TRight>`
     - `Maybe.Values` collection extension with filtering
     - `Try.Result` with additional generator parameter
