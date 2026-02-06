@@ -26,11 +26,11 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 
     /// <summary> Check if item contains value </summary>
     [PublicAPI]
-    public bool HasValue => IsNotEmpty();
+    public bool HasValue => IsNotNone();
 
     /// <summary> Item value (if exists) </summary>
     [PublicAPI]
-    public T Value => IsNotEmpty() ? GetValue() : throw new InvalidOperationException("No value");
+    public T Value => IsNotNone() ? GetValue() : throw new InvalidOperationException("No value");
 
     /// <inheritdoc />
     public bool Equals(Maybe<T>? other)
@@ -78,16 +78,16 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
     public static Maybe<T> operator |(Maybe<T> maybe, Maybe<T> other)
         => maybe.HasValue ? maybe : other;
 
-    private protected abstract bool IsNotEmpty();
+    private protected abstract bool IsNotNone();
     private protected abstract T GetValue();
 
     /// <inheritdoc />
     public override string? ToString()
-        => IsNotEmpty() ? Value?.ToString() : "No value";
+        => IsNotNone() ? Value?.ToString() : "No value";
 
     /// <inheritdoc />
     public override int GetHashCode()
-        => IsNotEmpty() ? Value?.GetHashCode() ?? 0 : 0;
+        => IsNotNone() ? Value?.GetHashCode() ?? 0 : 0;
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
@@ -136,7 +136,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 
     private sealed class MaybeEmpty : Maybe<T>
     {
-        private protected override bool IsNotEmpty()
+        private protected override bool IsNotNone()
             => false;
 
         private protected override T GetValue()
@@ -150,7 +150,7 @@ public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
         internal MaybeValue(T value)
             => _value = value;
 
-        private protected override bool IsNotEmpty()
+        private protected override bool IsNotNone()
             => true;
 
         private protected override T GetValue()
