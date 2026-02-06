@@ -94,6 +94,34 @@ public static partial class Maybe
             return collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefault(Maybe<T>.None);
 #endif
         }
+        
+        /// <summary> Get last value or none </summary>
+        /// <returns> Maybe </returns>
+        [PublicAPI]
+        public Maybe<T> LastOrNone()
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
+            return collection.Select(Maybe<T>.FromValue).LastOrDefault() ?? Maybe<T>.None;
+#else
+            return collection.Select(Maybe<T>.FromValue).LastOrDefault(Maybe<T>.None);
+#endif
+        }
+
+        /// <summary> Get last matching value or none </summary>
+        /// <param name="filter"> Filter </param>
+        /// <returns> Maybe </returns>
+        [PublicAPI]
+        public Maybe<T> LastOrNone([InstantHandle] Func<T, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+#if NETSTANDARD
+            return collection.Where(filter).Select(Maybe<T>.FromValue).LastOrDefault() ?? Maybe<T>.None;
+#else
+            return collection.Where(filter).Select(Maybe<T>.FromValue).LastOrDefault(Maybe<T>.None);
+#endif
+        }
 
         /// <summary> Get single value or none </summary>
         /// <returns> Maybe </returns>
@@ -143,6 +171,19 @@ public static partial class Maybe
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
 #endif
         }
+        
+        /// <summary> Get last not null value or none </summary>
+        /// <returns> Maybe </returns>
+        [PublicAPI]
+        public Maybe<T> LastNotNullOrNone()
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
+            return collection.Select(ValueIfNotNull).LastOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
+#else
+            return collection.Select(ValueIfNotNull).LastOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
+#endif
+        }
 
         /// <summary> Get single not null value or none </summary>
         /// <returns> Maybe </returns>
@@ -173,6 +214,19 @@ public static partial class Maybe
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
 #else
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
+#endif
+        }
+        
+        /// <summary> Get last not null value or none </summary>
+        /// <returns> Maybe </returns>
+        [PublicAPI]
+        public Maybe<T> LastNotNullOrNone()
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+#if NETSTANDARD
+            return collection.Select(ValueIfNotNull).LastOrDefault(maybe => maybe.HasValue) ?? Maybe<T>.None;
+#else
+            return collection.Select(ValueIfNotNull).LastOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
 #endif
         }
 

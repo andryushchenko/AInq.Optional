@@ -98,6 +98,45 @@ public static partial class MaybeAsync
                     return enumerator.Current;
             return Maybe.None<T>();
         }
+        
+        /// <inheritdoc cref="Maybe.LastOrNone{T}(IEnumerable{T})" />
+        [PublicAPI]
+        public async ValueTask<Maybe<T>> LastOrNoneAsync(CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            var result = Maybe.None<T>();
+            await foreach (var value in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                result = value;
+            return result;
+        }
+
+        /// <inheritdoc cref="Maybe.LastOrNone{T}(IEnumerable{T},Func{T,bool})" />
+        [PublicAPI]
+        public async ValueTask<Maybe<T>> LastOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, bool> filter,
+            CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            var result = Maybe.None<T>();
+            await foreach(var value in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (filter.Invoke(value))
+                    result = value;
+            return result;
+        }
+
+        /// <inheritdoc cref="Maybe.LastOrNone{T}(IEnumerable{T},Func{T,bool})" />
+        [PublicAPI]
+        public async ValueTask<Maybe<T>> LastOrNoneAsync([InstantHandle(RequireAwait = true)] Func<T, CancellationToken, ValueTask<bool>> filter,
+            CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            var result = Maybe.None<T>();
+            await foreach(var value in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (await filter.Invoke(value, cancellation).ConfigureAwait(false))
+                    result = value;
+            return result;
+        }
 
         /// <inheritdoc cref="Maybe.SingleOrNone{T}(IEnumerable{T})" />
         [PublicAPI]
@@ -169,6 +208,18 @@ public static partial class MaybeAsync
                     return enumerator.Current;
             return Maybe.None<T>();
         }
+        
+        /// <inheritdoc cref="Maybe.LastNotNullOrNone{T}(IEnumerable{T?})" />
+        [PublicAPI]
+        public async ValueTask<Maybe<T>> LastNotNullOrNoneAsync(CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            var result = Maybe.None<T>();
+            await foreach(var value in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (value is not null)
+                    result = value;
+            return result;
+        }
 
         /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
@@ -204,6 +255,18 @@ public static partial class MaybeAsync
                 if (enumerator.Current.HasValue)
                     return enumerator.Current.Value;
             return Maybe.None<T>();
+        }
+        
+        /// <inheritdoc cref="Maybe.LastNotNullOrNone{T}(IEnumerable{T?})" />
+        [PublicAPI]
+        public async ValueTask<Maybe<T>> LastNotNullOrNoneAsync(CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            var result = Maybe.None<T>();
+            await foreach(var value in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (value.HasValue)
+                    result = value;
+            return result;
         }
 
         /// <inheritdoc cref="Maybe.SingleNotNullOrNone{T}(IEnumerable{T?})" />
