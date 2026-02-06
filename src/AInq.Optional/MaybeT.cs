@@ -18,11 +18,11 @@ namespace AInq.Optional;
 /// <typeparam name="T"> Value type </typeparam>
 public abstract class Maybe<T> : IEquatable<Maybe<T>>, IEquatable<T>
 {
-    private static readonly Lazy<MaybeEmpty> Empty = new();
+    private static readonly Lazy<MaybeEmpty> NoneItem = new();
 
     /// <summary> Get empty Maybe </summary>
     [PublicAPI]
-    public static Maybe<T> None => Empty.Value;
+    public static Maybe<T> None => NoneItem.Value;
 
     /// <summary> Check if item contains value </summary>
     [PublicAPI]

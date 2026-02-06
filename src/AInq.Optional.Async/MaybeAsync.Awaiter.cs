@@ -191,8 +191,8 @@ public static partial class MaybeAsync
     private static async ValueTask<T> AwaitValueOrDefault<T>(Task<Maybe<T>> maybeTask, Func<T> defaultGenerator, CancellationToken cancellation)
         => (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ValueOrDefault(defaultGenerator);
 
-    private static async ValueTask<T> AwaitValueOrDefault<T>(this Task<Maybe<T>> maybeTask,
-        Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator, CancellationToken cancellation)
+    private static async ValueTask<T> AwaitValueOrDefault<T>(Task<Maybe<T>> maybeTask, Func<CancellationToken, ValueTask<T>> asyncDefaultGenerator,
+        CancellationToken cancellation)
         => await (await maybeTask.WaitAsync(cancellation).ConfigureAwait(false)).ValueOrDefaultAsync(asyncDefaultGenerator, cancellation)
                                                                                 .ConfigureAwait(false);
 

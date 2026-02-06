@@ -80,7 +80,7 @@ public static partial class MaybeAsync
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
             return await collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefaultAsync(Maybe.None<T>(), cancellation).ConfigureAwait(false);
         }
-        
+
         /// <inheritdoc cref="Maybe.LastOrNone{T}(IEnumerable{T})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> LastOrNoneAsync(CancellationToken cancellation = default)
@@ -158,7 +158,7 @@ public static partial class MaybeAsync
                                    .FirstOrDefaultAsync(maybe => maybe.HasValue, Maybe<T>.None, cancellation)
                                    .ConfigureAwait(false);
         }
-        
+
         /// <inheritdoc cref="Maybe.LastNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> LastNotNullOrNoneAsync(CancellationToken cancellation = default)
@@ -194,7 +194,7 @@ public static partial class MaybeAsync
                                    .FirstOrDefaultAsync(maybe => maybe.HasValue, Maybe<T>.None, cancellation)
                                    .ConfigureAwait(false);
         }
-        
+
         /// <inheritdoc cref="Maybe.LastNotNullOrNone{T}(IEnumerable{T?})" />
         [PublicAPI]
         public async ValueTask<Maybe<T>> LastNotNullOrNoneAsync(CancellationToken cancellation = default)

@@ -24,8 +24,8 @@ Large refactoring and internal optimization with some **breaking changes**
 - `System.Linq` is used for collection extensions, which may cause minor behavior changes
 - `System.Linq.AsyncEnumerable` is used in .net10 with minor API changes
 - Change some methods to remove ambiguity
-    - Rename `Maybe.AsTry` to `Maybe.TryValue` 
-    - Rename `Try.AsMaybe` to `Try.MaybeValue` 
+    - Rename `Maybe.AsTry` to `Maybe.TryValue`
+    - Rename `Try.AsMaybe` to `Try.MaybeValue`
     - Rename converter `Maybe.Or` to `Maybe.EitherValue`
     - Make `bool` cast operators explicit
 - Remove all `Try<T>` extensions, which can implicitly hide exceptions

@@ -94,7 +94,7 @@ public static partial class Maybe
             return collection.Where(filter).Select(Maybe<T>.FromValue).FirstOrDefault(Maybe<T>.None);
 #endif
         }
-        
+
         /// <summary> Get last value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
@@ -171,7 +171,7 @@ public static partial class Maybe
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
 #endif
         }
-        
+
         /// <summary> Get last not null value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
@@ -216,7 +216,7 @@ public static partial class Maybe
             return collection.Select(ValueIfNotNull).FirstOrDefault(maybe => maybe.HasValue, Maybe<T>.None);
 #endif
         }
-        
+
         /// <summary> Get last not null value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
