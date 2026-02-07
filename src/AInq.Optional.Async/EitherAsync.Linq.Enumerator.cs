@@ -34,6 +34,29 @@ public static partial class EitherAsync
                     yield return either.Left;
         }
 
+        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TLeft,bool})" />
+        [PublicAPI, LinqTunnel]
+        public async IAsyncEnumerable<TLeft> LeftValues(Func<TLeft, bool> filter, [EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            await foreach (var either in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (either is {HasLeft: true} && filter.Invoke(either.Left))
+                    yield return either.Left;
+        }
+
+        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TLeft,bool})" />
+        [PublicAPI, LinqTunnel]
+        public async IAsyncEnumerable<TLeft> LeftValues(Func<TLeft, CancellationToken, ValueTask<bool>> filter,
+            [EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            await foreach (var either in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (either is {HasLeft: true} && await filter.Invoke(either.Left, cancellation).ConfigureAwait(false))
+                    yield return either.Left;
+        }
+
         /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI]
         public async IAsyncEnumerable<TRight> RightValues([EnumeratorCancellation] CancellationToken cancellation = default)
@@ -41,6 +64,30 @@ public static partial class EitherAsync
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             await foreach (var either in collection.WithCancellation(cancellation).ConfigureAwait(false))
                 if (either is {HasRight: true})
+                    yield return either.Right;
+        }
+
+        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TRight,bool})" />
+        [PublicAPI, LinqTunnel]
+        public async IAsyncEnumerable<TRight> RightValues(Func<TRight, bool> filter,
+            [EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            await foreach (var either in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (either is {HasRight: true} && filter.Invoke(either.Right))
+                    yield return either.Right;
+        }
+
+        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TRight,bool})" />
+        [PublicAPI, LinqTunnel]
+        public async IAsyncEnumerable<TRight> RightValues(Func<TRight, CancellationToken, ValueTask<bool>> filter,
+            [EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            await foreach (var either in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (either is {HasRight: true} && await filter.Invoke(either.Right, cancellation).ConfigureAwait(false))
                     yield return either.Right;
         }
     }

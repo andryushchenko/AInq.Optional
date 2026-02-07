@@ -41,16 +41,20 @@ public static partial class Try
         /// <typeparam name="TResult"> Result value type </typeparam>
         [PublicAPI, Pure]
         public Try<TResult> Select<TResult>([InstantHandle] Func<T, TResult> selector)
-            => !(@try ?? throw new ArgumentNullException(nameof(@try))).Success
-                ? Try<TResult>.ConvertError(@try)
-                : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value);
+        {
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return !@try.Success ? Try<TResult>.ConvertError(@try) : Result(selector, @try.Value);
+        }
 
         /// <inheritdoc cref="Select{T,TResult}(Try{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public Try<TResult> Select<TResult>([InstantHandle] Func<T, Try<TResult>> selector)
-            => !(@try ?? throw new ArgumentNullException(nameof(@try))).Success
-                ? Try<TResult>.ConvertError(@try)
-                : Result(selector ?? throw new ArgumentNullException(nameof(selector)), @try.Value).Unwrap();
+        {
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return !@try.Success ? Try<TResult>.ConvertError(@try) : Result(selector, @try.Value).Unwrap();
+        }
 
 #endregion
 
@@ -62,8 +66,10 @@ public static partial class Try
         [PublicAPI]
         public void Do([InstantHandle] Action<T> valueAction, [InstantHandle] Action<Exception> errorAction)
         {
-            if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            _ = errorAction ?? throw new ArgumentNullException(nameof(errorAction));
+            if (@try.Success) valueAction.Invoke(@try.Value);
             else
                 try
                 {
@@ -71,7 +77,7 @@ public static partial class Try
                 }
                 catch (Exception exception)
                 {
-                    (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
+                    errorAction.Invoke(exception);
                 }
         }
 
@@ -83,8 +89,10 @@ public static partial class Try
         [PublicAPI]
         public void Do<TArgument>([InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action<Exception> errorAction, TArgument argument)
         {
-            if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            _ = errorAction ?? throw new ArgumentNullException(nameof(errorAction));
+            if (@try.Success) valueAction.Invoke(@try.Value, argument);
             else
                 try
                 {
@@ -92,7 +100,7 @@ public static partial class Try
                 }
                 catch (Exception exception)
                 {
-                    (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
+                    errorAction.Invoke(exception);
                 }
         }
 
@@ -102,8 +110,9 @@ public static partial class Try
         [PublicAPI]
         public void Do([InstantHandle] Action<T> valueAction, bool throwIfError = false)
         {
-            if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value);
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            if (@try.Success) valueAction.Invoke(@try.Value);
             else if (throwIfError) @try.Throw();
         }
 
@@ -115,8 +124,9 @@ public static partial class Try
         [PublicAPI]
         public void Do<TArgument>([InstantHandle] Action<T, TArgument> valueAction, TArgument argument, bool throwIfError = false)
         {
-            if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(@try.Value, argument);
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            if (@try.Success) valueAction.Invoke(@try.Value, argument);
             else if (throwIfError) @try.Throw();
         }
 
@@ -125,14 +135,16 @@ public static partial class Try
         [PublicAPI]
         public void DoIfError([InstantHandle] Action<Exception> errorAction)
         {
-            if ((@try ?? throw new ArgumentNullException(nameof(@try))).Success) return;
+            _ = @try ?? throw new ArgumentNullException(nameof(@try));
+            _ = errorAction ?? throw new ArgumentNullException(nameof(errorAction));
+            if (@try.Success) return;
             try
             {
                 @try.Throw();
             }
             catch (Exception exception)
             {
-                (errorAction ?? throw new ArgumentNullException(nameof(errorAction))).Invoke(exception);
+                errorAction.Invoke(exception);
             }
         }
 

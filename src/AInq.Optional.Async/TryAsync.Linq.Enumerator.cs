@@ -19,15 +19,40 @@ namespace AInq.Optional;
 
 public static partial class TryAsync
 {
-    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
-    [PublicAPI]
-    public static async IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection,
-        [EnumeratorCancellation] CancellationToken cancellation = default)
+    extension<T>(IAsyncEnumerable<Try<T>> collection)
     {
-        _ = collection ?? throw new ArgumentNullException(nameof(collection));
-        await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
-            if (@try is {Success: true})
-                yield return @try.Value;
+        /// <inheritdoc cref="Try.Values{T}(IEnumerable{AInq.Optional.Try{T}})" />
+        [PublicAPI]
+        public async IAsyncEnumerable<T> Values([EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (@try is {Success: true})
+                    yield return @try.Value;
+        }
+
+        /// <inheritdoc cref="Try.Values{T}(IEnumerable{AInq.Optional.Try{T}},Func{T,bool})" />
+        [PublicAPI]
+        public async IAsyncEnumerable<T> Values(Func<T, bool> filter, [EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (@try is {Success: true} && filter.Invoke(@try.Value))
+                    yield return @try.Value;
+        }
+
+        /// <inheritdoc cref="Try.Values{T}(IEnumerable{AInq.Optional.Try{T}},Func{T,bool})" />
+        [PublicAPI]
+        public async IAsyncEnumerable<T> Values(Func<T, CancellationToken, ValueTask<bool>> filter,
+            [EnumeratorCancellation] CancellationToken cancellation = default)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            await foreach (var @try in collection.WithCancellation(cancellation).ConfigureAwait(false))
+                if (@try is {Success: true} && await filter.Invoke(@try.Value, cancellation).ConfigureAwait(false))
+                    yield return @try.Value;
+        }
     }
 }
 

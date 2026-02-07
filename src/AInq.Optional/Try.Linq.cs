@@ -16,16 +16,48 @@ namespace AInq.Optional;
 
 public static partial class Try
 {
-    /// <summary> Select existing values </summary>
     /// <param name="collection"> Try collection </param>
     /// <typeparam name="T"> Value type </typeparam>
-    /// <returns> Values collection </returns>
-    [PublicAPI, LinqTunnel]
-    public static IEnumerable<T> Values<T>(this IEnumerable<Try<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {Success: true}).Select(item => item.Value);
+    extension<T>(IEnumerable<Try<T>> collection)
+    {
+        /// <summary> Select existing values </summary>
+        /// <returns> Values collection </returns>
+        [PublicAPI, LinqTunnel]
+        public IEnumerable<T> Values()
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(@try => @try is {Success: true}).Select(@try => @try.Value);
+        }
 
-    /// <inheritdoc cref="Values{T}(IEnumerable{Try{T}})" />
-    [PublicAPI, LinqTunnel]
-    public static ParallelQuery<T> Values<T>(this ParallelQuery<Try<T>> collection)
-        => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {Success: true}).Select(item => item.Value);
+        /// <summary> Select existing matching values </summary>
+        /// <param name="filter"> Filter </param>
+        /// <returns> Values collection </returns>
+        [PublicAPI, LinqTunnel]
+        public IEnumerable<T> Values([InstantHandle] Func<T, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(@try => @try is {Success: true} && filter.Invoke(@try.Value)).Select(@try => @try.Value);
+        }
+    }
+
+    extension<T>(ParallelQuery<Try<T>> collection)
+    {
+        /// <inheritdoc cref="Values{T}(IEnumerable{Try{T}})" />
+        [PublicAPI, LinqTunnel]
+        public ParallelQuery<T> Values()
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(@try => @try is {Success: true}).Select(@try => @try.Value);
+        }
+
+        /// <inheritdoc cref="Values{T}(IEnumerable{Try{T}},Func{T,bool})" />
+        [PublicAPI, LinqTunnel]
+        public ParallelQuery<T> Values([InstantHandle] Func<T, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(@try => @try is {Success: true} && filter.Invoke(@try.Value)).Select(@try => @try.Value);
+        }
+    }
 }
