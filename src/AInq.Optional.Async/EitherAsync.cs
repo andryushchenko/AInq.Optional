@@ -20,9 +20,12 @@ public static partial class EitherAsync
     /// <inheritdoc cref="Either.Left{TLeft,TRight}(TLeft)" />
     [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> LeftAsync<TLeft, TRight>(Task<TLeft> leftTask, CancellationToken cancellation = default)
-        => (leftTask ?? throw new ArgumentNullException(nameof(leftTask))).Status is TaskStatus.RanToCompletion
+    {
+        _ = leftTask ?? throw new ArgumentNullException(nameof(leftTask));
+        return leftTask.Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(Either.Left<TLeft, TRight>(leftTask.Result))
             : AwaitLeft<TLeft, TRight>(leftTask.WaitAsync(cancellation));
+    }
 
     /// <inheritdoc cref="Either.Left{TLeft,TRight}(TLeft)" />
     [PublicAPI, Pure]
@@ -34,9 +37,12 @@ public static partial class EitherAsync
     /// <inheritdoc cref="Either.Right{TLeft,TRight}(TRight)" />
     [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> RightAsync<TLeft, TRight>(Task<TRight> rightTask, CancellationToken cancellation = default)
-        => (rightTask ?? throw new ArgumentNullException(nameof(rightTask))).Status is TaskStatus.RanToCompletion
+    {
+        _ = rightTask ?? throw new ArgumentNullException(nameof(rightTask));
+        return rightTask.Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TLeft, TRight>>(Either.Right<TLeft, TRight>(rightTask.Result))
             : AwaitRight<TLeft, TRight>(rightTask.WaitAsync(cancellation));
+    }
 
     /// <inheritdoc cref="Either.Right{TLeft,TRight}(TRight)" />
     [PublicAPI, Pure]
@@ -49,7 +55,10 @@ public static partial class EitherAsync
     /// <inheritdoc cref="LeftAsync{TLeft,TRight}(Task{TLeft},CancellationToken)" />
     [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> AsEitherAsync<TLeft, TRight>(this Task<TLeft> leftTask, CancellationToken cancellation = default)
-        => LeftAsync<TLeft, TRight>(leftTask ?? throw new ArgumentNullException(nameof(leftTask)), cancellation);
+    {
+        _ = leftTask ?? throw new ArgumentNullException(nameof(leftTask));
+        return LeftAsync<TLeft, TRight>(leftTask, cancellation);
+    }
 
     /// <inheritdoc cref="LeftAsync{TLeft,TRight}(ValueTask{TLeft},CancellationToken)" />
     [PublicAPI, Pure]
@@ -60,7 +69,10 @@ public static partial class EitherAsync
     /// <inheritdoc cref="RightAsync{TLeft,TRight}(Task{TRight},CancellationToken)" />
     [PublicAPI, Pure]
     public static ValueTask<Either<TLeft, TRight>> AsEitherAsync<TLeft, TRight>(this Task<TRight> rightTask, CancellationToken cancellation = default)
-        => RightAsync<TLeft, TRight>(rightTask ?? throw new ArgumentNullException(nameof(rightTask)), cancellation);
+    {
+        _ = rightTask ?? throw new ArgumentNullException(nameof(rightTask));
+        return RightAsync<TLeft, TRight>(rightTask, cancellation);
+    }
 
     /// <inheritdoc cref="RightAsync{TLeft,TRight}(ValueTask{TRight},CancellationToken)" />
     [PublicAPI, Pure]
@@ -72,9 +84,12 @@ public static partial class EitherAsync
     [PublicAPI, Pure]
     public static ValueTask<Either<TRight, TLeft>> Invert<TLeft, TRight>(this Task<Either<TLeft, TRight>> eitherTask,
         CancellationToken cancellation = default)
-        => (eitherTask ?? throw new ArgumentNullException(nameof(eitherTask))).Status is TaskStatus.RanToCompletion
+    {
+        _ = eitherTask ?? throw new ArgumentNullException(nameof(eitherTask));
+        return eitherTask.Status is TaskStatus.RanToCompletion
             ? new ValueTask<Either<TRight, TLeft>>(eitherTask.Result.Invert())
             : AwaitInvert(eitherTask, cancellation);
+    }
 
     /// <inheritdoc cref="Either.Invert{TLeft,TRight}(Either{TLeft,TRight})" />
     [PublicAPI, Pure]

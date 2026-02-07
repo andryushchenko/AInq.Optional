@@ -182,7 +182,8 @@ public static partial class Maybe
         public Maybe<T> Or(Maybe<T> other)
         {
             _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
-            return maybe.HasValue ? maybe : other ?? throw new ArgumentNullException(nameof(other));
+            _ = other ?? throw new ArgumentNullException(nameof(other));
+            return maybe.HasValue ? maybe : other;
         }
 
         /// <summary> Get value form this item or other </summary>
