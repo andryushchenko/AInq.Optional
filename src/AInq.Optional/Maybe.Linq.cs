@@ -70,7 +70,7 @@ public static partial class Maybe
         /// <summary> Get first value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
-        public Maybe<T> FirstOrNone()
+        public Maybe<T> MaybeFirst()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -84,7 +84,7 @@ public static partial class Maybe
         /// <param name="filter"> Filter </param>
         /// <returns> Maybe </returns>
         [PublicAPI]
-        public Maybe<T> FirstOrNone([InstantHandle] Func<T, bool> filter)
+        public Maybe<T> MaybeFirst([InstantHandle] Func<T, bool> filter)
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
@@ -98,7 +98,7 @@ public static partial class Maybe
         /// <summary> Get last value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
-        public Maybe<T> LastOrNone()
+        public Maybe<T> MaybeLast()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -112,7 +112,7 @@ public static partial class Maybe
         /// <param name="filter"> Filter </param>
         /// <returns> Maybe </returns>
         [PublicAPI]
-        public Maybe<T> LastOrNone([InstantHandle] Func<T, bool> filter)
+        public Maybe<T> MaybeLast([InstantHandle] Func<T, bool> filter)
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
@@ -127,7 +127,7 @@ public static partial class Maybe
         /// <returns> Maybe </returns>
         /// <exception cref="InvalidOperationException"> Thrown if collection contains more than one element </exception>
         [PublicAPI]
-        public Maybe<T> SingleOrNone()
+        public Maybe<T> MaybeSingle()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -142,7 +142,7 @@ public static partial class Maybe
         /// <returns> Maybe </returns>
         /// <exception cref="InvalidOperationException"> Thrown if collection contains more than one matching element </exception>
         [PublicAPI]
-        public Maybe<T> SingleOrNone([InstantHandle] Func<T, bool> filter)
+        public Maybe<T> MaybeSingle([InstantHandle] Func<T, bool> filter)
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
@@ -162,7 +162,7 @@ public static partial class Maybe
         /// <summary> Get first not null value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
-        public Maybe<T> FirstNotNullOrNone()
+        public Maybe<T> MaybeFirstNotNull()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -175,7 +175,7 @@ public static partial class Maybe
         /// <summary> Get last not null value or none </summary>
         /// <returns> Maybe </returns>
         [PublicAPI]
-        public Maybe<T> LastNotNullOrNone()
+        public Maybe<T> MaybeLastNotNull()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -189,7 +189,7 @@ public static partial class Maybe
         /// <returns> Maybe </returns>
         /// <exception cref="InvalidOperationException"> Thrown if collection contains more than one not null element </exception>
         [PublicAPI]
-        public Maybe<T> SingleNotNullOrNone()
+        public Maybe<T> MaybeSingleNotNull()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -205,9 +205,9 @@ public static partial class Maybe
     extension<T>(IEnumerable<T?> collection)
         where T : struct
     {
-        /// <inheritdoc cref="FirstNotNullOrNone{T}(IEnumerable{T})" />
+        /// <inheritdoc cref="MaybeFirstNotNull{T}(IEnumerable{T?})" />
         [PublicAPI]
-        public Maybe<T> FirstNotNullOrNone()
+        public Maybe<T> MaybeFirstNotNull()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -217,10 +217,9 @@ public static partial class Maybe
 #endif
         }
 
-        /// <summary> Get last not null value or none </summary>
-        /// <returns> Maybe </returns>
+        /// <inheritdoc cref="MaybeLastNotNull{T}(IEnumerable{T?})" />
         [PublicAPI]
-        public Maybe<T> LastNotNullOrNone()
+        public Maybe<T> MaybeLastNotNull()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
@@ -230,9 +229,9 @@ public static partial class Maybe
 #endif
         }
 
-        /// <inheritdoc cref="SingleNotNullOrNone{T}(IEnumerable{T})" />
+        /// <inheritdoc cref="MaybeSingleNotNull{T}(IEnumerable{T?})" />
         [PublicAPI]
-        public Maybe<T> SingleNotNullOrNone()
+        public Maybe<T> MaybeSingleNotNull()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
 #if NETSTANDARD
