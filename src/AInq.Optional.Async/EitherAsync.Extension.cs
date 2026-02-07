@@ -217,7 +217,7 @@ public static partial class EitherAsync
             _ = asyncLeftAction ?? throw new ArgumentNullException(nameof(asyncLeftAction));
             _ = asyncRightAction ?? throw new ArgumentNullException(nameof(asyncRightAction));
             if (either.HasLeft) await asyncLeftAction.Invoke(either.Left, cancellation).ConfigureAwait(false);
-            if (either.HasRight) await asyncRightAction.Invoke(either.Right, cancellation).ConfigureAwait(false);
+            else await asyncRightAction.Invoke(either.Right, cancellation).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="Either.DoLeft{TLeft,TRight}" />
@@ -254,7 +254,7 @@ public static partial class EitherAsync
             _ = asyncLeftAction ?? throw new ArgumentNullException(nameof(asyncLeftAction));
             _ = asyncRightAction ?? throw new ArgumentNullException(nameof(asyncRightAction));
             if (either.HasLeft) await asyncLeftAction.Invoke(either.Left, argument, cancellation).ConfigureAwait(false);
-            if (either.HasRight) await asyncRightAction.Invoke(either.Right, argument, cancellation).ConfigureAwait(false);
+            else await asyncRightAction.Invoke(either.Right, argument, cancellation).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}" />

@@ -521,7 +521,7 @@ public static partial class EitherAsync
                 ? eitherValueTask.Result
                 : await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
             if (either.HasLeft) await asyncLeftAction.Invoke(either.Left, cancellation).ConfigureAwait(false);
-            if (either.HasRight) await asyncRightAction.Invoke(either.Right, cancellation).ConfigureAwait(false);
+            else await asyncRightAction.Invoke(either.Right, cancellation).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="Either.DoLeft{TLeft,TRight}" />
@@ -564,7 +564,7 @@ public static partial class EitherAsync
                 ? eitherValueTask.Result
                 : await eitherValueTask.AsTask().WaitAsync(cancellation).ConfigureAwait(false);
             if (either.HasLeft) await asyncLeftAction.Invoke(either.Left, argument, cancellation).ConfigureAwait(false);
-            if (either.HasRight) await asyncRightAction.Invoke(either.Right, argument, cancellation).ConfigureAwait(false);
+            else await asyncRightAction.Invoke(either.Right, argument, cancellation).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="Either.DoLeft{TLeft,TRight,TArgument}" />

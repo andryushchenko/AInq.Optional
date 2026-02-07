@@ -269,8 +269,32 @@ public static partial class Either
             _ = leftAction ?? throw new ArgumentNullException(nameof(leftAction));
             _ = rightAction ?? throw new ArgumentNullException(nameof(rightAction));
             if (either.HasLeft) leftAction.Invoke(either.Left);
+            else rightAction.Invoke(either.Right);
+        }
+
+        /// <summary> Do action with left value (if exists) </summary>
+        /// <param name="leftAction"> Left value action </param>
+        [PublicAPI]
+        public void DoLeft([InstantHandle] Action<TLeft> leftAction)
+        {
+            _ = either ?? throw new ArgumentNullException(nameof(either));
+            _ = leftAction ?? throw new ArgumentNullException(nameof(leftAction));
+            if (either.HasLeft) leftAction.Invoke(either.Left);
+        }
+
+        /// <summary> Do action with right value (if exists) </summary>
+        /// <param name="rightAction"> Right value action </param>
+        [PublicAPI]
+        public void DoRight([InstantHandle] Action<TRight> rightAction)
+        {
+            _ = either ?? throw new ArgumentNullException(nameof(either));
+            _ = rightAction ?? throw new ArgumentNullException(nameof(rightAction));
             if (either.HasRight) rightAction.Invoke(either.Right);
         }
+
+#endregion
+
+#region DoWithArgument
 
         /// <summary> Do action with left or right value with additional argument </summary>
         /// <param name="leftAction"> Left value action </param>
@@ -285,17 +309,7 @@ public static partial class Either
             _ = leftAction ?? throw new ArgumentNullException(nameof(leftAction));
             _ = rightAction ?? throw new ArgumentNullException(nameof(rightAction));
             if (either.HasLeft) leftAction.Invoke(either.Left, argument);
-            if (either.HasRight) rightAction.Invoke(either.Right, argument);
-        }
-
-        /// <summary> Do action with left value (if exists) </summary>
-        /// <param name="leftAction"> Left value action </param>
-        [PublicAPI]
-        public void DoLeft([InstantHandle] Action<TLeft> leftAction)
-        {
-            _ = either ?? throw new ArgumentNullException(nameof(either));
-            _ = leftAction ?? throw new ArgumentNullException(nameof(leftAction));
-            if (either.HasLeft) leftAction.Invoke(either.Left);
+            else rightAction.Invoke(either.Right, argument);
         }
 
         /// <summary> Do action with left value (if exists) with additional argument </summary>
@@ -308,16 +322,6 @@ public static partial class Either
             _ = either ?? throw new ArgumentNullException(nameof(either));
             _ = leftAction ?? throw new ArgumentNullException(nameof(leftAction));
             if (either.HasLeft) leftAction.Invoke(either.Left, argument);
-        }
-
-        /// <summary> Do action with right value (if exists) </summary>
-        /// <param name="rightAction"> Right value action </param>
-        [PublicAPI]
-        public void DoRight([InstantHandle] Action<TRight> rightAction)
-        {
-            _ = either ?? throw new ArgumentNullException(nameof(either));
-            _ = rightAction ?? throw new ArgumentNullException(nameof(rightAction));
-            if (either.HasRight) rightAction.Invoke(either.Right);
         }
 
         /// <summary> Do action with right value (if exists) with additional argument </summary>

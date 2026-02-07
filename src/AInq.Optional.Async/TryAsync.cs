@@ -40,7 +40,10 @@ public static partial class TryAsync
     /// <inheritdoc cref="ResultAsync{T}(Task{T},CancellationToken)" />
     [PublicAPI, Pure]
     public static ValueTask<Try<T>> AsTryAsync<T>(this Task<T> task, CancellationToken cancellation = default)
-        => ResultAsync(task ?? throw new ArgumentNullException(nameof(task)), cancellation);
+    {
+        _ = task ?? throw new ArgumentNullException(nameof(task));
+        return ResultAsync(task, cancellation);
+    }
 
     /// <inheritdoc cref="ResultAsync{T}(ValueTask{T},CancellationToken)" />
     [PublicAPI, Pure]
@@ -50,9 +53,10 @@ public static partial class TryAsync
     /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
     [PublicAPI, Pure]
     public static ValueTask<Try<T>> Unwrap<T>(this Task<Try<Try<T>>> tryTask, CancellationToken cancellation = default)
-        => (tryTask ?? throw new ArgumentNullException(nameof(tryTask))).Status is TaskStatus.RanToCompletion
-            ? new ValueTask<Try<T>>(tryTask.Result.Unwrap())
-            : AwaitUnwrap(tryTask, cancellation);
+    {
+        _ = tryTask ?? throw new ArgumentNullException(nameof(tryTask));
+        return tryTask.Status is TaskStatus.RanToCompletion ? new ValueTask<Try<T>>(tryTask.Result.Unwrap()) : AwaitUnwrap(tryTask, cancellation);
+    }
 
     /// <inheritdoc cref="Try.Unwrap{T}(Try{Try{T}})" />
     [PublicAPI, Pure]
