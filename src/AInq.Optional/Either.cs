@@ -40,17 +40,8 @@ public static partial class Either
     /// <summary> Swap left and right values </summary>
     [PublicAPI, Pure]
     public static Either<TRight, TLeft> Invert<TLeft, TRight>(this Either<TLeft, TRight> either)
-        => (either ?? throw new ArgumentNullException(nameof(either))).HasLeft
-            ? Right<TRight, TLeft>(either.Left)
-            : Left<TRight, TLeft>(either.Right);
-
-    /// <typeparam name="TLeft"> Left value type </typeparam>
-    /// <typeparam name="TRight"> Right value type </typeparam>
-    extension<TLeft, TRight>(Either<TLeft, TRight>)
     {
-        /// <inheritdoc cref="Invert{TLeft,TRight}(Either{TLeft,TRight})" />
-        [PublicAPI, Pure]
-        public static Either<TRight, TLeft> operator !(Either<TLeft, TRight> either)
-            => either.Invert();
+        _ = either ?? throw new ArgumentNullException(nameof(either));
+        return either.HasLeft ? Either<TRight, TLeft>.FromRight(either.Left) : Either<TRight, TLeft>.FromLeft(either.Right);
     }
 }

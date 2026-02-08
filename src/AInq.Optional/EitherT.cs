@@ -81,6 +81,11 @@ public abstract class Either<TLeft, TRight> : IEquatable<Either<TLeft, TRight>>
     public override int GetHashCode()
         => HasLeft ? Left?.GetHashCode() ?? 0 : Right?.GetHashCode() ?? 0;
 
+    /// <summary> Swap left and right values </summary>
+    [PublicAPI, Pure]
+    public static Either<TRight, TLeft> operator !(Either<TLeft, TRight> either)
+        => either.HasLeft ? Either<TRight, TLeft>.FromRight(either.Left) : Either<TRight, TLeft>.FromLeft(either.Right);
+
     /// <inheritdoc />
     public override bool Equals(object? obj)
         => obj switch
