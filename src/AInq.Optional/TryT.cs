@@ -56,7 +56,10 @@ public abstract class Try<T> : IEquatable<Try<T>>, IEquatable<T>
     /// <exception cref="ArgumentException"> Thrown when source item is success </exception>
     /// <remarks> <b> FOR INTERNAL USE ONLY </b> </remarks>
     public static Try<T> ConvertError<TSource>(Try<TSource> source)
-        => new TryError(source.GetError() ?? throw new ArgumentException("Source item doesn't contain error", nameof(source)));
+    {
+        var dispatcherInfo = source.GetError() ?? throw new InvalidOperationException("Source item doesn't contain error");
+        return new TryError(dispatcherInfo);
+    }
 
     /// <summary> Cast value to Try </summary>
     /// <param name="value"> Value </param>
