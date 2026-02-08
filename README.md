@@ -16,6 +16,20 @@ Simple optional types with basic helpers and converters
 [![Nuget](https://img.shields.io/nuget/v/AInq.Optional.Async)](https://www.nuget.org/packages/AInq.Optional.Async/)
 **AInq.Optional.Async** - Async helpers and extensions
 
+## New in 4.3
+
+Some Maybe LINQ extensions renamed to avoid ambiguity with other libs with similar functions. Current method names saved 
+as aliases and marked as **deprecated** and will be removed in next major release.
+
+Renamed method groups:
+
+- `IEnumerable.FirstOrNone` -> `IEnumerable.MaybeFirst`
+- `IEnumerable.LastOrNone` -> `IEnumerable.MaybeLast`
+- `IEnumerable.SingleOrNone` -> `IEnumerable.MaybeSingle`
+- `IEnumerable.FirstOrNoneNotNull` -> `IEnumerable.MaybeFirstNotNull`
+- `IEnumerable.LastOrNoneNotNull` -> `IEnumerable.MaybeLastNotNull`
+- `IEnumerable.SingleOrNoneNotNull` -> `IEnumerable.MaybeSingleNotNull`
+
 ## New in 4.1
 
 Large refactoring and internal optimization with some **breaking changes**
