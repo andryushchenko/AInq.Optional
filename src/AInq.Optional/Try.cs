@@ -78,5 +78,8 @@ public static partial class Try
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Try<T> Unwrap<T>(this Try<Try<T>> @try)
-        => (@try ?? throw new ArgumentNullException(nameof(@try))).Success ? @try.Value : Try<T>.ConvertError(@try);
+    {
+        _ = @try ?? throw new ArgumentNullException(nameof(@try));
+        return @try.Success ? @try.Value : Try<T>.ConvertError(@try);
+    }
 }

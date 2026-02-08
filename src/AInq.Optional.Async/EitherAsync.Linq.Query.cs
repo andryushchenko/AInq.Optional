@@ -30,12 +30,50 @@ public static partial class EitherAsync
             return collection.Where(either => either is {HasLeft: true}).Select(either => either.Left);
         }
 
+        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TLeft,bool})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<TLeft> LeftValues(Func<TLeft, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(either => either is {HasLeft: true} && filter.Invoke(either.Left)).Select(either => either.Left);
+        }
+
+        /// <inheritdoc cref="Either.LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TLeft,bool})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<TLeft> LeftValues(Func<TLeft, CancellationToken, ValueTask<bool>> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(async (either, ctx) => either is {HasLeft: true} && await filter.Invoke(either.Left, ctx).ConfigureAwait(false))
+                             .Select(either => either.Left);
+        }
+
         /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public IAsyncEnumerable<TRight> RightValues()
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             return collection.Where(either => either is {HasRight: true}).Select(either => either.Right);
+        }
+
+        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TRight,bool})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<TRight> RightValues(Func<TRight, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(either => either is {HasRight: true} && filter.Invoke(either.Right)).Select(either => either.Right);
+        }
+
+        /// <inheritdoc cref="Either.RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TRight,bool})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<TRight> RightValues(Func<TRight, CancellationToken, ValueTask<bool>> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(async (either, ctx) => either is {HasRight: true} && await filter.Invoke(either.Right, ctx).ConfigureAwait(false))
+                             .Select(either => either.Right);
         }
     }
 }

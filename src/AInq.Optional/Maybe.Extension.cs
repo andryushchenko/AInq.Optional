@@ -28,9 +28,10 @@ public static partial class Maybe
         /// <returns> Either </returns>
         [PublicAPI, Pure]
         public Either<T, TOther> EitherValue<TOther>([NoEnumeration] TOther other)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Either<T, TOther>.FromLeft(maybe.Value)
-                : Either<T, TOther>.FromRight(other);
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            return maybe.HasValue ? Either<T, TOther>.FromLeft(maybe.Value) : Either<T, TOther>.FromRight(other);
+        }
 
         /// <summary> Get source value or other if empty </summary>
         /// <param name="otherGenerator"> Other generator </param>
@@ -38,16 +39,19 @@ public static partial class Maybe
         /// <returns> Either </returns>
         [PublicAPI, Pure]
         public Either<T, TOther> EitherValue<TOther>([InstantHandle] Func<TOther> otherGenerator)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Either<T, TOther>.FromLeft(maybe.Value)
-                : Either<T, TOther>.FromRight((otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke());
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator));
+            return maybe.HasValue ? Either<T, TOther>.FromLeft(maybe.Value) : Either<T, TOther>.FromRight(otherGenerator.Invoke());
+        }
 
         /// <summary> Convert <see cref="Maybe{T}" /> to <see cref="Try{T}" /> </summary>
         [PublicAPI, Pure]
         public Try<T> TryValue()
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Try<T>.FromValue(maybe.Value)
-                : Try<T>.FromError(new InvalidOperationException("No value"));
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            return maybe.HasValue ? Try<T>.FromValue(maybe.Value) : Try<T>.FromError(new InvalidOperationException("No value"));
+        }
 
 #endregion
 
@@ -58,32 +62,40 @@ public static partial class Maybe
         /// <typeparam name="TResult"> Result value type </typeparam>
         [PublicAPI, Pure]
         public Maybe<TResult> Select<TResult>([InstantHandle] Func<T, TResult> selector)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? Maybe<TResult>.FromValue((selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value))
-                : Maybe<TResult>.None;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return maybe.HasValue ? Maybe<TResult>.FromValue(selector.Invoke(maybe.Value)) : Maybe<TResult>.None;
+        }
 
         /// <inheritdoc cref="Select{T,TResult}(Maybe{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public Maybe<TResult> Select<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
-                : Maybe<TResult>.None;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return maybe.HasValue ? selector.Invoke(maybe.Value) : Maybe<TResult>.None;
+        }
 
         /// <summary> Convert to other value type or default </summary>
         /// <param name="selector"> Converter </param>
         /// <typeparam name="TResult"> Result value type </typeparam>
         [PublicAPI, Pure]
         public TResult? SelectOrDefault<TResult>([InstantHandle] Func<T, TResult> selector)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
-                : default;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return maybe.HasValue ? selector.Invoke(maybe.Value) : default;
+        }
 
         /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult})" />
         [PublicAPI, Pure]
         public TResult? SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault()
-                : default;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return maybe.HasValue ? selector.Invoke(maybe.Value).ValueOrDefault() : default;
+        }
 
         /// <summary> Convert to other value type or default </summary>
         /// <param name="selector"> Converter </param>
@@ -91,16 +103,20 @@ public static partial class Maybe
         /// <typeparam name="TResult"> Result value type </typeparam>
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, TResult> selector, [NoEnumeration] TResult defaultValue)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
-                : defaultValue;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return maybe.HasValue ? selector.Invoke(maybe.Value) : defaultValue;
+        }
 
         /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},TResult)" />
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector, [NoEnumeration] TResult defaultValue)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value).ValueOrDefault(defaultValue)
-                : defaultValue;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            return maybe.HasValue ? selector.Invoke(maybe.Value).ValueOrDefault(defaultValue) : defaultValue;
+        }
 
         /// <summary> Convert to other value type or default from generator </summary>
         /// <param name="selector"> Converter </param>
@@ -108,19 +124,22 @@ public static partial class Maybe
         /// <typeparam name="TResult"> Result value type </typeparam>
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, TResult> selector, [InstantHandle] Func<TResult> defaultGenerator)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
-                : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            _ = defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator));
+            return maybe.HasValue ? selector.Invoke(maybe.Value) : defaultGenerator.Invoke();
+        }
 
         /// <inheritdoc cref="SelectOrDefault{T,TResult}(Maybe{T},Func{T,TResult},Func{TResult})" />
         [PublicAPI, Pure]
         public TResult SelectOrDefault<TResult>([InstantHandle] Func<T, Maybe<TResult>> selector, [InstantHandle] Func<TResult> defaultGenerator)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? (selector ?? throw new ArgumentNullException(nameof(selector))).Invoke(maybe.Value)
-                                                                                 .ValueOrDefault(defaultGenerator
-                                                                                                 ?? throw new ArgumentNullException(
-                                                                                                     nameof(defaultGenerator)))
-                : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = selector ?? throw new ArgumentNullException(nameof(selector));
+            _ = defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator));
+            return maybe.HasValue ? selector.Invoke(maybe.Value).ValueOrDefault(defaultGenerator) : defaultGenerator.Invoke();
+        }
 
 #endregion
 
@@ -129,21 +148,29 @@ public static partial class Maybe
         /// <summary> Get value or default </summary>
         [PublicAPI, Pure]
         public T? ValueOrDefault()
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : default;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            return maybe.HasValue ? maybe.Value : default;
+        }
 
         /// <summary> Get value or default </summary>
         /// <param name="defaultValue"> Default value </param>
         [PublicAPI, Pure]
         public T ValueOrDefault([NoEnumeration] T defaultValue)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : defaultValue;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            return maybe.HasValue ? maybe.Value : defaultValue;
+        }
 
         /// <summary> Get value or default from generator </summary>
         /// <param name="defaultGenerator"> Default value generator </param>
         [PublicAPI, Pure]
         public T ValueOrDefault([InstantHandle] Func<T> defaultGenerator)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? maybe.Value
-                : (defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator))).Invoke();
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = defaultGenerator ?? throw new ArgumentNullException(nameof(defaultGenerator));
+            return maybe.HasValue ? maybe.Value : defaultGenerator.Invoke();
+        }
 
 #endregion
 
@@ -153,24 +180,31 @@ public static partial class Maybe
         /// <param name="other"> Other </param>
         [PublicAPI, Pure]
         public Maybe<T> Or(Maybe<T> other)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe : other ?? throw new ArgumentNullException(nameof(other));
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = other ?? throw new ArgumentNullException(nameof(other));
+            return maybe.HasValue ? maybe : other;
+        }
 
         /// <summary> Get value form this item or other </summary>
         /// <param name="otherGenerator"> Other generator </param>
         [PublicAPI, Pure]
         public Maybe<T> Or([InstantHandle] Func<Maybe<T>> otherGenerator)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-                ? maybe
-                : (otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator))).Invoke();
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = otherGenerator ?? throw new ArgumentNullException(nameof(otherGenerator));
+            return maybe.HasValue ? maybe : otherGenerator.Invoke();
+        }
 
         /// <summary> Filter value </summary>
         /// <param name="filter"> Filter </param>
         [PublicAPI, Pure]
         public Maybe<T> Filter([InstantHandle] Func<T, bool> filter)
-            => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue
-               && (filter ?? throw new ArgumentNullException(nameof(filter))).Invoke(maybe.Value)
-                ? maybe
-                : Maybe<T>.None;
+        {
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return maybe.HasValue && filter.Invoke(maybe.Value) ? maybe : Maybe<T>.None;
+        }
 
 #endregion
 
@@ -182,9 +216,11 @@ public static partial class Maybe
         [PublicAPI]
         public void Do([InstantHandle] Action<T> valueAction, [InstantHandle] Action emptyAction)
         {
-            if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
-            else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            _ = emptyAction ?? throw new ArgumentNullException(nameof(emptyAction));
+            if (maybe.HasValue) valueAction.Invoke(maybe.Value);
+            else emptyAction.Invoke();
         }
 
         /// <summary> Do action with additional argument </summary>
@@ -195,9 +231,11 @@ public static partial class Maybe
         [PublicAPI]
         public void Do<TArgument>([InstantHandle] Action<T, TArgument> valueAction, [InstantHandle] Action<TArgument> emptyAction, TArgument argument)
         {
-            if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value, argument);
-            else (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke(argument);
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            _ = emptyAction ?? throw new ArgumentNullException(nameof(emptyAction));
+            if (maybe.HasValue) valueAction.Invoke(maybe.Value, argument);
+            else emptyAction.Invoke(argument);
         }
 
         /// <summary> Do action with value (if exists) </summary>
@@ -205,8 +243,9 @@ public static partial class Maybe
         [PublicAPI]
         public void Do([InstantHandle] Action<T> valueAction)
         {
-            if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value);
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            if (maybe.HasValue) valueAction.Invoke(maybe.Value);
         }
 
         /// <summary> Do action with value (if exists) with additional argument </summary>
@@ -216,8 +255,9 @@ public static partial class Maybe
         [PublicAPI]
         public void Do<TArgument>([InstantHandle] Action<T, TArgument> valueAction, TArgument argument)
         {
-            if ((maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-                (valueAction ?? throw new ArgumentNullException(nameof(valueAction))).Invoke(maybe.Value, argument);
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = valueAction ?? throw new ArgumentNullException(nameof(valueAction));
+            if (maybe.HasValue) valueAction.Invoke(maybe.Value, argument);
         }
 
         /// <summary> Do action if empty </summary>
@@ -225,8 +265,9 @@ public static partial class Maybe
         [PublicAPI]
         public void DoIfEmpty([InstantHandle] Action emptyAction)
         {
-            if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-                (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke();
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = emptyAction ?? throw new ArgumentNullException(nameof(emptyAction));
+            if (!maybe.HasValue) emptyAction.Invoke();
         }
 
         /// <summary> Do action if empty with additional argument </summary>
@@ -236,8 +277,9 @@ public static partial class Maybe
         [PublicAPI]
         public void DoIfEmpty<TArgument>([InstantHandle] Action<TArgument> emptyAction, TArgument argument)
         {
-            if (!(maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue)
-                (emptyAction ?? throw new ArgumentNullException(nameof(emptyAction))).Invoke(argument);
+            _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+            _ = emptyAction ?? throw new ArgumentNullException(nameof(emptyAction));
+            if (!maybe.HasValue) emptyAction.Invoke(argument);
         }
 
 #endregion

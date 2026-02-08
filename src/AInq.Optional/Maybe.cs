@@ -63,5 +63,8 @@ public static partial class Maybe
     /// <typeparam name="T"> Value type </typeparam>
     [PublicAPI, Pure]
     public static Maybe<T> Unwrap<T>(this Maybe<Maybe<T>> maybe)
-        => (maybe ?? throw new ArgumentNullException(nameof(maybe))).HasValue ? maybe.Value : None<T>();
+    {
+        _ = maybe ?? throw new ArgumentNullException(nameof(maybe));
+        return maybe.HasValue ? maybe.Value : None<T>();
+    }
 }

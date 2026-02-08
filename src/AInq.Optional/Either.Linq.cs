@@ -25,13 +25,41 @@ public static partial class Either
         /// <returns> Left values collection </returns>
         [PublicAPI, LinqTunnel]
         public IEnumerable<TLeft> LeftValues()
-            => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasLeft: true}).Select(item => item.Left);
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(either => either is {HasLeft: true}).Select(either => either.Left);
+        }
+
+        /// <summary> Select matching left values </summary>
+        /// <param name="filter"> Filter </param>
+        /// <returns> Left values collection </returns>
+        [PublicAPI, LinqTunnel]
+        public IEnumerable<TLeft> LeftValues(Func<TLeft, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(either => either is {HasLeft: true} && filter.Invoke(either.Left)).Select(either => either.Left);
+        }
 
         /// <summary> Select existing right values </summary>
         /// <returns> Right values collection </returns>
         [PublicAPI, LinqTunnel]
         public IEnumerable<TRight> RightValues()
-            => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasRight: true}).Select(item => item.Right);
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(either => either is {HasRight: true}).Select(either => either.Right);
+        }
+
+        /// <summary> Select matching right values </summary>
+        /// <param name="filter"> Filter </param>
+        /// <returns> Right values collection </returns>
+        [PublicAPI, LinqTunnel]
+        public IEnumerable<TRight> RightValues(Func<TRight, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(either => either is {HasRight: true} && filter.Invoke(either.Right)).Select(either => either.Right);
+        }
     }
 
     /// <param name="collection"> <see cref="Either{TLeft,TRight}" /> parallel query </param>
@@ -42,11 +70,35 @@ public static partial class Either
         /// <inheritdoc cref="LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<TLeft> LeftValues()
-            => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasLeft: true}).Select(item => item.Left);
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(either => either is {HasLeft: true}).Select(either => either.Left);
+        }
+
+        /// <inheritdoc cref="LeftValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TLeft,bool})" />
+        [PublicAPI, LinqTunnel]
+        public ParallelQuery<TLeft> LeftValues(Func<TLeft, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(either => either is {HasLeft: true} && filter.Invoke(either.Left)).Select(either => either.Left);
+        }
 
         /// <inheritdoc cref="RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}})" />
         [PublicAPI, LinqTunnel]
         public ParallelQuery<TRight> RightValues()
-            => (collection ?? throw new ArgumentNullException(nameof(collection))).Where(item => item is {HasRight: true}).Select(item => item.Right);
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(either => either is {HasRight: true}).Select(either => either.Right);
+        }
+
+        /// <inheritdoc cref="RightValues{TLeft,TRight}(IEnumerable{Either{TLeft,TRight}},Func{TRight,bool})" />
+        [PublicAPI, LinqTunnel]
+        public ParallelQuery<TRight> RightValues(Func<TRight, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(either => either is {HasRight: true} && filter.Invoke(either.Right)).Select(either => either.Right);
+        }
     }
 }

@@ -17,12 +17,34 @@ namespace AInq.Optional;
 
 public static partial class TryAsync
 {
-    /// <inheritdoc cref="Try.Values{T}(IEnumerable{Try{T}})" />
-    [PublicAPI, LinqTunnel]
-    public static IAsyncEnumerable<T> Values<T>(this IAsyncEnumerable<Try<T>> collection)
+    extension<T>(IAsyncEnumerable<Try<T>> collection)
     {
-        _ = collection ?? throw new ArgumentNullException(nameof(collection));
-        return collection.Where(@try => @try is {Success: true}).Select(@try => @try.Value);
+        /// <inheritdoc cref="Try.Values{T}(IEnumerable{AInq.Optional.Try{T}})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<T> Values()
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            return collection.Where(@try => @try is {Success: true}).Select(@try => @try.Value);
+        }
+
+        /// <inheritdoc cref="Try.Values{T}(IEnumerable{AInq.Optional.Try{T}},Func{T,bool})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<T> Values(Func<T, bool> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(@try => @try is {Success: true} && filter.Invoke(@try.Value)).Select(@try => @try.Value);
+        }
+
+        /// <inheritdoc cref="Try.Values{T}(IEnumerable{AInq.Optional.Try{T}},Func{T,bool})" />
+        [PublicAPI, LinqTunnel]
+        public IAsyncEnumerable<T> Values(Func<T, CancellationToken, ValueTask<bool>> filter)
+        {
+            _ = collection ?? throw new ArgumentNullException(nameof(collection));
+            _ = filter ?? throw new ArgumentNullException(nameof(filter));
+            return collection.Where(async (@try, ctx) => @try is {Success: true} && await filter.Invoke(@try.Value, ctx).ConfigureAwait(false))
+                             .Select(@try => @try.Value);
+        }
     }
 }
 
