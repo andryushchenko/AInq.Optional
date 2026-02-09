@@ -147,9 +147,9 @@ public static partial class Maybe
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
 #if NETSTANDARD
-            return collection.Where(filter).Select(Maybe<T>.FromValue).SingleOrDefault() ?? Maybe<T>.None;
+            return collection.Select(Maybe<T>.FromValue).SingleOrDefault(maybe => maybe.HasValue && filter.Invoke(maybe.Value)) ?? Maybe<T>.None;
 #else
-            return collection.Where(filter).Select(Maybe<T>.FromValue).SingleOrDefault(Maybe<T>.None);
+            return collection.Select(Maybe<T>.FromValue).SingleOrDefault(maybe => maybe.HasValue && filter.Invoke(maybe.Value), Maybe<T>.None);
 #endif
         }
     }

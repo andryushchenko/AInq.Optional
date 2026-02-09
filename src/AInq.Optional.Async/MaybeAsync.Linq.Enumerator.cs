@@ -147,7 +147,7 @@ public static partial class MaybeAsync
             if (!await enumerator.MoveNextAsync().ConfigureAwait(false)) return Maybe.None<T>();
             var result = enumerator.Current;
             return await enumerator.MoveNextAsync().ConfigureAwait(false)
-                ? throw new InvalidOperationException("Collection contains more than one not null element")
+                ? throw new InvalidOperationException("Sequence contains more than one element")
                 : result;
         }
 
@@ -165,7 +165,7 @@ public static partial class MaybeAsync
                 if (!filter.Invoke(result)) continue;
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     if (filter.Invoke(enumerator.Current))
-                        throw new InvalidOperationException("Collection contains more than one not null element");
+                        throw new InvalidOperationException("Sequence contains more than one matching element");
                 return result;
             }
             return Maybe.None<T>();
@@ -185,7 +185,7 @@ public static partial class MaybeAsync
                 if (!await filter.Invoke(result, cancellation).ConfigureAwait(false)) continue;
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     if (await filter.Invoke(enumerator.Current, cancellation).ConfigureAwait(false))
-                        throw new InvalidOperationException("Collection contains more than one not null element");
+                        throw new InvalidOperationException("Sequence contains more than one matching element");
                 return result;
             }
             return Maybe.None<T>();
@@ -233,7 +233,7 @@ public static partial class MaybeAsync
                 if (result is null) continue;
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     if (enumerator.Current is not null)
-                        throw new InvalidOperationException("Collection contains more than one not null element");
+                        throw new InvalidOperationException("Sequence contains more than one matching element");
                 return result;
             }
             return Maybe.None<T>();
@@ -281,7 +281,7 @@ public static partial class MaybeAsync
                 if (!result.HasValue) continue;
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     if (enumerator.Current.HasValue)
-                        throw new InvalidOperationException("Collection contains more than one not null element");
+                        throw new InvalidOperationException("Sequence contains more than one matching element");
                 return result.Value;
             }
             return Maybe.None<T>();

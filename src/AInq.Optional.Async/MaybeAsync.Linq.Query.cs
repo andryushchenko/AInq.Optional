@@ -124,9 +124,8 @@ public static partial class MaybeAsync
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
-            return await collection.Where(filter)
-                                   .Select(Maybe<T>.FromValue)
-                                   .SingleOrDefaultAsync(Maybe.None<T>(), cancellation)
+            return await collection.Select(Maybe<T>.FromValue)
+                                   .SingleOrDefaultAsync(maybe => maybe.HasValue && filter.Invoke(maybe.Value), Maybe.None<T>(), cancellation)
                                    .ConfigureAwait(false);
         }
 
@@ -137,9 +136,11 @@ public static partial class MaybeAsync
         {
             _ = collection ?? throw new ArgumentNullException(nameof(collection));
             _ = filter ?? throw new ArgumentNullException(nameof(filter));
-            return await collection.Where(filter)
-                                   .Select(Maybe<T>.FromValue)
-                                   .SingleOrDefaultAsync(Maybe.None<T>(), cancellation)
+            return await collection.Select(Maybe<T>.FromValue)
+                                   .SingleOrDefaultAsync(async (maybe, ctx)
+                                           => maybe.HasValue && await filter.Invoke(maybe.Value, ctx).ConfigureAwait(false),
+                                       Maybe.None<T>(),
+                                       cancellation)
                                    .ConfigureAwait(false);
         }
     }
